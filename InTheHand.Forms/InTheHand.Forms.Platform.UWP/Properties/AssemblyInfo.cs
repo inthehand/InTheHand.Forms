@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("InTheHand.Forms.Platform.UWP")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("InTheHand.Forms.Platform.UWP")]
-[assembly: AssemblyCopyright("Copyright ©  2017")]
+[assembly: AssemblyCompany("In The Hand Ltd")]
+[assembly: AssemblyProduct("InTheHand.Forms")]
+[assembly: AssemblyCopyright("Copyright © In The Hand Ltd 2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

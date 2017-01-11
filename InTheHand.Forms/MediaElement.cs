@@ -1,25 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="MediaElement.cs" company="In The Hand Ltd">
+//   Copyright (c) 2017 In The Hand Ltd, All rights reserved.
+// </copyright>
+// --------------------------------------------------------------------------------------------------------------------
+
+using System;
 using Xamarin.Forms;
 
 namespace InTheHand.Forms
 {
+    /// <summary>
+    /// Represents an object that renders audio and video to the display.
+    /// </summary>
     public sealed class MediaElement : Xamarin.Forms.View
     {
         //Bindable properties
         public static readonly BindableProperty SourceProperty =
-          BindableProperty.Create("Source", typeof(Uri), typeof(MediaElement));
+          BindableProperty.Create(nameof(Source), typeof(Uri), typeof(MediaElement));
 
         public static readonly BindableProperty CurrentStateProperty =
-          BindableProperty.Create("CurrentState", typeof(MediaElementState), typeof(MediaElement), MediaElementState.Closed);
+          BindableProperty.Create(nameof(CurrentState), typeof(MediaElementState), typeof(MediaElement), MediaElementState.Closed);
 
         public static readonly BindableProperty PositionProperty =
-          BindableProperty.Create("Position", typeof(TimeSpan), typeof(MediaElement), TimeSpan.Zero);
+          BindableProperty.Create(nameof(Position), typeof(TimeSpan), typeof(MediaElement), TimeSpan.Zero);
 
-        //Gets or sets the source
+        /// <summary>
+        /// Gets or sets a media source on the MediaElement.
+        /// </summary>
         [Xamarin.Forms.TypeConverter(typeof(UriTypeConverter))]
         public Uri Source
         {
@@ -27,6 +34,9 @@ namespace InTheHand.Forms
             set { SetValue(SourceProperty, value); }
         }
 
+        /// <summary>
+        /// Gets the status of this MediaElement.
+        /// </summary>
         public MediaElementState CurrentState
         {
             get { return (MediaElementState)GetValue(CurrentStateProperty); }
@@ -37,6 +47,9 @@ namespace InTheHand.Forms
             }
         }
 
+        /// <summary>
+        /// Gets or sets the current position of progress through the media's playback time.
+        /// </summary>
         public System.TimeSpan Position
         {
             get
@@ -51,11 +64,17 @@ namespace InTheHand.Forms
             }
         }
 
+        /// <summary>
+        /// Plays media from the current position.
+        /// </summary>
         public void Play()
         {
             CurrentState = MediaElementState.Playing;
         }
 
+        /// <summary>
+        /// Pauses media at the current position.
+        /// </summary>
         public void Pause()
         {
             if(CurrentState == MediaElementState.Playing)
@@ -64,6 +83,9 @@ namespace InTheHand.Forms
             }
         }
 
+        /// <summary>
+        /// Stops and resets media to be played from the beginning.
+        /// </summary>
         public void Stop()
         {
             if (CurrentState != MediaElementState.Closed)
@@ -72,15 +94,27 @@ namespace InTheHand.Forms
             }
         }
 
+        /// <summary>
+        /// Occurs when the value of the CurrentState property changes.
+        /// </summary>
         public event EventHandler CurrentStateChanged;
 
+        /// <summary>
+        /// Occurs when the MediaElement finishes playing audio or video.
+        /// </summary>
         public event EventHandler MediaEnded;
 
+        /// <summary>
+        /// Occurs when the media stream has been validated and opened, and the file headers have been read.
+        /// </summary>
         public event EventHandler MediaOpened;
 
+        /// <summary>
+        /// Occurs when the seek point of a requested seek operation is ready for playback.
+        /// </summary>
         public event EventHandler SeekCompleted;
 
-        public void OnMediaEnded()
+        internal void OnMediaEnded()
         {
             if(MediaEnded != null)
             {
@@ -89,7 +123,7 @@ namespace InTheHand.Forms
             }
         }
 
-        public void OnMediaOpened()
+        internal void OnMediaOpened()
         {
             if (MediaOpened != null)
             {
@@ -97,15 +131,5 @@ namespace InTheHand.Forms
                 MediaOpened(this, EventArgs.Empty);
             }
         }
-    }
-
-    public enum MediaElementState
-    {
-        Buffering,
-        Closed,
-        Opening,
-        Paused,
-        Playing,
-        Stopped,
     }
 }

@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+    <metadata>
+        <id>InTheHand.Forms</id>
+        <version>1.0.2017.0111</version>
+        <title>InTheHand.Forms</title>
+        <authors>Peter Foot</authors>
+        <owners>peterfoot</owners>
+        <licenseUrl>https://github.com/inthehand/inthehand.forms/blob/master/License.txt</licenseUrl>
+        <projectUrl>https://github.com/inthehand/inthehand.forms</projectUrl>
+        <iconUrl>https://avatars3.githubusercontent.com/u/11249648</iconUrl>
+        <requireLicenseAcceptance>true</requireLicenseAcceptance>
+        <description>Extras for Xamarin Forms</description>
+        <summary>Extras for Xamarin Forms</summary>
+        <releaseNotes>Initial NuGet release.</releaseNotes>
+        <copyright>Copyright (c) 2017 In The Hand Ltd</copyright>
+        <tags>windows ios tvos android xamarin uwp pcl</tags>
+        <dependencies>
+            <dependency id="Xamarin.Forms" version="2.3.3.180" />
+        </dependencies>
+    </metadata>
+    <files>
+        <file src="lib\MonoAndroid10\InTheHand.Forms.dll" target="lib\MonoAndroid\InTheHand.Forms.dll" />
+        <file src="lib\MonoAndroid10\InTheHand.Forms.Platform.Android.dll" target="lib\MonoAndroid\InTheHand.Forms.Platform.Android.dll" />
+        <file src="lib\MonoAndroid10\InTheHand.Forms.xml" target="lib\MonoAndroid\InTheHand.Forms.xml" />
+        <file src="lib\portable-net45+netcore45+wpa81+wp8\InTheHand.Forms.dll" target="lib\portable-net45+netcore45+wpa81+wp8\InTheHand.Forms.dll" />
+        <file src="lib\portable-net45+netcore45+wpa81+wp8\InTheHand.Forms.XML" target="lib\portable-net45+netcore45+wpa81+wp8\InTheHand.Forms.XML" />
+        <file src="lib\uap10.0\InTheHand.Forms.dll" target="lib\uap10.0\InTheHand.Forms.dll" />
+        <file src="lib\uap10.0\InTheHand.Forms.Platform.UWP.dll" target="lib\uap10.0\InTheHand.Forms.Platform.UWP.dll" />
+        <file src="lib\uap10.0\InTheHand.Forms.xml" target="lib\uap10.0\InTheHand.Forms.xml" />
+        <file src="lib\Xamarin.iOS10\InTheHand.Forms.dll" target="lib\xamarinios\InTheHand.Forms.dll" />
+        <file src="lib\Xamarin.iOS10\InTheHand.Forms.Platform.iOS.dll" target="lib\xamarinios\InTheHand.Forms.Platform.iOS.dll" />
+        <file src="lib\Xamarin.iOS10\InTheHand.Forms.xml" target="lib\xamarinios\InTheHand.Forms.xml" />
+    </files>
+</package>

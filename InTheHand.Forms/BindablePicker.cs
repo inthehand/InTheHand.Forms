@@ -1,4 +1,10 @@
-﻿using System;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="BindablePicker.cs" company="In The Hand Ltd">
+//   Copyright (c) 2017 In The Hand Ltd, All rights reserved.
+// </copyright>
+// --------------------------------------------------------------------------------------------------------------------
+
+using System;
 using Xamarin.Forms;
 using System.Collections;
 //
@@ -6,6 +12,9 @@ using System.Collections;
 //
 namespace InTheHand.Forms
 {
+    /// <summary>
+    /// Adds data-binding support to Picker.
+    /// </summary>
     public class BindablePicker : Picker
     {
         public BindablePicker()
@@ -14,10 +23,10 @@ namespace InTheHand.Forms
         }
 
         public static BindableProperty ItemsSourceProperty =
-            BindableProperty.Create("ItemsSource", typeof(IEnumerable), typeof(BindablePicker), default(IEnumerable), BindingMode.OneWay,null, OnItemsSourceChanged);
+            BindableProperty.Create(nameof(ItemsSource), typeof(IEnumerable), typeof(BindablePicker), default(IEnumerable), BindingMode.OneWay,null, OnItemsSourceChanged);
 
         public static BindableProperty SelectedItemProperty =
-            BindableProperty.Create("SelectedItem", typeof(object), typeof(BindablePicker), default(object), BindingMode.TwoWay, null, OnSelectedItemChanged);
+            BindableProperty.Create(nameof(SelectedItem), typeof(object), typeof(BindablePicker), null, BindingMode.TwoWay, null, OnSelectedItemChanged);
 
         public IEnumerable ItemsSource
         {

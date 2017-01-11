@@ -29,15 +29,18 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>NuGet\lib\portable-net45+netcore45+wpa81+wp8\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>NuGet\lib\portable-net45+netcore45+wpa81+wp8\InTheHand.Forms.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="BindablePicker.cs" />
     <Compile Include="CheckSwitch.cs" />
     <Compile Include="MediaElement.cs" />
+    <Compile Include="MediaElementState.cs" />
+    <Compile Include="OnPlatform2.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

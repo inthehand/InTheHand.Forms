@@ -1,0 +1,120 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>InTheHand.Forms</name>
+    </assembly>
+    <members>
+        <member name="T:InTheHand.Forms.MediaElement">
+            <summary>
+            Represents an object that renders audio and video to the display.
+            </summary>
+        </member>
+        <member name="P:InTheHand.Forms.MediaElement.Source">
+            <summary>
+            Gets or sets a media source on the MediaElement.
+            </summary>
+        </member>
+        <member name="P:InTheHand.Forms.MediaElement.CurrentState">
+            <summary>
+            Gets the status of this MediaElement.
+            </summary>
+        </member>
+        <member name="P:InTheHand.Forms.MediaElement.Position">
+            <summary>
+            Gets or sets the current position of progress through the media's playback time.
+            </summary>
+        </member>
+        <member name="M:InTheHand.Forms.MediaElement.Play">
+            <summary>
+            Plays media from the current position.
+            </summary>
+        </member>
+        <member name="M:InTheHand.Forms.MediaElement.Pause">
+            <summary>
+            Pauses media at the current position.
+            </summary>
+        </member>
+        <member name="M:InTheHand.Forms.MediaElement.Stop">
+            <summary>
+            Stops and resets media to be played from the beginning.
+            </summary>
+        </member>
+        <member name="E:InTheHand.Forms.MediaElement.CurrentStateChanged">
+            <summary>
+            Occurs when the value of the CurrentState property changes.
+            </summary>
+        </member>
+        <member name="E:InTheHand.Forms.MediaElement.MediaEnded">
+            <summary>
+            Occurs when the MediaElement finishes playing audio or video.
+            </summary>
+        </member>
+        <member name="E:InTheHand.Forms.MediaElement.MediaOpened">
+            <summary>
+            Occurs when the media stream has been validated and opened, and the file headers have been read.
+            </summary>
+        </member>
+        <member name="E:InTheHand.Forms.MediaElement.SeekCompleted">
+            <summary>
+            Occurs when the seek point of a requested seek operation is ready for playback.
+            </summary>
+        </member>
+        <member name="T:InTheHand.Forms.MediaElementState">
+            <summary>
+            Defines the potential states of a MediaElement object. 
+            </summary>
+        </member>
+        <member name="F:InTheHand.Forms.MediaElementState.Closed">
+            <summary>
+            The <see cref="T:InTheHand.Forms.MediaElement"/> contains no media.
+            The <see cref="T:InTheHand.Forms.MediaElement"/> displays a transparent frame.
+            </summary>
+        </member>
+        <member name="F:InTheHand.Forms.MediaElementState.Opening">
+            <summary>
+            The <see cref="T:InTheHand.Forms.MediaElement"/> is validating and attempting to load the specified source.
+            </summary>
+        </member>
+        <member name="F:InTheHand.Forms.MediaElementState.Buffering">
+            <summary>
+            The <see cref="T:InTheHand.Forms.MediaElement"/> is loading the media for playback.
+            Its <see cref="P:InTheHand.Forms.MediaElement.Position"/> does not advance during this state.
+            If the <see cref="T:InTheHand.Forms.MediaElement"/> was already playing video, it continues to display the last displayed frame.
+            </summary>
+        </member>
+        <member name="F:InTheHand.Forms.MediaElementState.Playing">
+            <summary>
+            The <see cref="T:InTheHand.Forms.MediaElement"/> is playing the current media source.
+            </summary>
+        </member>
+        <member name="F:InTheHand.Forms.MediaElementState.Paused">
+            <summary>
+            The <see cref="T:InTheHand.Forms.MediaElement"/> does not advance its <see cref="P:InTheHand.Forms.MediaElement.Position"/>.
+            If the <see cref="T:InTheHand.Forms.MediaElement"/> was playing video, it continues to display the current frame.
+            </summary>
+        </member>
+        <member name="F:InTheHand.Forms.MediaElementState.Stopped">
+            <summary>
+            The <see cref="T:InTheHand.Forms.MediaElement"/> contains media but is not playing or paused.
+            Its <see cref="P:InTheHand.Forms.MediaElement.Position"/> is 0 and does not advance.
+            If the loaded media is video, the <see cref="T:InTheHand.Forms.MediaElement"/> displays the first frame.
+            </summary>
+        </member>
+        <member name="T:InTheHand.Forms.OnPlatform2`1">
+            <summary>
+            Replacement for Xamarin.Forms.OnPlatform which supports the Windows (WinRT) platforms.
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="P:InTheHand.Forms.OnPlatform2`1.Windows">
+            <summary>
+            The value to use for WinRT (Windows Phone 8.1, Windows 8.1, Windows 10).
+            </summary>
+        </member>
+        <member name="P:InTheHand.Forms.OnPlatform2`1.Other">
+            <summary>
+            Currently unused.
+            </summary>
+        </member>
+    </members>
+</doc>
