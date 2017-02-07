@@ -138,14 +138,18 @@ namespace InTheHand.Forms.Platform.iOS
                 case "Source":
                     if (Element.Source != null)
                     {
+                        NSUrl url = null;
+
                         if (!Element.Source.OriginalString.StartsWith("/"))
                         {
-                            player = AVPlayer.FromUrl(NSUrl.FromString(Element.Source.ToString()));
+                            url = NSUrl.FromString(Element.Source.ToString());
                         }
                         else
                         {
-                            player = AVPlayer.FromUrl(NSUrl.FromFilename(Element.Source.ToString().Substring(1)));
+                            url = NSUrl.FromFilename(Element.Source.ToString().Substring(1));
                         }
+
+                        player = AVPlayer.FromUrl(url);
                     }
 
                     layer = AVPlayerLayer.FromPlayer(player);

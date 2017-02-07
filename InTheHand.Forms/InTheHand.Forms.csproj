@@ -36,7 +36,6 @@
     <DocumentationFile>NuGet\lib\portable-net45+netcore45+wpa81+wp8\InTheHand.Forms.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="BindablePicker.cs" />
     <Compile Include="CheckSwitch.cs" />
     <Compile Include="MediaElement.cs" />
     <Compile Include="MediaElementState.cs" />

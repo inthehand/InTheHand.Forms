@@ -14,20 +14,28 @@ namespace InTheHand.Forms
     /// </summary>
     public sealed class MediaElement : Xamarin.Forms.View
     {
-        //Bindable properties
+        /// <summary>
+        /// Identifies the Source dependency property.
+        /// </summary>
         public static readonly BindableProperty SourceProperty =
           BindableProperty.Create(nameof(Source), typeof(Uri), typeof(MediaElement));
 
+        /// <summary>
+        /// Identifies the CurrentState dependency property.
+        /// </summary>
         public static readonly BindableProperty CurrentStateProperty =
           BindableProperty.Create(nameof(CurrentState), typeof(MediaElementState), typeof(MediaElement), MediaElementState.Closed);
 
+        /// <summary>
+        /// Identifies the Position dependency property.
+        /// </summary>
         public static readonly BindableProperty PositionProperty =
           BindableProperty.Create(nameof(Position), typeof(TimeSpan), typeof(MediaElement), TimeSpan.Zero);
 
         /// <summary>
         /// Gets or sets a media source on the MediaElement.
         /// </summary>
-        [Xamarin.Forms.TypeConverter(typeof(UriTypeConverter))]
+        [TypeConverter(typeof(UriTypeConverter))]
         public Uri Source
         {
             get { return (Uri)GetValue(SourceProperty); }

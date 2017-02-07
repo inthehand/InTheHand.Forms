@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InTheHand.Forms.Platform.UW
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InTheHand.Forms.Platform.Android", "InTheHand.Forms.Platform.Android\InTheHand.Forms.Platform.Android.csproj", "{754B39AD-D247-4972-9686-F95F889234A8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InTheHand.Forms.Platform.Tizen", "..\InTheHand.Forms.Platform.Tizen\InTheHand.Forms.Platform.Tizen.csproj", "{3496951D-CB7A-4849-9C9C-85DCEF213460}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -87,6 +89,22 @@ Global
 		{754B39AD-D247-4972-9686-F95F889234A8}.Release|x64.Build.0 = Release|Any CPU
 		{754B39AD-D247-4972-9686-F95F889234A8}.Release|x86.ActiveCfg = Release|Any CPU
 		{754B39AD-D247-4972-9686-F95F889234A8}.Release|x86.Build.0 = Release|Any CPU
+		{3496951D-CB7A-4849-9C9C-85DCEF213460}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3496951D-CB7A-4849-9C9C-85DCEF213460}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3496951D-CB7A-4849-9C9C-85DCEF213460}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{3496951D-CB7A-4849-9C9C-85DCEF213460}.Debug|ARM.Build.0 = Debug|Any CPU
+		{3496951D-CB7A-4849-9C9C-85DCEF213460}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{3496951D-CB7A-4849-9C9C-85DCEF213460}.Debug|x64.Build.0 = Debug|Any CPU
+		{3496951D-CB7A-4849-9C9C-85DCEF213460}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{3496951D-CB7A-4849-9C9C-85DCEF213460}.Debug|x86.Build.0 = Debug|Any CPU
+		{3496951D-CB7A-4849-9C9C-85DCEF213460}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3496951D-CB7A-4849-9C9C-85DCEF213460}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3496951D-CB7A-4849-9C9C-85DCEF213460}.Release|ARM.ActiveCfg = Release|Any CPU
+		{3496951D-CB7A-4849-9C9C-85DCEF213460}.Release|ARM.Build.0 = Release|Any CPU
+		{3496951D-CB7A-4849-9C9C-85DCEF213460}.Release|x64.ActiveCfg = Release|Any CPU
+		{3496951D-CB7A-4849-9C9C-85DCEF213460}.Release|x64.Build.0 = Release|Any CPU
+		{3496951D-CB7A-4849-9C9C-85DCEF213460}.Release|x86.ActiveCfg = Release|Any CPU
+		{3496951D-CB7A-4849-9C9C-85DCEF213460}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
