@@ -20,6 +20,7 @@ namespace InTheHand.Forms.Platform.UWP
             {
                 this.SetNativeControl(new Windows.UI.Xaml.Controls.MediaElement());
                 Control.Stretch = Windows.UI.Xaml.Media.Stretch.Uniform;
+                Control.AreTransportControlsEnabled = true;
                 if (Element.Source != null)
                 {
                     if (Element.Source.IsAbsoluteUri)
@@ -38,6 +39,10 @@ namespace InTheHand.Forms.Platform.UWP
         {
             switch (e.PropertyName)
             {
+                case "AreTransportControlsEnabled":
+                    Control.AreTransportControlsEnabled = Element.AreTransportControlsEnabled;
+                    break;
+
                 case "Source":
                     Control.Source = Element.Source;
                     break;

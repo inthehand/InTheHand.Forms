@@ -13,17 +13,22 @@ namespace InTheHand.Forms.Platform.Android
 {
     public sealed class MediaElementRenderer : ViewRenderer<MediaElement, VideoView>, MediaPlayer.IOnCompletionListener
     {
+        private MediaController _controller;
+        
         protected override void OnElementChanged(ElementChangedEventArgs<MediaElement> e)
         {
             base.OnElementChanged(e);
 
             if (e.NewElement != null)
             {
-                SetNativeControl(new VideoView(this.Context));
+                SetNativeControl(new VideoView(Context));
                 this.Control.Touch += Control_Touch;
                 this.Control.KeepScreenOn = true;
                 this.Control.Prepared += Control_Prepared;
                 this.Control.SetOnCompletionListener(this);
+                _controller = new MediaController(Context);
+                _controller.Visibility = Element.AreTransportControlsEnabled ? ViewStates.Visible : ViewStates.Gone;
+                this.Control.SetMediaController(_controller);
 
                 if (e.NewElement.Source != null)
                 {
@@ -81,6 +86,10 @@ namespace InTheHand.Forms.Platform.Android
         {
             switch(e.PropertyName)
             {
+                case "AreTransportControlsEnabled":
+                    _controller.Visibility = Element.AreTransportControlsEnabled ? ViewStates.Visible : ViewStates.Gone;
+                    break;
+
                 case "Source":
                     if (!Element.Source.OriginalString.StartsWith("/"))
                     {
