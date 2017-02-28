@@ -20,7 +20,8 @@ namespace InTheHand.Forms.Platform.UWP
             {
                 this.SetNativeControl(new Windows.UI.Xaml.Controls.MediaElement());
                 Control.Stretch = Windows.UI.Xaml.Media.Stretch.Uniform;
-                Control.AreTransportControlsEnabled = true;
+                Control.AreTransportControlsEnabled = Element.AreTransportControlsEnabled;
+                Control.AutoPlay = Element.AutoPlay;
                 if (Element.Source != null)
                 {
                     if (Element.Source.IsAbsoluteUri)
@@ -41,6 +42,10 @@ namespace InTheHand.Forms.Platform.UWP
             {
                 case "AreTransportControlsEnabled":
                     Control.AreTransportControlsEnabled = Element.AreTransportControlsEnabled;
+                    break;
+
+                case "AutoPlay":
+                    Control.AutoPlay = Element.AutoPlay;
                     break;
 
                 case "Source":

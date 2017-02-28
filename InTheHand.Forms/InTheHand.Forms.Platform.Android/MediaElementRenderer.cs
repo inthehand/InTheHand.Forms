@@ -14,10 +14,20 @@ namespace InTheHand.Forms.Platform.Android
     public sealed class MediaElementRenderer : ViewRenderer<MediaElement, VideoView>, MediaPlayer.IOnCompletionListener
     {
         private MediaController _controller;
-        
+
         protected override void OnElementChanged(ElementChangedEventArgs<MediaElement> e)
         {
             base.OnElementChanged(e);
+
+            if(e.OldElement != null)
+            {
+                if (Control != null)
+                {
+                    Control.Touch -= Control_Touch;
+                    Control.Prepared -= Control_Prepared;
+                    Control.Dispose();
+                }
+            }
 
             if (e.NewElement != null)
             {
@@ -30,20 +40,29 @@ namespace InTheHand.Forms.Platform.Android
                 _controller.Visibility = Element.AreTransportControlsEnabled ? ViewStates.Visible : ViewStates.Gone;
                 this.Control.SetMediaController(_controller);
 
-                if (e.NewElement.Source != null)
+                UpdateSource();
+            }
+        }
+
+        private void UpdateSource()
+        {
+            if (Element.Source != null)
+            {
+                if (!Element.Source.OriginalString.StartsWith("/"))
                 {
-                    if (!e.NewElement.Source.OriginalString.StartsWith("/"))
-                    {
-                        this.Control.SetVideoURI(global::Android.Net.Uri.Parse(e.NewElement.Source.ToString()));
-                    }
-                    else
-                    {
-                        String path = "android.resource://" + Context.PackageName + "/" + Resources.GetIdentifier(System.IO.Path.GetFileNameWithoutExtension(e.NewElement.Source.ToString()), "raw", Context.PackageName).ToString();
-
-                        this.Control.SetVideoPath(path);
-                    }
-
+                    Control.SetVideoURI(global::Android.Net.Uri.Parse(Element.Source.ToString()));
                 }
+                else
+                {
+                    string path = "android.resource://" + Context.PackageName + "/" + Resources.GetIdentifier(System.IO.Path.GetFileNameWithoutExtension(Element.Source.ToString()), "raw", Context.PackageName).ToString();
+                    Control.SetVideoPath(path);
+                }
+
+                if(Element.AutoPlay)
+                {
+                    Control.Start();
+                }
+
             }
         }
 
@@ -52,11 +71,7 @@ namespace InTheHand.Forms.Platform.Android
             Element.OnMediaOpened();
         }
 
-        protected override void OnSizeChanged(int w, int h, int oldw, int oldh)
-        {
-            base.OnSizeChanged(w, h, oldw, oldh);
-            Control.RequestLayout();
-        }
+
 
         void Control_Touch(object sender, TouchEventArgs e)
         {
@@ -91,17 +106,9 @@ namespace InTheHand.Forms.Platform.Android
                     break;
 
                 case "Source":
-                    if (!Element.Source.OriginalString.StartsWith("/"))
-                    {
-                        Control.SetVideoURI(global::Android.Net.Uri.Parse(Element.Source.ToString()));
-                    }
-                    else
-                    {
-                        string path = "android.resource://" + Context.PackageName + "/" + Resources.GetIdentifier(System.IO.Path.GetFileNameWithoutExtension(Element.Source.ToString()), "raw", Context.PackageName).ToString();
-
-                        Control.SetVideoPath(path);
-                    }
+                    UpdateSource();
                     break;
+
                 case "CurrentState":
                     switch(Element.CurrentState)
                     {
@@ -122,11 +129,11 @@ namespace InTheHand.Forms.Platform.Android
             base.OnElementPropertyChanged(sender, e);
         }
 
-        private MediaPlayer player = null;
+        //private MediaPlayer player = null;
 
         public void OnCompletion(MediaPlayer mp)
         {
-            player = mp;
+            //player = mp;
             this.Element.OnMediaEnded();
         }
     }

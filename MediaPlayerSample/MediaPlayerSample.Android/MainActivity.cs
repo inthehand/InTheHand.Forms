@@ -9,7 +9,7 @@ using Android.OS;
 
 namespace MediaPlayerSample.Droid
 {
-    [Activity(Label = "MediaPlayerSample", Icon = "@drawable/icon", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+    [Activity(Label = "Media Player Sample", Icon = "@drawable/icon", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
         protected override void OnCreate(Bundle bundle)
@@ -20,6 +20,7 @@ namespace MediaPlayerSample.Droid
             base.OnCreate(bundle);
 
             global::Xamarin.Forms.Forms.Init(this, bundle);
+            var r = new InTheHand.Forms.Platform.Android.MediaElementRenderer();
             LoadApplication(new App());
         }
     }

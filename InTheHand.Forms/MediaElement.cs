@@ -12,8 +12,21 @@ namespace InTheHand.Forms
     /// <summary>
     /// Represents an object that renders audio and video to the display.
     /// </summary>
-    public sealed class MediaElement : Xamarin.Forms.View
+    public sealed class MediaElement : View
     {
+        /// <summary>
+        /// Identifies the AreTransportControlsEnabled dependency property.
+        /// </summary>
+        public static readonly BindableProperty AreTransportControlsEnabledProperty =
+          BindableProperty.Create(nameof(AreTransportControlsEnabled), typeof(bool), typeof(MediaElement), false);
+        
+        /// <summary>
+        /// Identifies the AutoPlay dependency property.
+        /// </summary>
+        public static readonly BindableProperty AutoPlayProperty =
+          BindableProperty.Create(nameof(AutoPlay), typeof(bool), typeof(MediaElement), true);
+
+
         /// <summary>
         /// Identifies the Source dependency property.
         /// </summary>
@@ -31,6 +44,24 @@ namespace InTheHand.Forms
         /// </summary>
         public static readonly BindableProperty PositionProperty =
           BindableProperty.Create(nameof(Position), typeof(TimeSpan), typeof(MediaElement), TimeSpan.Zero);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool AreTransportControlsEnabled
+        {
+            get { return (bool)GetValue(AreTransportControlsEnabledProperty); }
+            set { SetValue(AreTransportControlsEnabledProperty, value); }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool AutoPlay
+        {
+            get { return (bool)GetValue(AutoPlayProperty); }
+            set { SetValue(AutoPlayProperty, value); }
+        }
 
         /// <summary>
         /// Gets or sets a media source on the MediaElement.

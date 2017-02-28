@@ -18,10 +18,10 @@ namespace MediaPlayerSample
         private void MainPage_Appearing(object sender, EventArgs e)
         {
             //Device.OpenUri(new Uri("http://video.ch9.ms/ch9/334f/891b78a5-642d-40b4-8d02-ff40ffdd334f/LoginToLinkedinUSingXamarinAuth_mid.mp4"));
-            if(Media.CurrentState != InTheHand.Forms.MediaElementState.Playing)
+            /*if(Media.CurrentState != InTheHand.Forms.MediaElementState.Playing)
             {
                 Media.Play();
-            }
+            }*/
         }
     }
 }

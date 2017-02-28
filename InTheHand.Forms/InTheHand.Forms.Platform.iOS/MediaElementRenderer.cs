@@ -51,6 +51,11 @@ namespace InTheHand.Forms.Platform.iOS
            
                 _notificationHandle = NSNotificationCenter.DefaultCenter.AddObserver(AVPlayerItem.DidPlayToEndTimeNotification, PlayedToEnd);
                 observer = (NSObject)_avPlayerViewController.Player.CurrentItem.AddObserver("status", 0, ObserveStatus);
+
+                if(Element.AutoPlay)
+                {
+                    _avPlayerViewController.Player.Play();
+                }
             }
         }
 
@@ -137,6 +142,10 @@ namespace InTheHand.Forms.Platform.iOS
                         }
 
                         _avPlayerViewController.Player.ReplaceCurrentItemWithPlayerItem(new AVPlayerItem(url));
+                        if (Element.AutoPlay)
+                        {
+                            _avPlayerViewController.Player.Play();
+                        }
                     }
                     
                     break;
