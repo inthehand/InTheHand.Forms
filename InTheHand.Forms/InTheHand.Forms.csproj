@@ -37,8 +37,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="CheckSwitch.cs" />
+    <Compile Include="IPageNavigation.cs" />
     <Compile Include="MediaElement.cs" />
     <Compile Include="MediaElementState.cs" />
+    <Compile Include="NavigationEventArgs2.cs" />
+    <Compile Include="NavigationMode.cs" />
+    <Compile Include="NavigationPage2.cs" />
     <Compile Include="OnPlatform2.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

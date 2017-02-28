@@ -23,19 +23,24 @@ namespace InTheHand.Forms.Platform.Android
             {
                 if (Control != null)
                 {
-                    Control.Touch -= Control_Touch;
                     Control.Prepared -= Control_Prepared;
+                    Control.SetOnCompletionListener(null);
                     Control.Dispose();
+                }
+                if(_controller != null)
+                {
+                    _controller.Dispose();
+                    _controller = null;
                 }
             }
 
             if (e.NewElement != null)
             {
                 SetNativeControl(new VideoView(Context));
-                this.Control.Touch += Control_Touch;
                 this.Control.KeepScreenOn = true;
                 this.Control.Prepared += Control_Prepared;
                 this.Control.SetOnCompletionListener(this);
+
                 _controller = new MediaController(Context);
                 _controller.Visibility = Element.AreTransportControlsEnabled ? ViewStates.Visible : ViewStates.Gone;
                 this.Control.SetMediaController(_controller);
@@ -70,33 +75,7 @@ namespace InTheHand.Forms.Platform.Android
         {
             Element.OnMediaOpened();
         }
-
-
-
-        void Control_Touch(object sender, TouchEventArgs e)
-        {
-            switch (e.Event.Action)
-            {
-                case MotionEventActions.Up:
-                    if (Control.IsPlaying)
-                    {
-                        if (this.Control.CanPause())
-                        {
-                            Element.Pause();
-                            this.Control.Pause();
-                            this.Control.KeepScreenOn = false;
-                        }
-                    }
-                    else
-                    {
-                        Element.Play();
-                        this.Control.Start();
-                        this.Control.KeepScreenOn = true;
-                    }
-                    break;
-            }
-        }
-
+        
         protected override void OnElementPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             switch(e.PropertyName)
@@ -114,13 +93,16 @@ namespace InTheHand.Forms.Platform.Android
                     {
                         case MediaElementState.Playing:
                             Control.Start();
+                            this.Control.KeepScreenOn = true;
                             break;
                         case MediaElementState.Paused:
                             Control.Pause();
+                            this.Control.KeepScreenOn = false;
                             break;
                         case MediaElementState.Stopped:
                             Control.SeekTo(0);
                             Control.StopPlayback();
+                            this.Control.KeepScreenOn = false;
                             break;
                     }
                     break;

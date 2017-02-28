@@ -108,6 +108,9 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\InTheHand.Forms.Platform.Android\InTheHandForms.cs">
+      <Link>InTheHandForms.cs</Link>
+    </Compile>
     <Compile Include="CheckSwitchRenderer.cs" />
     <Compile Include="ColorExtensions.cs" />
     <Compile Include="MediaElementRenderer.cs" />

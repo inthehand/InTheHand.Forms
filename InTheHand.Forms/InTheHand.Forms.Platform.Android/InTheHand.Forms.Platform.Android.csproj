@@ -100,6 +100,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CheckSwitchRenderer.cs" />
+    <Compile Include="InTheHandForms.cs" />
     <Compile Include="MediaElementRenderer.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

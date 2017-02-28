@@ -46,7 +46,7 @@ namespace InTheHand.Forms
           BindableProperty.Create(nameof(Position), typeof(TimeSpan), typeof(MediaElement), TimeSpan.Zero);
 
         /// <summary>
-        /// 
+        /// Gets or sets a value that determines whether the standard transport controls are enabled.
         /// </summary>
         public bool AreTransportControlsEnabled
         {
@@ -55,7 +55,7 @@ namespace InTheHand.Forms
         }
 
         /// <summary>
-        /// 
+        /// Gets or sets a value that indicates whether media will begin playback automatically when the <see cref="Source"/> property is set.
         /// </summary>
         public bool AutoPlay
         {
@@ -134,7 +134,7 @@ namespace InTheHand.Forms
         }
 
         /// <summary>
-        /// Occurs when the value of the CurrentState property changes.
+        /// Occurs when the value of the <see cref="CurrentState"/> property changes.
         /// </summary>
         public event EventHandler CurrentStateChanged;
 

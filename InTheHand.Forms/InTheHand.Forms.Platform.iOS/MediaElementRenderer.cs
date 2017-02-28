@@ -61,10 +61,18 @@ namespace InTheHand.Forms.Platform.iOS
 
         protected override void Dispose(bool disposing)
         {
-            NSNotificationCenter.DefaultCenter.RemoveObserver(_notificationHandle);
-            _avPlayerViewController.Player.CurrentItem.RemoveObserver(observer, "status");
-            _notificationHandle = null;
-            observer = null;
+            if (_notificationHandle != null)
+            {
+                NSNotificationCenter.DefaultCenter.RemoveObserver(_notificationHandle);
+                _notificationHandle = null;
+            }
+
+            if (observer != null)
+            {
+                _avPlayerViewController?.Player?.CurrentItem?.RemoveObserver(observer, "status");
+                observer = null;
+            }
+
             base.Dispose(disposing);
         }
 

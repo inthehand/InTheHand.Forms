@@ -23,7 +23,7 @@ namespace MediaPlayerSample.iOS
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
             global::Xamarin.Forms.Forms.Init();
-            var m = new InTheHand.Forms.Platform.iOS.MediaElementRenderer();
+            InTheHand.Forms.Platform.iOS.InTheHandForms.Init();
             LoadApplication(new App());
 
             return base.FinishedLaunching(app, options);

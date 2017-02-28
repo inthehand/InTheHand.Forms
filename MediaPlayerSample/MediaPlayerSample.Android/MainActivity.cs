@@ -20,7 +20,7 @@ namespace MediaPlayerSample.Droid
             base.OnCreate(bundle);
 
             global::Xamarin.Forms.Forms.Init(this, bundle);
-            var r = new InTheHand.Forms.Platform.Android.MediaElementRenderer();
+            InTheHand.Forms.Platform.Android.InTheHandForms.Init();
             LoadApplication(new App());
         }
     }
