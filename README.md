@@ -1,4 +1,3 @@
-
 # InTheHand.Forms
 Extra Xamarin Forms APIs
 
@@ -18,5 +17,5 @@ Supports Android, iOS and UWP platforms.
 - [Navigation Sample](https://github.com/inthehand/InTheHand.Forms/tree/master/XamarinFormsNavigation)
 
 ## See also:-
-[Pontoon - Cross platform APIs](https://github.com/inthehand/Pontoon)
-[In The Hand Ltd](http://inthehand.com)
+- [Pontoon - Cross platform APIs](https://github.com/inthehand/Pontoon)
+- [In The Hand Ltd](http://inthehand.com)
