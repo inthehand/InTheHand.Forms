@@ -6,6 +6,8 @@ using InTheHand.Forms;
 using System;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
+using Android.Graphics;
+using Android.Runtime;
 
 [assembly: ExportRenderer(typeof(MediaElement), typeof(InTheHand.Forms.Platform.Android.MediaElementRenderer))]
 
@@ -27,6 +29,7 @@ namespace InTheHand.Forms.Platform.Android
                     Control.SetOnCompletionListener(null);
                     Control.Dispose();
                 }
+
                 if(_controller != null)
                 {
                     _controller.Dispose();
@@ -44,7 +47,7 @@ namespace InTheHand.Forms.Platform.Android
                 _controller = new MediaController(Context);
                 _controller.Visibility = Element.AreTransportControlsEnabled ? ViewStates.Visible : ViewStates.Gone;
                 this.Control.SetMediaController(_controller);
-
+                
                 UpdateSource();
             }
         }
@@ -53,14 +56,15 @@ namespace InTheHand.Forms.Platform.Android
         {
             if (Element.Source != null)
             {
-                if (!Element.Source.OriginalString.StartsWith("/"))
+                if (Element.Source.Scheme == "ms-appx")
                 {
-                    Control.SetVideoURI(global::Android.Net.Uri.Parse(Element.Source.ToString()));
+                    // video resources should be in the raw folder with Build Action set to AndroidResource
+                    string uri = "android.resource://" + Context.PackageName + "/raw/" + Element.Source.LocalPath.Substring(1, Element.Source.LocalPath.LastIndexOf('.') - 1).ToLower();
+                    Control.SetVideoURI(global::Android.Net.Uri.Parse(uri));
                 }
                 else
                 {
-                    string path = "android.resource://" + Context.PackageName + "/" + Resources.GetIdentifier(System.IO.Path.GetFileNameWithoutExtension(Element.Source.ToString()), "raw", Context.PackageName).ToString();
-                    Control.SetVideoPath(path);
+                    Control.SetVideoURI(global::Android.Net.Uri.Parse(Element.Source.ToString()));
                 }
 
                 if(Element.AutoPlay)
@@ -115,8 +119,16 @@ namespace InTheHand.Forms.Platform.Android
 
         public void OnCompletion(MediaPlayer mp)
         {
-            //player = mp;
-            this.Element.OnMediaEnded();
+            if (Element.IsLooping)
+            {
+                mp.SeekTo(0);
+                mp.Start();
+            }
+            else
+            {
+                //player = mp;
+                this.Element.OnMediaEnded();
+            }
         }
     }
 }

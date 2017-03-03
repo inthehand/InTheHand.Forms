@@ -22,6 +22,7 @@ namespace InTheHand.Forms.Platform.UWP
                 Control.Stretch = Windows.UI.Xaml.Media.Stretch.Uniform;
                 Control.AreTransportControlsEnabled = Element.AreTransportControlsEnabled;
                 Control.AutoPlay = Element.AutoPlay;
+                Control.IsLooping = Element.IsLooping;
                 if (Element.Source != null)
                 {
                     if (Element.Source.IsAbsoluteUri)
@@ -46,6 +47,10 @@ namespace InTheHand.Forms.Platform.UWP
 
                 case "AutoPlay":
                     Control.AutoPlay = Element.AutoPlay;
+                    break;
+
+                case "IsLooping":
+                    Control.IsLooping = Element.IsLooping;
                     break;
 
                 case "Source":

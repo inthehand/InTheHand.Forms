@@ -26,6 +26,13 @@ namespace InTheHand.Forms
         public static readonly BindableProperty AutoPlayProperty =
           BindableProperty.Create(nameof(AutoPlay), typeof(bool), typeof(MediaElement), true);
 
+        /// <summary>
+        /// Identifies the IsLooping dependency property.
+        /// </summary>
+        public static readonly BindableProperty IsLoopingProperty =
+          BindableProperty.Create(nameof(IsLooping), typeof(bool), typeof(MediaElement), false);
+
+
 
         /// <summary>
         /// Identifies the Source dependency property.
@@ -61,6 +68,15 @@ namespace InTheHand.Forms
         {
             get { return (bool)GetValue(AutoPlayProperty); }
             set { SetValue(AutoPlayProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets a value that describes whether the media source currently loaded in the media engine should automatically set the position to the media start after reaching its end.
+        /// </summary>
+        public bool IsLooping
+        {
+            get { return (bool)GetValue(IsLoopingProperty); }
+            set { SetValue(IsLoopingProperty, value); }
         }
 
         /// <summary>

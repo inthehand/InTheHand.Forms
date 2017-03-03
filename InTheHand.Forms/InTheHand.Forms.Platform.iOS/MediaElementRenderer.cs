@@ -27,32 +27,57 @@ namespace InTheHand.Forms.Platform.iOS
             SetNativeControl(_avPlayerViewController.View);
 
             _avPlayerViewController.ShowsPlaybackControls = Element.AreTransportControlsEnabled;
-            Control.BackgroundColor = UIColor.Black;
+            _avPlayerViewController.VideoGravity = AVLayerVideoGravity.ResizeAspect;
+            
+            Element.SeekCompleted += Element_SeekCompleted;
+            _notificationHandle = NSNotificationCenter.DefaultCenter.AddObserver(AVPlayerItem.DidPlayToEndTimeNotification, PlayedToEnd);
 
+            UpdateSource();
+        }
+
+        private void UpdateSource()
+        {
             if (Element.Source != null)
             {
-                Element.SeekCompleted += Element_SeekCompleted;
                 AVAsset asset = null;
-                if (Element.Source.OriginalString.StartsWith("http"))
+                if(Element.Source.Scheme == "ms-appx")
+                {
+                    // used for a file embedded in the application package
+                    asset = AVAsset.FromUrl(NSUrl.FromFilename(Element.Source.LocalPath.Substring(1)));
+                }
+                else if (Element.Source.OriginalString.StartsWith("http"))
                 {
                     asset = AVAsset.FromUrl(NSUrl.FromString(Element.Source.ToString()));
                 }
                 else
                 {
-                    asset = AVAsset.FromUrl(NSUrl.FromFilename(Element.Source.OriginalString.Substring(1)));                
+                    asset = AVAsset.FromUrl(NSUrl.FromFilename(Element.Source.OriginalString.Substring(1)));
                 }
 
                 AVPlayerItem item = new AVPlayerItem(asset);
-                _avPlayerViewController.Player = new AVPlayer(item);
-                _avPlayerViewController.VideoGravity = AVLayerVideoGravity.ResizeAspect;
+                if(observer != null)
+                {
+                    if (_avPlayerViewController.Player != null && _avPlayerViewController.Player.CurrentItem != null)
+                    {
+                        _avPlayerViewController.Player.CurrentItem.RemoveObserver(observer, "status");
+                    }
 
-                UIGestureRecognizer recog = new UITapGestureRecognizer(Touched);
-                Control.GestureRecognizers = new UIGestureRecognizer[] { recog };
-           
-                _notificationHandle = NSNotificationCenter.DefaultCenter.AddObserver(AVPlayerItem.DidPlayToEndTimeNotification, PlayedToEnd);
-                observer = (NSObject)_avPlayerViewController.Player.CurrentItem.AddObserver("status", 0, ObserveStatus);
+                    observer.Dispose();
+                    observer = null;
+                }
 
-                if(Element.AutoPlay)
+                observer = (NSObject)item.AddObserver("status", 0, ObserveStatus);
+
+                if (_avPlayerViewController.Player != null)
+                {
+                    _avPlayerViewController.Player.ReplaceCurrentItemWithPlayerItem(item);
+                }
+                else
+                {
+                    _avPlayerViewController.Player = new AVPlayer(item);
+                }
+                
+                if (Element.AutoPlay)
                 {
                     _avPlayerViewController.Player.Play();
                 }
@@ -91,11 +116,19 @@ namespace InTheHand.Forms.Platform.iOS
 
         private void PlayedToEnd(NSNotification notification)
         {
-            try
+            if (Element.IsLooping)
             {
-                Device.BeginInvokeOnMainThread(Element.OnMediaEnded);
+                _avPlayerViewController.Player.Seek(CMTime.Zero);
+                _avPlayerViewController.Player.Play();
             }
-            catch { }
+            else
+            {
+                try
+                {
+                    Device.BeginInvokeOnMainThread(Element.OnMediaEnded);
+                }
+                catch { }
+            }
         }
 
         private void Element_SeekCompleted(object sender, EventArgs e)
@@ -103,7 +136,7 @@ namespace InTheHand.Forms.Platform.iOS
             _avPlayerViewController.Player.Seek(new CoreMedia.CMTime(Convert.ToInt64(Element.Position.TotalMilliseconds), 1000));
         }
 
-        private void Touched()
+        /*private void Touched()
         {
             if (_avPlayerViewController.Player.Rate == 1.0)
             {
@@ -119,44 +152,25 @@ namespace InTheHand.Forms.Platform.iOS
                 Element.Play();
                 //player.Play();
             }
-        }
+        }*/
 
         protected override void OnElementPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            System.Diagnostics.Debug.WriteLine(_avPlayerViewController.Player.Status.ToString());
-
             switch (e.PropertyName)
             {
                 case "AreTransportControlsEnabled":
                     _avPlayerViewController.ShowsPlaybackControls = Element.AreTransportControlsEnabled;
                     break;
 
-                case "Width":
+                /*case "Width":
                 case "Height":
                     System.Diagnostics.Debug.WriteLine(Element.Bounds);
-                    break;
+                    break;*/
+
                 case "Source":
-                    if (Element.Source != null)
-                    {
-                        NSUrl url = null;
-
-                        if (!Element.Source.OriginalString.StartsWith("/"))
-                        {
-                            url = NSUrl.FromString(Element.Source.ToString());
-                        }
-                        else
-                        {
-                            url = NSUrl.FromFilename(Element.Source.ToString().Substring(1));
-                        }
-
-                        _avPlayerViewController.Player.ReplaceCurrentItemWithPlayerItem(new AVPlayerItem(url));
-                        if (Element.AutoPlay)
-                        {
-                            _avPlayerViewController.Player.Play();
-                        }
-                    }
-                    
+                    UpdateSource();                  
                     break;
+
                 case "CurrentState":
                     System.Diagnostics.Debug.WriteLine(Element.CurrentState.ToString());
                     switch (Element.CurrentState)
@@ -176,6 +190,7 @@ namespace InTheHand.Forms.Platform.iOS
                             _avPlayerViewController.Player.Seek(CMTime.Zero);
                             break;
                     }
+
                     break;
             }
 
