@@ -6,11 +6,11 @@
 
 using InTheHand.Forms;
 using System;
-using Xamarin.Forms.Platform.UWP;
+using Xamarin.Forms.Platform.WinRT;
 
-[assembly: ExportRenderer(typeof(MediaElement), typeof(InTheHand.Forms.Platform.UWP.MediaElementRenderer))]
+[assembly: ExportRenderer(typeof(MediaElement), typeof(InTheHand.Forms.Platform.WinRT.MediaElementRenderer))]
 
-namespace InTheHand.Forms.Platform.UWP
+namespace InTheHand.Forms.Platform.WinRT
 {
     public sealed class MediaElementRenderer : VisualElementRenderer<MediaElement, Windows.UI.Xaml.Controls.MediaElement>, IMediaElementRenderer
     {

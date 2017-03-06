@@ -11,28 +11,50 @@ using Xamarin.Forms;
 
 namespace InTheHand.Forms.Platform.iOS
 {
-    public sealed class MediaElementRenderer : Xamarin.Forms.Platform.iOS.ViewRenderer<MediaElement,UIView>
+    public sealed class MediaElementRenderer : Xamarin.Forms.Platform.iOS.ViewRenderer<MediaElement,UIView>, IMediaElementRenderer
     {
         private AVPlayerViewController _avPlayerViewController = new AVPlayerViewController();
         private NSObject _notificationHandle;
         private NSObject observer;
 
+        public double BufferingProgress
+        {
+            get
+            {
+                return 0.0;
+            }
+        }
+
+        public TimeSpan Position
+        {
+            get
+            {
+                return TimeSpan.FromSeconds(_avPlayerViewController.Player.CurrentTime.Seconds);
+            }
+        }
+
         protected override void OnElementChanged(Xamarin.Forms.Platform.iOS.ElementChangedEventArgs<MediaElement> e)
         {
             base.OnElementChanged(e);
 
-            if (e.OldElement != null || this.Element == null)
-                return;
-            
-            SetNativeControl(_avPlayerViewController.View);
+            if (e.OldElement != null)
+            {
+                e.OldElement.SetRenderer(null);
+            }
 
-            _avPlayerViewController.ShowsPlaybackControls = Element.AreTransportControlsEnabled;
-            _avPlayerViewController.VideoGravity = AVLayerVideoGravity.ResizeAspect;
-            
-            Element.SeekCompleted += Element_SeekCompleted;
-            _notificationHandle = NSNotificationCenter.DefaultCenter.AddObserver(AVPlayerItem.DidPlayToEndTimeNotification, PlayedToEnd);
+            if (e.NewElement != null)
+            {
+                SetNativeControl(_avPlayerViewController.View);
+                e.NewElement.SetRenderer(this);
 
-            UpdateSource();
+                _avPlayerViewController.ShowsPlaybackControls = Element.AreTransportControlsEnabled;
+                _avPlayerViewController.VideoGravity = AVLayerVideoGravity.ResizeAspect;
+
+                Element.SeekCompleted += Element_SeekCompleted;
+                _notificationHandle = NSNotificationCenter.DefaultCenter.AddObserver(AVPlayerItem.DidPlayToEndTimeNotification, PlayedToEnd);
+
+                UpdateSource();
+            }
         }
 
         private void UpdateSource()

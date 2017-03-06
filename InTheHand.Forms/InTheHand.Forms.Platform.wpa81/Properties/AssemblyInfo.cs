@@ -1,20 +1,18 @@
-﻿using System.Resources;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("InTheHand.Forms")]
-[assembly: AssemblyDescription("Extras for Xamarin Forms")]
-[assembly: AssemblyConfiguration("")]
+[assembly: AssemblyTitle("InTheHand.Forms.Platform.wpa81")]
+[assembly: AssemblyDescription("")]
+[assembly: AssemblyConfiguration("Windows Phone 8.1")]
 [assembly: AssemblyCompany("In The Hand Ltd")]
 [assembly: AssemblyProduct("InTheHand.Forms")]
 [assembly: AssemblyCopyright("Copyright © In The Hand Ltd 2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
-[assembly: NeutralResourcesLanguage("en")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -27,10 +25,5 @@ using System.Runtime.InteropServices;
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.2017.0306")]
-
-[assembly: InternalsVisibleTo("InTheHand.Forms.Platform.Android")]
-[assembly: InternalsVisibleTo("InTheHand.Forms.Platform.iOS")]
-[assembly: InternalsVisibleTo("InTheHand.Forms.Platform.UWP")]
-[assembly: InternalsVisibleTo("InTheHand.Forms.Platform.WinRT")]
-[assembly: InternalsVisibleTo("InTheHand.Forms.Platform.wpa81")]
+[assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: ComVisible(false)]

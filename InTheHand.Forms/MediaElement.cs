@@ -14,6 +14,7 @@ namespace InTheHand.Forms
     /// </summary>
     public sealed class MediaElement : View
     {
+        
         /// <summary>
         /// Identifies the AreTransportControlsEnabled dependency property.
         /// </summary>
@@ -25,13 +26,12 @@ namespace InTheHand.Forms
         /// </summary>
         public static readonly BindableProperty AutoPlayProperty =
           BindableProperty.Create(nameof(AutoPlay), typeof(bool), typeof(MediaElement), true);
-
+        
         /// <summary>
         /// Identifies the IsLooping dependency property.
         /// </summary>
         public static readonly BindableProperty IsLoopingProperty =
           BindableProperty.Create(nameof(IsLooping), typeof(bool), typeof(MediaElement), false);
-
 
 
         /// <summary>
@@ -52,6 +52,15 @@ namespace InTheHand.Forms
         public static readonly BindableProperty PositionProperty =
           BindableProperty.Create(nameof(Position), typeof(TimeSpan), typeof(MediaElement), TimeSpan.Zero);
 
+
+        private IMediaElementRenderer _renderer = null;
+
+        internal void SetRenderer(IMediaElementRenderer renderer)
+        {
+            _renderer = renderer;
+        }
+
+
         /// <summary>
         /// Gets or sets a value that determines whether the standard transport controls are enabled.
         /// </summary>
@@ -68,6 +77,24 @@ namespace InTheHand.Forms
         {
             get { return (bool)GetValue(AutoPlayProperty); }
             set { SetValue(AutoPlayProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets a value that indicates the current buffering progress.
+        /// </summary>
+        /// <value>The amount of buffering that is completed for media content.
+        /// The value ranges from 0 to 1. Multiply by 100 to obtain a percentage.</value>
+        public double BufferingProgress
+        {
+            get
+            {
+                if (_renderer != null)
+                {
+                    return _renderer.BufferingProgress;
+                }
+
+                return 0.0;
+            }
         }
 
         /// <summary>
@@ -186,5 +213,12 @@ namespace InTheHand.Forms
                 MediaOpened(this, EventArgs.Empty);
             }
         }
+    }
+
+    internal interface IMediaElementRenderer
+    {
+        double BufferingProgress { get; }
+
+        TimeSpan Position { get; }
     }
 }

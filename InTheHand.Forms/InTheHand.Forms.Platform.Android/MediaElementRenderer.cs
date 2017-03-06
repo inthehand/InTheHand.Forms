@@ -13,9 +13,30 @@ using Android.Runtime;
 
 namespace InTheHand.Forms.Platform.Android
 {
-    public sealed class MediaElementRenderer : ViewRenderer<MediaElement, VideoView>, MediaPlayer.IOnCompletionListener
+    public sealed class MediaElementRenderer : ViewRenderer<MediaElement, VideoView>, MediaPlayer.IOnCompletionListener, IMediaElementRenderer
     {
         private MediaController _controller;
+
+        public double BufferingProgress
+        {
+            get
+            {
+                return Control.BufferPercentage / 100;
+            }
+        }
+
+        public TimeSpan Position
+        {
+            get
+            {
+                if (Control.IsPlaying)
+                {
+                    return TimeSpan.FromMilliseconds(Control.CurrentPosition);
+                }
+
+                return TimeSpan.Zero;
+            }
+        }
 
         protected override void OnElementChanged(ElementChangedEventArgs<MediaElement> e)
         {
@@ -23,6 +44,8 @@ namespace InTheHand.Forms.Platform.Android
 
             if(e.OldElement != null)
             {
+                e.OldElement.SetRenderer(null);
+
                 if (Control != null)
                 {
                     Control.Prepared -= Control_Prepared;
@@ -40,6 +63,7 @@ namespace InTheHand.Forms.Platform.Android
             if (e.NewElement != null)
             {
                 SetNativeControl(new VideoView(Context));
+                e.NewElement.SetRenderer(this);
                 this.Control.KeepScreenOn = true;
                 this.Control.Prepared += Control_Prepared;
                 this.Control.SetOnCompletionListener(this);
