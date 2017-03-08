@@ -4,6 +4,7 @@ using CoreMedia;
 using Foundation;
 using InTheHand.Forms;
 using System;
+using System.IO;
 using UIKit;
 using Xamarin.Forms;
 
@@ -67,13 +68,13 @@ namespace InTheHand.Forms.Platform.iOS
                     // used for a file embedded in the application package
                     asset = AVAsset.FromUrl(NSUrl.FromFilename(Element.Source.LocalPath.Substring(1)));
                 }
-                else if (Element.Source.OriginalString.StartsWith("http"))
+                else if (Element.Source.Scheme == "ms-appdata")
                 {
-                    asset = AVAsset.FromUrl(NSUrl.FromString(Element.Source.ToString()));
+                    asset = AVAsset.FromUrl(NSUrl.FromFilename(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), Element.Source.LocalPath.Substring(1))));
                 }
                 else
                 {
-                    asset = AVAsset.FromUrl(NSUrl.FromFilename(Element.Source.OriginalString.Substring(1)));
+                    asset = AVAsset.FromUrl(NSUrl.FromString(Element.Source.ToString()));
                 }
 
                 AVPlayerItem item = new AVPlayerItem(asset);

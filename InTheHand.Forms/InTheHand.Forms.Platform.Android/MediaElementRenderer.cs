@@ -64,7 +64,6 @@ namespace InTheHand.Forms.Platform.Android
             {
                 SetNativeControl(new VideoView(Context));
                 e.NewElement.SetRenderer(this);
-                this.Control.KeepScreenOn = true;
                 this.Control.Prepared += Control_Prepared;
                 this.Control.SetOnCompletionListener(this);
 
@@ -85,6 +84,10 @@ namespace InTheHand.Forms.Platform.Android
                     // video resources should be in the raw folder with Build Action set to AndroidResource
                     string uri = "android.resource://" + Context.PackageName + "/raw/" + Element.Source.LocalPath.Substring(1, Element.Source.LocalPath.LastIndexOf('.') - 1).ToLower();
                     Control.SetVideoURI(global::Android.Net.Uri.Parse(uri));
+                }
+                else if (Element.Source.Scheme == "ms-appdata")
+                {
+                    Control.SetVideoPath(System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),Element.Source.LocalPath.Substring(1)));
                 }
                 else
                 {
@@ -121,16 +124,16 @@ namespace InTheHand.Forms.Platform.Android
                     {
                         case MediaElementState.Playing:
                             Control.Start();
-                            this.Control.KeepScreenOn = true;
+                            //this.Control.KeepScreenOn = true;
                             break;
                         case MediaElementState.Paused:
                             Control.Pause();
-                            this.Control.KeepScreenOn = false;
+                            //this.Control.KeepScreenOn = false;
                             break;
                         case MediaElementState.Stopped:
                             Control.SeekTo(0);
                             Control.StopPlayback();
-                            this.Control.KeepScreenOn = false;
+                            //this.Control.KeepScreenOn = false;
                             break;
                     }
                     break;
