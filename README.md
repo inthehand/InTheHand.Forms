@@ -7,10 +7,18 @@ Supports Android, iOS and UWP platforms.
 
 ## Contains:-
 - BindablePicker
+- CheckSwitch
 - ColorExtensions (UWP)
 - MediaElement
 - NavigationPage2
 - OnPlatform2
+
+## Platforms
+- Android
+- iOS
+- Windows UWP
+- Windows 8.1 Store
+- Windows Phone 8.1
 
 ## Samples:-
 - [MediaPlayer Sample](https://github.com/inthehand/InTheHand.Forms/tree/master/MediaPlayerSample/MediaPlayerSample)
