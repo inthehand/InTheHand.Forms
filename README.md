@@ -1,7 +1,7 @@
 # InTheHand.Forms
 Extra Xamarin Forms APIs
 
-Supports Android, iOS and UWP platforms.
+Supports Android, iOS and Windows platforms.
 
 [![NuGet version](https://badge.fury.io/nu/inthehand.forms.svg)](https://badge.fury.io/nu/inthehand.forms)
 
