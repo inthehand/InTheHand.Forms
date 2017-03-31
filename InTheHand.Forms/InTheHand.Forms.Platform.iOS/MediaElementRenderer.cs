@@ -22,7 +22,7 @@ namespace InTheHand.Forms.Platform.iOS
         {
             get
             {
-                return 0.0;
+                return _avPlayerViewController.Player.Status == AVPlayerStatus.ReadyToPlay ? 1.0 : 0.0;
             }
         }
 
@@ -50,8 +50,7 @@ namespace InTheHand.Forms.Platform.iOS
 
                 _avPlayerViewController.ShowsPlaybackControls = Element.AreTransportControlsEnabled;
                 _avPlayerViewController.VideoGravity = AVLayerVideoGravity.ResizeAspect;
-
-                Element.SeekCompleted += Element_SeekCompleted;
+                
                 _notificationHandle = NSNotificationCenter.DefaultCenter.AddObserver(AVPlayerItem.DidPlayToEndTimeNotification, PlayedToEnd);
 
                 UpdateSource();
@@ -153,12 +152,7 @@ namespace InTheHand.Forms.Platform.iOS
                 catch { }
             }
         }
-
-        private void Element_SeekCompleted(object sender, EventArgs e)
-        {
-            _avPlayerViewController.Player.Seek(new CoreMedia.CMTime(Convert.ToInt64(Element.Position.TotalMilliseconds), 1000));
-        }
-
+        
         /*private void Touched()
         {
             if (_avPlayerViewController.Player.Rate == 1.0)
@@ -215,9 +209,21 @@ namespace InTheHand.Forms.Platform.iOS
                     }
 
                     break;
+
+                case nameof(Position):
+                    _avPlayerViewController.Player.Seek(new CoreMedia.CMTime(Convert.ToInt64(Element.Position.TotalMilliseconds), 1000), SeekComplete);
+                    break;
             }
 
             base.OnElementPropertyChanged(sender, e);
+        }
+
+        private void SeekComplete(bool finished)
+        {
+            if (finished)
+            {
+                Element.RaiseSeekCompleted();
+            }
         }
 
         /*public override SizeRequest GetDesiredSize(double widthConstraint, double heightConstraint)

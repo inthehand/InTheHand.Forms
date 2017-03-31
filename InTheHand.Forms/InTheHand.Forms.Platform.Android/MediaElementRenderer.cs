@@ -62,16 +62,24 @@ namespace InTheHand.Forms.Platform.Android
 
             if (e.NewElement != null)
             {
-                SetNativeControl(new VideoView(Context));
-                e.NewElement.SetRenderer(this);
-                this.Control.Prepared += Control_Prepared;
-                this.Control.SetOnCompletionListener(this);
+                if (Application.Current != null)
+                {
+                    try
+                    {
+                        SetNativeControl(new VideoView(Context));
+                        e.NewElement.SetRenderer(this);
+                        Control.Prepared += Control_Prepared;
+                        Control.SetOnCompletionListener(this);
+                        
 
-                _controller = new MediaController(Context);
-                _controller.Visibility = Element.AreTransportControlsEnabled ? ViewStates.Visible : ViewStates.Gone;
-                this.Control.SetMediaController(_controller);
-                
-                UpdateSource();
+                        _controller = new MediaController(Context);
+                        _controller.Visibility = Element.AreTransportControlsEnabled ? ViewStates.Visible : ViewStates.Gone;
+                        Control.SetMediaController(_controller);
+                        UpdateSource();
+                    }
+                    catch
+                    { }
+                }
             }
         }
 
@@ -137,12 +145,15 @@ namespace InTheHand.Forms.Platform.Android
                             break;
                     }
                     break;
+
+                case "Position":
+                    Control.SeekTo((int)((TimeSpan)Element.GetValue(MediaElement.PositionProperty)).TotalMilliseconds);
+                    break;
             }
 
             base.OnElementPropertyChanged(sender, e);
         }
-
-        //private MediaPlayer player = null;
+        
 
         public void OnCompletion(MediaPlayer mp)
         {
@@ -153,7 +164,6 @@ namespace InTheHand.Forms.Platform.Android
             }
             else
             {
-                //player = mp;
                 this.Element.OnMediaEnded();
             }
         }

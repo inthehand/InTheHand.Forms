@@ -33,7 +33,6 @@ namespace InTheHand.Forms.Platform.Android
                 this.SetNativeControl(new CheckBox(this.Context));
                 
                 Control.SetTextColor(e.NewElement.TextColor.ToAndroid());
-
                 this.Control.Text = e.NewElement.Text;
                 this.Control.Checked = e.NewElement.IsToggled;
                 this.Control.CheckedChange += Control_CheckedChange;

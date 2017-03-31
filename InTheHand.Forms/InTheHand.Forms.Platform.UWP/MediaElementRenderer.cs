@@ -7,6 +7,9 @@
 using InTheHand.Forms;
 using System;
 using Xamarin.Forms.Platform.UWP;
+using Windows.UI.Xaml;
+using System.Diagnostics;
+using Xamarin.Forms;
 
 [assembly: ExportRenderer(typeof(MediaElement), typeof(InTheHand.Forms.Platform.UWP.MediaElementRenderer))]
 
@@ -21,7 +24,7 @@ namespace InTheHand.Forms.Platform.UWP
                 return Control.BufferingProgress;
             }
         }
-
+        
         public TimeSpan Position
         {
             get
@@ -36,6 +39,17 @@ namespace InTheHand.Forms.Platform.UWP
 
             if (e.OldElement != null)
             {
+                if (Control != null)
+                {
+                    if (_positionChangedToken != 0)
+                    {
+                        Control.UnregisterPropertyChangedCallback(Windows.UI.Xaml.Controls.MediaElement.PositionProperty, _positionChangedToken);
+                        _positionChangedToken = 0;
+                    }
+
+                    Control.SeekCompleted -= Control_SeekCompleted;
+                    
+                }
                 e.OldElement.SetRenderer(null);
             }
 
@@ -47,6 +61,10 @@ namespace InTheHand.Forms.Platform.UWP
                 Control.AreTransportControlsEnabled = Element.AreTransportControlsEnabled;
                 Control.AutoPlay = Element.AutoPlay;
                 Control.IsLooping = Element.IsLooping;
+                _bufferingProgressChangedToken = Control.RegisterPropertyChangedCallback(Windows.UI.Xaml.Controls.MediaElement.BufferingProgressProperty, BufferingProgressChanged);
+                _positionChangedToken = Control.RegisterPropertyChangedCallback(Windows.UI.Xaml.Controls.MediaElement.PositionProperty, PositionChanged);
+                Control.SeekCompleted += Control_SeekCompleted;
+
                 if (Element.Source != null)
                 {
                     if (Element.Source.IsAbsoluteUri)
@@ -59,6 +77,31 @@ namespace InTheHand.Forms.Platform.UWP
                     }
                 }
             }
+        }
+
+        private void BufferingProgressChanged(DependencyObject sender, DependencyProperty dp)
+        {
+            Debug.WriteLine("BufferingProgress");
+            ((IElementController)Element).SetValueFromRenderer(MediaElement.BufferingProgressProperty, Control.BufferingProgress);
+            //Element.RaisePropertyChanged(nameof(BufferingProgress));
+        }
+
+        private void Control_SeekCompleted(object sender, RoutedEventArgs e)
+        {
+            Element.RaiseSeekCompleted();
+        }
+
+        private long _bufferingProgressChangedToken;
+
+        private long _positionChangedToken;
+        private void PositionChanged(DependencyObject sender, DependencyProperty dp)
+        {
+            Debug.WriteLine("Position");
+            //if (Control.Position != Element.Position)
+            //{
+                ((IElementController)Element).SetValueFromRenderer(MediaElement.PositionProperty, Control.Position);
+                //Element.RaisePropertyChanged(nameof(Position));
+            //}
         }
         
         protected override void OnElementPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -85,16 +128,21 @@ namespace InTheHand.Forms.Platform.UWP
                     switch (Element.CurrentState)
                     {
                         case MediaElementState.Playing:
-
                             Control.Play();
                             break;
+
                         case MediaElementState.Paused:
                             Control.Pause();
                             break;
+
                         case MediaElementState.Stopped:
                             Control.Stop();
                             break;
                     }
+                    break;
+
+                case "Position":
+                    Control.Position = (TimeSpan)Element.GetValue(MediaElement.PositionProperty);
                     break;
             }
 

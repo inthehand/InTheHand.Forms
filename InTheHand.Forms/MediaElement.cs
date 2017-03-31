@@ -26,7 +26,13 @@ namespace InTheHand.Forms
         /// </summary>
         public static readonly BindableProperty AutoPlayProperty =
           BindableProperty.Create(nameof(AutoPlay), typeof(bool), typeof(MediaElement), true);
-        
+
+        /// <summary>
+        /// Identifies the BufferingProgress dependency property.
+        /// </summary>
+        public static readonly BindableProperty BufferingProgressProperty =
+          BindableProperty.Create(nameof(BufferingProgress), typeof(double), typeof(MediaElement), 0.0);
+
         /// <summary>
         /// Identifies the IsLooping dependency property.
         /// </summary>
@@ -83,17 +89,13 @@ namespace InTheHand.Forms
         /// Gets a value that indicates the current buffering progress.
         /// </summary>
         /// <value>The amount of buffering that is completed for media content.
-        /// The value ranges from 0 to 1. Multiply by 100 to obtain a percentage.</value>
+        /// The value ranges from 0 to 1. 
+        /// Multiply by 100 to obtain a percentage.</value>
         public double BufferingProgress
         {
             get
             {
-                if (_renderer != null)
-                {
-                    return _renderer.BufferingProgress;
-                }
-
-                return 0.0;
+                return (double)GetValue(BufferingProgressProperty);
             }
         }
 
@@ -136,13 +138,17 @@ namespace InTheHand.Forms
         {
             get
             {
+                if (_renderer != null)
+                {
+                    return _renderer.Position;
+                }
+
                 return (TimeSpan)GetValue(PositionProperty);
             }
 
             set
             {
                 SetValue(PositionProperty, value);
-                SeekCompleted?.Invoke(this, EventArgs.Empty);
             }
         }
 
@@ -191,6 +197,11 @@ namespace InTheHand.Forms
         /// </summary>
         public event EventHandler MediaOpened;
 
+        internal void RaiseSeekCompleted()
+        {
+            SeekCompleted?.Invoke(this, EventArgs.Empty);
+        }
+
         /// <summary>
         /// Occurs when the seek point of a requested seek operation is ready for playback.
         /// </summary>
@@ -212,6 +223,11 @@ namespace InTheHand.Forms
                 System.Diagnostics.Debug.WriteLine("Media Opened");
                 MediaOpened(this, EventArgs.Empty);
             }
+        }
+
+        internal void RaisePropertyChanged(string propertyName)
+        {
+            OnPropertyChanged(propertyName);
         }
     }
 
