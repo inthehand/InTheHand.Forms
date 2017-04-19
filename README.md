@@ -1,3 +1,4 @@
+
 # InTheHand.Forms
 Extra Xamarin Forms APIs
 
@@ -9,6 +10,7 @@ Supports Android, iOS and Windows platforms.
 - BindablePicker
 - CheckSwitch
 - ColorExtensions (UWP)
+- DesignMode
 - MediaElement
 - NavigationPage2
 - OnPlatform2
