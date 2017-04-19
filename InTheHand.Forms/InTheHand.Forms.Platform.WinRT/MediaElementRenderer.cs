@@ -96,6 +96,10 @@ namespace InTheHand.Forms.Platform.WinRT
                             break;
                     }
                     break;
+
+                case "Position":
+                    Control.Position = (TimeSpan)Element.GetValue(MediaElement.PositionProperty);
+                    break;
             }
 
             base.OnElementPropertyChanged(sender, e);

@@ -50,10 +50,35 @@ namespace InTheHand.Forms.Platform.iOS
 
                 _avPlayerViewController.ShowsPlaybackControls = Element.AreTransportControlsEnabled;
                 _avPlayerViewController.VideoGravity = AVLayerVideoGravity.ResizeAspect;
+                if(Element.KeepScreenOn)
+                {
+                    SetKeepScreenOn(true);
+                }
                 
                 _notificationHandle = NSNotificationCenter.DefaultCenter.AddObserver(AVPlayerItem.DidPlayToEndTimeNotification, PlayedToEnd);
 
                 UpdateSource();
+            }
+        }
+
+        private bool _idleTimerDisabled = false;
+        private void SetKeepScreenOn(bool value)
+        {
+            if (value)
+            {
+                if (!UIApplication.SharedApplication.IdleTimerDisabled)
+                {
+                    _idleTimerDisabled = true;
+                    UIApplication.SharedApplication.IdleTimerDisabled = true;
+                }
+            }
+            else
+            {
+                if(_idleTimerDisabled)
+                {
+                    _idleTimerDisabled = false;
+                    UIApplication.SharedApplication.IdleTimerDisabled = false;
+                }
             }
         }
 
@@ -145,6 +170,8 @@ namespace InTheHand.Forms.Platform.iOS
             }
             else
             {
+                SetKeepScreenOn(false);
+
                 try
                 {
                     Device.BeginInvokeOnMainThread(Element.OnMediaEnded);
@@ -194,20 +221,39 @@ namespace InTheHand.Forms.Platform.iOS
                     {
                         case MediaElementState.Playing:
                             _avPlayerViewController.Player.Play();
+                            if(Element.KeepScreenOn)
+                            {
+                                SetKeepScreenOn(true);
+                            }
                             System.Diagnostics.Debug.WriteLine(_avPlayerViewController.Player.Status.ToString());
                             break;
 
                         case MediaElementState.Paused:
+                            if (Element.KeepScreenOn)
+                            {
+                                SetKeepScreenOn(false);
+                            }
                             _avPlayerViewController.Player.Pause();
                             break;
 
                         case MediaElementState.Stopped:
+                            if (Element.KeepScreenOn)
+                            {
+                                SetKeepScreenOn(false);
+                            }
                             //ios has no stop...
                             _avPlayerViewController.Player.Pause();
                             _avPlayerViewController.Player.Seek(CMTime.Zero);
                             break;
                     }
 
+                    break;
+
+                case "KeepScreenOn":
+                    if (!Element.KeepScreenOn)
+                    {
+                        SetKeepScreenOn(false);
+                    }
                     break;
 
                 case nameof(Position):

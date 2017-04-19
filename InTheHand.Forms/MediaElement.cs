@@ -39,6 +39,11 @@ namespace InTheHand.Forms
         public static readonly BindableProperty IsLoopingProperty =
           BindableProperty.Create(nameof(IsLooping), typeof(bool), typeof(MediaElement), false);
 
+        /// <summary>
+        /// Identifies the KeepScreenOn dependency property.
+        /// </summary>
+        public static readonly BindableProperty KeepScreenOnProperty =
+          BindableProperty.Create(nameof(KeepScreenOn), typeof(bool), typeof(MediaElement), false);
 
         /// <summary>
         /// Identifies the Source dependency property.
@@ -109,6 +114,15 @@ namespace InTheHand.Forms
         }
 
         /// <summary>
+        /// Gets or sets a value that specifies whether the control should stop the screen from timing out when playing media.
+        /// </summary>
+        public bool KeepScreenOn
+        {
+            get { return (bool)GetValue(KeepScreenOnProperty); }
+            set { SetValue(KeepScreenOnProperty, value); }
+        }
+
+        /// <summary>
         /// Gets or sets a media source on the MediaElement.
         /// </summary>
         [TypeConverter(typeof(UriTypeConverter))]
@@ -124,11 +138,15 @@ namespace InTheHand.Forms
         public MediaElementState CurrentState
         {
             get { return (MediaElementState)GetValue(CurrentStateProperty); }
-            private set
+            internal set
             {
-                SetValue(CurrentStateProperty, value);
-                CurrentStateChanged?.Invoke(this, EventArgs.Empty);
+                SetValue(CurrentStateProperty, value);                
             }
+        }
+
+        internal void RaiseCurrentStateChanged()
+        {
+            CurrentStateChanged?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>

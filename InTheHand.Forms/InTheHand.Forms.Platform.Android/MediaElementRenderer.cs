@@ -70,7 +70,7 @@ namespace InTheHand.Forms.Platform.Android
                         e.NewElement.SetRenderer(this);
                         Control.Prepared += Control_Prepared;
                         Control.SetOnCompletionListener(this);
-                        
+                        Control.KeepScreenOn = Element.KeepScreenOn;
 
                         _controller = new MediaController(Context);
                         _controller.Visibility = Element.AreTransportControlsEnabled ? ViewStates.Visible : ViewStates.Gone;
@@ -144,6 +144,10 @@ namespace InTheHand.Forms.Platform.Android
                             //this.Control.KeepScreenOn = false;
                             break;
                     }
+                    break;
+
+                case "KeepScreenOn":
+                    Control.KeepScreenOn = Element.KeepScreenOn;
                     break;
 
                 case "Position":

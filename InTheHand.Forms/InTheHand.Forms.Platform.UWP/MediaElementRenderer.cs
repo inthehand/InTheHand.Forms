@@ -17,6 +17,8 @@ namespace InTheHand.Forms.Platform.UWP
 {
     public sealed class MediaElementRenderer : VisualElementRenderer<MediaElement, Windows.UI.Xaml.Controls.MediaElement>, IMediaElementRenderer
     {
+        private Windows.System.Display.DisplayRequest _request = new Windows.System.Display.DisplayRequest();
+
         public double BufferingProgress
         {
             get
@@ -64,6 +66,7 @@ namespace InTheHand.Forms.Platform.UWP
                 _bufferingProgressChangedToken = Control.RegisterPropertyChangedCallback(Windows.UI.Xaml.Controls.MediaElement.BufferingProgressProperty, BufferingProgressChanged);
                 _positionChangedToken = Control.RegisterPropertyChangedCallback(Windows.UI.Xaml.Controls.MediaElement.PositionProperty, PositionChanged);
                 Control.SeekCompleted += Control_SeekCompleted;
+                Control.CurrentStateChanged += Control_CurrentStateChanged;
 
                 if (Element.Source != null)
                 {
@@ -77,6 +80,31 @@ namespace InTheHand.Forms.Platform.UWP
                     }
                 }
             }
+        }
+
+        private void Control_CurrentStateChanged(object sender, RoutedEventArgs e)
+        {
+            switch(Control.CurrentState)
+            {
+                case Windows.UI.Xaml.Media.MediaElementState.Playing:
+                    if(Element.KeepScreenOn)
+                    {
+                        _request.RequestActive();
+                    }
+                    break;
+
+                case Windows.UI.Xaml.Media.MediaElementState.Paused:
+                case Windows.UI.Xaml.Media.MediaElementState.Stopped:
+                case Windows.UI.Xaml.Media.MediaElementState.Closed:
+                    if(Element.KeepScreenOn)
+                    {
+                        _request.RequestRelease();
+                    }
+                    break;
+            }
+            Element.CurrentState = (MediaElementState)((int)Control.CurrentState);
+            //((IElementController)Element).SetValueFromRenderer(MediaElement.CurrentStateProperty, (MediaElementState)((int)Control.CurrentState));
+            Element.RaiseCurrentStateChanged();
         }
 
         private void BufferingProgressChanged(DependencyObject sender, DependencyProperty dp)
@@ -118,6 +146,20 @@ namespace InTheHand.Forms.Platform.UWP
 
                 case "IsLooping":
                     Control.IsLooping = Element.IsLooping;
+                    break;
+
+                case "KeepScreenOn":
+                    if (Element.KeepScreenOn)
+                    {
+                        if (Control.CurrentState == Windows.UI.Xaml.Media.MediaElementState.Playing)
+                        {
+                            _request.RequestActive();
+                        }
+                    }
+                    else
+                    {
+                        _request.RequestRelease();
+                    }
                     break;
 
                 case "Source":
