@@ -8,8 +8,8 @@
 namespace InTheHand.Forms.Platform.Android
 #elif __IOS__
 namespace InTheHand.Forms.Platform.iOS
-#elif WINDOWS_UWP
-namespace InTheHand.Forms.Platform.UWP
+#elif WINDOWS_UWP || WINDOWS_APP || WINDOWS_PHONE_APP
+namespace InTheHand.Forms.Platform.WinRT
 #endif
 {
     public static class InTheHandForms

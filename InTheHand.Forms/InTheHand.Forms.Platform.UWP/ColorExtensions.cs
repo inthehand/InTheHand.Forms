@@ -1,6 +1,12 @@
-﻿using System;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="ColorExtensions.cs" company="In The Hand Ltd">
+//   Copyright (c) 2017 In The Hand Ltd, All rights reserved.
+// </copyright>
+// --------------------------------------------------------------------------------------------------------------------
 
-namespace InTheHand.Forms.Platform.UWP
+using System;
+
+namespace InTheHand.Forms
 {
     public static class ColorExtensions
     {

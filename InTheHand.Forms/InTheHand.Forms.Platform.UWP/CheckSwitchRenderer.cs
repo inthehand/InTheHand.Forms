@@ -1,13 +1,23 @@
-﻿using InTheHand.Forms;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="CheckSwitchRenderer.cs" company="In The Hand Ltd">
+//   Copyright (c) 2017 In The Hand Ltd, All rights reserved.
+// </copyright>
+// --------------------------------------------------------------------------------------------------------------------
+
+using InTheHand.Forms;
 using Windows.UI.Xaml.Media;
 using Xamarin.Forms;
+
+#if WINDOWS_UWP
 using Xamarin.Forms.Platform.UWP;
+#else
+using Xamarin.Forms.Platform.WinRT;
+#endif
 
-[assembly: ExportRenderer(typeof(CheckSwitch), typeof(InTheHand.Forms.Platform.UWP.CheckSwitchRenderer))]
+[assembly: ExportRenderer(typeof(CheckSwitch), typeof(InTheHand.Forms.Platform.WinRT.CheckSwitchRenderer))]
 
-namespace InTheHand.Forms.Platform.UWP
+namespace InTheHand.Forms.Platform.WinRT
 {
-
     public sealed class CheckSwitchRenderer : VisualElementRenderer<CheckSwitch, Windows.UI.Xaml.Controls.CheckBox>
     {
         protected override void OnElementChanged(ElementChangedEventArgs<CheckSwitch> e)

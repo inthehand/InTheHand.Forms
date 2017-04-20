@@ -83,9 +83,18 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="CheckSwitchRenderer.cs" />
-    <Compile Include="ColorExtensions.cs" />
-    <Compile Include="MediaElementRenderer.cs" />
+    <Compile Include="..\InTheHand.Forms.Platform.Android\InTheHandForms.cs">
+      <Link>InTheHandForms.cs</Link>
+    </Compile>
+    <Compile Include="..\InTheHand.Forms.Platform.UWP\CheckSwitchRenderer.cs">
+      <Link>CheckSwitchRenderer.cs</Link>
+    </Compile>
+    <Compile Include="..\InTheHand.Forms.Platform.UWP\ColorExtensions.cs">
+      <Link>ColorExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\InTheHand.Forms.Platform.UWP\MediaElementRenderer.cs">
+      <Link>MediaElementRenderer.cs</Link>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

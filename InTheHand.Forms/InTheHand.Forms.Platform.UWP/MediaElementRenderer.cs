@@ -6,18 +6,28 @@
 
 using InTheHand.Forms;
 using System;
+#if WINDOWS_UWP
 using Xamarin.Forms.Platform.UWP;
+#else
+using Xamarin.Forms.Platform.WinRT;
+#endif
 using Windows.UI.Xaml;
 using System.Diagnostics;
 using Xamarin.Forms;
 
-[assembly: ExportRenderer(typeof(MediaElement), typeof(InTheHand.Forms.Platform.UWP.MediaElementRenderer))]
+[assembly: ExportRenderer(typeof(MediaElement), typeof(InTheHand.Forms.Platform.WinRT.MediaElementRenderer))]
 
-namespace InTheHand.Forms.Platform.UWP
+namespace InTheHand.Forms.Platform.WinRT
 {
     public sealed class MediaElementRenderer : VisualElementRenderer<MediaElement, Windows.UI.Xaml.Controls.MediaElement>, IMediaElementRenderer
     {
         private Windows.System.Display.DisplayRequest _request = new Windows.System.Display.DisplayRequest();
+
+#if WINDOWS_UWP
+        private long _bufferingProgressChangedToken;
+
+        private long _positionChangedToken;
+#endif
 
         public double BufferingProgress
         {
@@ -43,15 +53,18 @@ namespace InTheHand.Forms.Platform.UWP
             {
                 if (Control != null)
                 {
+#if WINDOWS_UWP
                     if (_positionChangedToken != 0)
                     {
                         Control.UnregisterPropertyChangedCallback(Windows.UI.Xaml.Controls.MediaElement.PositionProperty, _positionChangedToken);
                         _positionChangedToken = 0;
                     }
-
+#endif
+                    Control.CurrentStateChanged -= Control_CurrentStateChanged;
                     Control.SeekCompleted -= Control_SeekCompleted;
                     
                 }
+
                 e.OldElement.SetRenderer(null);
             }
 
@@ -63,8 +76,10 @@ namespace InTheHand.Forms.Platform.UWP
                 Control.AreTransportControlsEnabled = Element.AreTransportControlsEnabled;
                 Control.AutoPlay = Element.AutoPlay;
                 Control.IsLooping = Element.IsLooping;
+#if WINDOWS_UWP
                 _bufferingProgressChangedToken = Control.RegisterPropertyChangedCallback(Windows.UI.Xaml.Controls.MediaElement.BufferingProgressProperty, BufferingProgressChanged);
                 _positionChangedToken = Control.RegisterPropertyChangedCallback(Windows.UI.Xaml.Controls.MediaElement.PositionProperty, PositionChanged);
+#endif
                 Control.SeekCompleted += Control_SeekCompleted;
                 Control.CurrentStateChanged += Control_CurrentStateChanged;
 
@@ -107,31 +122,26 @@ namespace InTheHand.Forms.Platform.UWP
             Element.RaiseCurrentStateChanged();
         }
 
+#if WINDOWS_UWP
         private void BufferingProgressChanged(DependencyObject sender, DependencyProperty dp)
         {
             Debug.WriteLine("BufferingProgress");
             ((IElementController)Element).SetValueFromRenderer(MediaElement.BufferingProgressProperty, Control.BufferingProgress);
-            //Element.RaisePropertyChanged(nameof(BufferingProgress));
         }
+        
+        private void PositionChanged(DependencyObject sender, DependencyProperty dp)
+        {
+            Debug.WriteLine("Position");
+
+            ((IElementController)Element).SetValueFromRenderer(MediaElement.PositionProperty, Control.Position);
+        }     
+#endif  
 
         private void Control_SeekCompleted(object sender, RoutedEventArgs e)
         {
             Element.RaiseSeekCompleted();
         }
-
-        private long _bufferingProgressChangedToken;
-
-        private long _positionChangedToken;
-        private void PositionChanged(DependencyObject sender, DependencyProperty dp)
-        {
-            Debug.WriteLine("Position");
-            //if (Control.Position != Element.Position)
-            //{
-                ((IElementController)Element).SetValueFromRenderer(MediaElement.PositionProperty, Control.Position);
-                //Element.RaisePropertyChanged(nameof(Position));
-            //}
-        }
-        
+               
         protected override void OnElementPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             switch (e.PropertyName)
@@ -142,28 +152,6 @@ namespace InTheHand.Forms.Platform.UWP
 
                 case "AutoPlay":
                     Control.AutoPlay = Element.AutoPlay;
-                    break;
-
-                case "IsLooping":
-                    Control.IsLooping = Element.IsLooping;
-                    break;
-
-                case "KeepScreenOn":
-                    if (Element.KeepScreenOn)
-                    {
-                        if (Control.CurrentState == Windows.UI.Xaml.Media.MediaElementState.Playing)
-                        {
-                            _request.RequestActive();
-                        }
-                    }
-                    else
-                    {
-                        _request.RequestRelease();
-                    }
-                    break;
-
-                case "Source":
-                    Control.Source = Element.Source;
                     break;
 
                 case "CurrentState":
@@ -183,8 +171,30 @@ namespace InTheHand.Forms.Platform.UWP
                     }
                     break;
 
+                case "IsLooping":
+                    Control.IsLooping = Element.IsLooping;
+                    break;
+
+                case "KeepScreenOn":
+                    if (Element.KeepScreenOn)
+                    {
+                        if (Control.CurrentState == Windows.UI.Xaml.Media.MediaElementState.Playing)
+                        {
+                            _request.RequestActive();
+                        }
+                    }
+                    else
+                    {
+                        _request.RequestRelease();
+                    }
+                    break;
+                         
                 case "Position":
                     Control.Position = (TimeSpan)Element.GetValue(MediaElement.PositionProperty);
+                    break;
+
+                case "Source":
+                    Control.Source = Element.Source;
                     break;
             }
 
