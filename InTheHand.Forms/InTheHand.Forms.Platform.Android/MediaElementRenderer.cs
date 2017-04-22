@@ -62,7 +62,7 @@ namespace InTheHand.Forms.Platform.Android
 
             if (e.NewElement != null)
             {
-                if (Application.Current != null)
+                if (!DesignMode.DesignModeEnabled)
                 {
                     try
                     {
