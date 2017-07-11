@@ -63,6 +63,13 @@ namespace InTheHand.Forms
         public static readonly BindableProperty PositionProperty =
           BindableProperty.Create(nameof(Position), typeof(TimeSpan), typeof(MediaElement), TimeSpan.Zero);
 
+        /// <summary>
+        /// Identifies the Stretch dependency property.
+        /// </summary>
+        public static readonly BindableProperty StretchProperty =
+          BindableProperty.Create(nameof(Stretch), typeof(Stretch), typeof(MediaElement), Stretch.Uniform);
+
+
 
         private IMediaElementRenderer _renderer = null;
 
@@ -120,6 +127,32 @@ namespace InTheHand.Forms
         {
             get { return (bool)GetValue(KeepScreenOnProperty); }
             set { SetValue(KeepScreenOnProperty, value); }
+        }
+
+        public int NaturalVideoHeight
+        {
+            get
+            {
+                if(_renderer != null)
+                {
+                    return _renderer.NaturalVideoHeight;
+                }
+
+                return 0;
+            }
+        }
+
+        public int NaturalVideoWidth
+        {
+            get
+            {
+                if (_renderer != null)
+                {
+                    return _renderer.NaturalVideoWidth;
+                }
+
+                return 0;
+            }
         }
 
         /// <summary>
@@ -201,6 +234,24 @@ namespace InTheHand.Forms
         }
 
         /// <summary>
+        /// Gets or sets a value that describes how an MediaElement should be stretched to fill the destination rectangle.
+        /// </summary>
+        /// <value>A value of the <see cref="Stretch"/> enumeration that specifies how the source visual media is rendered.
+        /// The default value is Uniform.</value>
+        public Stretch Stretch
+        {
+            get
+            {
+                return (Stretch)GetValue(StretchProperty);
+            }
+
+            set
+            {
+                SetValue(StretchProperty, value);
+            }
+        }
+
+        /// <summary>
         /// Occurs when the value of the <see cref="CurrentState"/> property changes.
         /// </summary>
         public event EventHandler CurrentStateChanged;
@@ -252,6 +303,10 @@ namespace InTheHand.Forms
     internal interface IMediaElementRenderer
     {
         double BufferingProgress { get; }
+
+        int NaturalVideoHeight { get; }
+
+        int NaturalVideoWidth { get; }
 
         TimeSpan Position { get; }
     }

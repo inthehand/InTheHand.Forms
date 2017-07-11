@@ -29,15 +29,31 @@ namespace InTheHand.Forms.Platform.WinRT
         private long _positionChangedToken;
 #endif
 
-        public double BufferingProgress
+        double IMediaElementRenderer.BufferingProgress
         {
             get
             {
                 return Control.BufferingProgress;
             }
         }
-        
-        public TimeSpan Position
+
+        int IMediaElementRenderer.NaturalVideoHeight
+        {
+            get
+            {
+                return Control.NaturalVideoHeight;
+            }
+        }
+
+        int IMediaElementRenderer.NaturalVideoWidth
+        {
+            get
+            {
+                return Control.NaturalVideoWidth;
+            }
+        }
+
+        TimeSpan IMediaElementRenderer.Position
         {
             get
             {
@@ -76,6 +92,7 @@ namespace InTheHand.Forms.Platform.WinRT
                 Control.AreTransportControlsEnabled = Element.AreTransportControlsEnabled;
                 Control.AutoPlay = Element.AutoPlay;
                 Control.IsLooping = Element.IsLooping;
+                Control.Stretch = (Windows.UI.Xaml.Media.Stretch)Element.Stretch;
 #if WINDOWS_UWP
                 _bufferingProgressChangedToken = Control.RegisterPropertyChangedCallback(Windows.UI.Xaml.Controls.MediaElement.BufferingProgressProperty, BufferingProgressChanged);
                 _positionChangedToken = Control.RegisterPropertyChangedCallback(Windows.UI.Xaml.Controls.MediaElement.PositionProperty, PositionChanged);
@@ -195,6 +212,10 @@ namespace InTheHand.Forms.Platform.WinRT
 
                 case "Source":
                     Control.Source = Element.Source;
+                    break;
+
+                case "Stretch":
+                    Control.Stretch = (Windows.UI.Xaml.Media.Stretch)Element.Stretch;
                     break;
             }
 

@@ -13,11 +13,11 @@ using Android.Runtime;
 
 namespace InTheHand.Forms.Platform.Android
 {
-    public sealed class MediaElementRenderer : ViewRenderer<MediaElement, VideoView>, MediaPlayer.IOnCompletionListener, IMediaElementRenderer
+    public sealed class MediaElementRenderer : ViewRenderer<MediaElement, VideoViewEx>, MediaPlayer.IOnCompletionListener, IMediaElementRenderer
     {
         private MediaController _controller;
 
-        public double BufferingProgress
+        double IMediaElementRenderer.BufferingProgress
         {
             get
             {
@@ -25,7 +25,23 @@ namespace InTheHand.Forms.Platform.Android
             }
         }
 
-        public TimeSpan Position
+        int IMediaElementRenderer.NaturalVideoHeight
+        {
+            get
+            {
+                return Control.VideoHeight;
+            }
+        }
+
+        int IMediaElementRenderer.NaturalVideoWidth
+        {
+            get
+            {
+                return Control.VideoWidth;
+            }
+        }
+
+        TimeSpan IMediaElementRenderer.Position
         {
             get
             {
@@ -66,7 +82,7 @@ namespace InTheHand.Forms.Platform.Android
                 {
                     try
                     {
-                        SetNativeControl(new VideoView(Context));
+                        SetNativeControl(new VideoViewEx(Context));
                         e.NewElement.SetRenderer(this);
                         Control.Prepared += Control_Prepared;
                         Control.SetOnCompletionListener(this);
@@ -159,7 +175,7 @@ namespace InTheHand.Forms.Platform.Android
         }
         
 
-        public void OnCompletion(MediaPlayer mp)
+        void MediaPlayer.IOnCompletionListener.OnCompletion(MediaPlayer mp)
         {
             if (Element.IsLooping)
             {

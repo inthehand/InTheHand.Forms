@@ -20,10 +20,6 @@ namespace InTheHand.Forms.Platform.Android
 {
     public sealed class CheckSwitchRenderer : ViewRenderer<CheckSwitch, CheckBox>
     {
-        public CheckSwitchRenderer() : base() 
-        {
-            System.Diagnostics.Debug.WriteLine("Created");
-        }
         protected override void OnElementChanged(ElementChangedEventArgs<CheckSwitch> e)
         {
             base.OnElementChanged(e);

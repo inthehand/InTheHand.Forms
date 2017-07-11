@@ -34,6 +34,22 @@ namespace InTheHand.Forms.Platform.iOS
             }
         }
 
+        int IMediaElementRenderer.NaturalVideoHeight
+        {
+            get
+            {
+                return (int)_avPlayerViewController.Player?.CurrentItem.Asset.NaturalSize.Height;
+            }
+        }
+
+        int IMediaElementRenderer.NaturalVideoWidth
+        {
+            get
+            {
+                return (int)_avPlayerViewController.Player?.CurrentItem.Asset.NaturalSize.Width;
+            }
+        }
+
         protected override void OnElementChanged(Xamarin.Forms.Platform.iOS.ElementChangedEventArgs<MediaElement> e)
         {
             base.OnElementChanged(e);
@@ -256,12 +272,31 @@ namespace InTheHand.Forms.Platform.iOS
                     }
                     break;
 
-                case nameof(Position):
+                case "Position":
                     _avPlayerViewController.Player.Seek(new CoreMedia.CMTime(Convert.ToInt64(Element.Position.TotalMilliseconds), 1000), SeekComplete);
+                    break;
+
+                case "Stretch":
+                    _avPlayerViewController.VideoGravity = StretchToGravity(Element.Stretch);
                     break;
             }
 
             base.OnElementPropertyChanged(sender, e);
+        }
+
+        private static AVLayerVideoGravity StretchToGravity(Stretch stretch)
+        {
+            switch(stretch)
+            {
+                case Stretch.Fill:
+                    return AVLayerVideoGravity.Resize;
+
+                case Stretch.UniformToFill:
+                    return AVLayerVideoGravity.ResizeAspectFill;
+
+                default:
+                    return AVLayerVideoGravity.ResizeAspect;
+            }
         }
 
         private void SeekComplete(bool finished)

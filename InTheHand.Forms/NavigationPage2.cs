@@ -51,7 +51,7 @@ namespace InTheHand.Forms
 
             Page newTopPage = Navigation.NavigationStack[Navigation.NavigationStack.Count - 1];
 
-            if (Device.OS == TargetPlatform.iOS)
+            if (Device.RuntimePlatform == Device.iOS)
             {
                 newTopPage = Navigation.NavigationStack[Navigation.NavigationStack.Count - 2];
             }
