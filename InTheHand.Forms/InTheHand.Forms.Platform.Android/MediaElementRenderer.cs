@@ -13,15 +13,16 @@ using Android.Runtime;
 
 namespace InTheHand.Forms.Platform.Android
 {
-    public sealed class MediaElementRenderer : ViewRenderer<MediaElement, VideoViewEx>, MediaPlayer.IOnCompletionListener, IMediaElementRenderer
+    public sealed class MediaElementRenderer : ViewRenderer<MediaElement, FrameLayout>, MediaPlayer.IOnCompletionListener, IMediaElementRenderer
     {
         private MediaController _controller;
+        private VideoViewEx _view;
 
         double IMediaElementRenderer.BufferingProgress
         {
             get
             {
-                return Control.BufferPercentage / 100;
+                return _view.BufferPercentage / 100;
             }
         }
 
@@ -29,7 +30,7 @@ namespace InTheHand.Forms.Platform.Android
         {
             get
             {
-                return Control.VideoHeight;
+                return _view.VideoHeight;
             }
         }
 
@@ -37,7 +38,7 @@ namespace InTheHand.Forms.Platform.Android
         {
             get
             {
-                return Control.VideoWidth;
+                return _view.VideoWidth;
             }
         }
 
@@ -45,9 +46,9 @@ namespace InTheHand.Forms.Platform.Android
         {
             get
             {
-                if (Control.IsPlaying)
+                if (_view.IsPlaying)
                 {
-                    return TimeSpan.FromMilliseconds(Control.CurrentPosition);
+                    return TimeSpan.FromMilliseconds(_view.CurrentPosition);
                 }
 
                 return TimeSpan.Zero;
@@ -62,11 +63,11 @@ namespace InTheHand.Forms.Platform.Android
             {
                 e.OldElement.SetRenderer(null);
 
-                if (Control != null)
+                if (_view != null)
                 {
-                    Control.Prepared -= Control_Prepared;
-                    Control.SetOnCompletionListener(null);
-                    Control.Dispose();
+                    _view.Prepared -= Control_Prepared;
+                    _view.SetOnCompletionListener(null);
+                    _view.Dispose();
                 }
 
                 if(_controller != null)
@@ -82,15 +83,17 @@ namespace InTheHand.Forms.Platform.Android
                 {
                     try
                     {
-                        SetNativeControl(new VideoViewEx(Context));
+                        SetNativeControl(new FrameLayout(Context));// new VideoViewEx(Context));
+                        _view = new VideoViewEx(Context);
+                        Control.AddView(_view);
                         e.NewElement.SetRenderer(this);
-                        Control.Prepared += Control_Prepared;
-                        Control.SetOnCompletionListener(this);
-                        Control.KeepScreenOn = Element.KeepScreenOn;
+                        _view.Prepared += Control_Prepared;
+                        _view.SetOnCompletionListener(this);
+                        _view.KeepScreenOn = Element.KeepScreenOn;
 
                         _controller = new MediaController(Context);
                         _controller.Visibility = Element.AreTransportControlsEnabled ? ViewStates.Visible : ViewStates.Gone;
-                        Control.SetMediaController(_controller);
+                        _view.SetMediaController(_controller);
                         UpdateSource();
                     }
                     catch
@@ -107,20 +110,20 @@ namespace InTheHand.Forms.Platform.Android
                 {
                     // video resources should be in the raw folder with Build Action set to AndroidResource
                     string uri = "android.resource://" + Context.PackageName + "/raw/" + Element.Source.LocalPath.Substring(1, Element.Source.LocalPath.LastIndexOf('.') - 1).ToLower();
-                    Control.SetVideoURI(global::Android.Net.Uri.Parse(uri));
+                    _view.SetVideoURI(global::Android.Net.Uri.Parse(uri));
                 }
                 else if (Element.Source.Scheme == "ms-appdata")
                 {
-                    Control.SetVideoPath(System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),Element.Source.LocalPath.Substring(1)));
+                    _view.SetVideoPath(System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),Element.Source.LocalPath.Substring(1)));
                 }
                 else
                 {
-                    Control.SetVideoURI(global::Android.Net.Uri.Parse(Element.Source.ToString()));
+                    _view.SetVideoURI(global::Android.Net.Uri.Parse(Element.Source.ToString()));
                 }
 
                 if(Element.AutoPlay)
                 {
-                    Control.Start();
+                    _view.Start();
                 }
 
             }
@@ -147,33 +150,76 @@ namespace InTheHand.Forms.Platform.Android
                     switch(Element.CurrentState)
                     {
                         case MediaElementState.Playing:
-                            Control.Start();
-                            //this.Control.KeepScreenOn = true;
+                            _view.Start();
                             break;
+
                         case MediaElementState.Paused:
-                            Control.Pause();
-                            //this.Control.KeepScreenOn = false;
+                            _view.Pause();
                             break;
+
                         case MediaElementState.Stopped:
-                            Control.SeekTo(0);
-                            Control.StopPlayback();
-                            //this.Control.KeepScreenOn = false;
+                            _view.SeekTo(0);
+                            _view.StopPlayback();
                             break;
                     }
                     break;
 
                 case "KeepScreenOn":
-                    Control.KeepScreenOn = Element.KeepScreenOn;
+                    _view.KeepScreenOn = Element.KeepScreenOn;
                     break;
 
                 case "Position":
-                    Control.SeekTo((int)((TimeSpan)Element.GetValue(MediaElement.PositionProperty)).TotalMilliseconds);
+                    _view.SeekTo((int)((TimeSpan)Element.GetValue(MediaElement.PositionProperty)).TotalMilliseconds);
+                    break;
+
+                case "Stretch":
+                    UpdateLayoutParameters();
                     break;
             }
 
             base.OnElementPropertyChanged(sender, e);
         }
-        
+
+        private void UpdateLayoutParameters()
+        {
+            float ratio = (float)Element.NaturalVideoWidth / Element.NaturalVideoHeight;
+            float controlRatio = (float)Control.Width / Control.Height;
+
+            switch (Element.Stretch)
+            {
+                case Stretch.None:
+                    _view.LayoutParameters = new FrameLayout.LayoutParams(Control.Width, Control.Height, GravityFlags.CenterHorizontal | GravityFlags.CenterVertical);
+                    break;
+
+                case Stretch.Fill:
+                    // TODO: this doesn't stretch like other platforms...
+                    _view.LayoutParameters = new FrameLayout.LayoutParams(Control.Width, Control.Height, GravityFlags.FillHorizontal | GravityFlags.FillVertical | GravityFlags.CenterHorizontal | GravityFlags.CenterVertical) { LeftMargin = 0, RightMargin = 0, TopMargin = 0, BottomMargin = 0 };
+                    break;
+
+                case Stretch.Uniform:
+                    if (ratio > controlRatio)
+                    {
+                        _view.LayoutParameters = new FrameLayout.LayoutParams(Control.Width, (int)(Control.Width / ratio), GravityFlags.FillHorizontal | GravityFlags.CenterVertical);
+                    }
+                    else
+                    {
+                        _view.LayoutParameters = new FrameLayout.LayoutParams((int)(Control.Height * ratio), Control.Height, GravityFlags.CenterHorizontal | GravityFlags.FillVertical) { LeftMargin = 0, RightMargin = 0, TopMargin = 0, BottomMargin = 0 };
+                    }
+                    break;
+
+                case Stretch.UniformToFill:
+                    if (ratio > controlRatio)
+                    {
+                        _view.LayoutParameters = new FrameLayout.LayoutParams((int)(Control.Height * ratio), Control.Height, GravityFlags.CenterHorizontal | GravityFlags.FillVertical) { TopMargin = 0, BottomMargin = 0 };
+                    }
+                    else
+                    {
+                        _view.LayoutParameters = new FrameLayout.LayoutParams(Control.Width, (int)(Control.Width * ratio), GravityFlags.FillHorizontal | GravityFlags.CenterVertical) { LeftMargin = 0, RightMargin = 0, TopMargin = 0, BottomMargin = 0 };
+                    }
+
+                    break;
+            }
+        }
 
         void MediaPlayer.IOnCompletionListener.OnCompletion(MediaPlayer mp)
         {

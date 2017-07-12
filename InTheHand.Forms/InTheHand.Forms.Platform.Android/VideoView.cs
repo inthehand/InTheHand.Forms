@@ -33,9 +33,16 @@ namespace InTheHand.Forms.Platform.Android
         public override void SetVideoURI(global::Android.Net.Uri uri)
         {
             MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-            retriever.SetDataSource(Context, uri);
+            if (uri.Scheme.StartsWith("http"))
+            {
+                retriever.SetDataSource(uri.ToString(), new Dictionary<string, string>());
+            }
+            else
+            {
+                retriever.SetDataSource(Context, uri);
+            }
             _videoWidth = int.Parse(retriever.ExtractMetadata(MetadataKey.VideoWidth));
-            _videoHeight = int.Parse(retriever.ExtractMetadata(MetadataKey.VideoWidth));
+            _videoHeight = int.Parse(retriever.ExtractMetadata(MetadataKey.VideoHeight));
 
             base.SetVideoURI(uri);
         }

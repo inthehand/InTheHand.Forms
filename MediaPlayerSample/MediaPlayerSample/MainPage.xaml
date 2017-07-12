@@ -6,6 +6,6 @@
              x:Class="MediaPlayerSample.MainPage">
     <StackLayout>
         <Button Text="Stretch" Clicked="Button_Clicked"/>
-        <forms:MediaElement HorizontalOptions="Fill" VerticalOptions="Center" HeightRequest="240" x:Name="Media" IsLooping="True"  AreTransportControlsEnabled="true" Source="http://video.ch9.ms/ch9/334f/891b78a5-642d-40b4-8d02-ff40ffdd334f/LoginToLinkedinUSingXamarinAuth_mid.mp4"/>
+        <forms:MediaElement HorizontalOptions="Fill" BackgroundColor="Green" VerticalOptions="Center" HeightRequest="180" x:Name="Media" IsLooping="True"  AreTransportControlsEnabled="true" Source="http://video.ch9.ms/ch9/334f/891b78a5-642d-40b4-8d02-ff40ffdd334f/LoginToLinkedinUSingXamarinAuth_mid.mp4"/>
     </StackLayout>
 </ContentPage>

@@ -59,7 +59,7 @@ namespace MediaPlayerSample.UWP
                 rootFrame.NavigationFailed += OnNavigationFailed;
 
                 Xamarin.Forms.Forms.Init(e);
-                InTheHand.Forms.Platform.UWP.InTheHandForms.Init();
+                InTheHand.Forms.Platform.WinRT.InTheHandForms.Init();
 
                 if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
                 {
