@@ -26,6 +26,14 @@ namespace InTheHand.Forms.Platform.Android
             }
         }
 
+        TimeSpan IMediaElementRenderer.NaturalDuration
+        {
+            get
+            {
+                return _view.Duration;
+            }
+        }
+
         int IMediaElementRenderer.NaturalVideoHeight
         {
             get

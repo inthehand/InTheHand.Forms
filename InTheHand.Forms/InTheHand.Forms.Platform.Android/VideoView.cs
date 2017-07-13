@@ -17,6 +17,7 @@ namespace InTheHand.Forms.Platform.Android
     public sealed class VideoViewEx : VideoView
     {
         private int _videoHeight, _videoWidth;
+        private TimeSpan _duration;
 
         public VideoViewEx(Context context) : base(context) { }
 
@@ -24,10 +25,23 @@ namespace InTheHand.Forms.Platform.Android
         {
             MediaMetadataRetriever retriever = new MediaMetadataRetriever();
             retriever.SetDataSource(path);
+            ExtractMetadata(retriever);
+
+            base.SetVideoPath(path);
+        }
+
+        private void ExtractMetadata(MediaMetadataRetriever retriever)
+        {
+            _duration = TimeSpan.Zero;
             _videoWidth = int.Parse(retriever.ExtractMetadata(MetadataKey.VideoWidth));
             _videoHeight = int.Parse(retriever.ExtractMetadata(MetadataKey.VideoWidth));
 
-            base.SetVideoPath(path);
+            string durationString = retriever.ExtractMetadata(MetadataKey.Duration);
+            if (!string.IsNullOrEmpty(durationString))
+            {
+                long durationMS = long.Parse(durationString);
+                _duration = TimeSpan.FromMilliseconds(durationMS);
+            }
         }
 
         public override void SetVideoURI(global::Android.Net.Uri uri)
@@ -41,8 +55,8 @@ namespace InTheHand.Forms.Platform.Android
             {
                 retriever.SetDataSource(Context, uri);
             }
-            _videoWidth = int.Parse(retriever.ExtractMetadata(MetadataKey.VideoWidth));
-            _videoHeight = int.Parse(retriever.ExtractMetadata(MetadataKey.VideoHeight));
+
+            ExtractMetadata(retriever);
 
             base.SetVideoURI(uri);
         }
@@ -63,6 +77,13 @@ namespace InTheHand.Forms.Platform.Android
             }
         }
 
+        public TimeSpan Duration
+        {
+            get
+            {
+                return _duration;
+            }
+        }
         
     }
 }

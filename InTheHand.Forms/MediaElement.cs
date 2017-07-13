@@ -304,6 +304,8 @@ namespace InTheHand.Forms
     {
         double BufferingProgress { get; }
 
+        TimeSpan NaturalDuration { get; }
+
         int NaturalVideoHeight { get; }
 
         int NaturalVideoWidth { get; }

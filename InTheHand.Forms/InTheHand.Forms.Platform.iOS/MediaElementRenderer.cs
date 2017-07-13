@@ -34,6 +34,14 @@ namespace InTheHand.Forms.Platform.iOS
             }
         }
 
+        TimeSpan IMediaElementRenderer.NaturalDuration
+        {
+            get
+            {
+                return TimeSpan.FromSeconds(_avPlayerViewController.Player.CurrentItem != null ? _avPlayerViewController.Player.CurrentItem.Asset.Duration.Seconds : 0);
+            }
+        }
+
         int IMediaElementRenderer.NaturalVideoHeight
         {
             get

@@ -37,6 +37,19 @@ namespace InTheHand.Forms.Platform.WinRT
             }
         }
 
+        TimeSpan IMediaElementRenderer.NaturalDuration
+        {
+            get
+            {
+                if (Control.NaturalDuration.HasTimeSpan)
+                {
+                    return Control.NaturalDuration.TimeSpan;
+                }
+
+                return TimeSpan.Zero;
+            }
+        }
+
         int IMediaElementRenderer.NaturalVideoHeight
         {
             get
