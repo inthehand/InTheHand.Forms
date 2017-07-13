@@ -7,13 +7,11 @@ Supports Android, iOS and Windows platforms.
 [![NuGet version](https://badge.fury.io/nu/inthehand.forms.svg)](https://badge.fury.io/nu/inthehand.forms)
 
 ## Contains:-
-- BindablePicker
 - CheckSwitch
 - ColorExtensions (UWP)
 - DesignMode
 - MediaElement
 - NavigationPage2
-- OnPlatform2
 
 ## Platforms
 - Android
