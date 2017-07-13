@@ -147,9 +147,13 @@ namespace InTheHand.Forms.Platform.WinRT
                     }
                     break;
             }
-            Element.CurrentState = (MediaElementState)((int)Control.CurrentState);
-            //((IElementController)Element).SetValueFromRenderer(MediaElement.CurrentStateProperty, (MediaElementState)((int)Control.CurrentState));
-            Element.RaiseCurrentStateChanged();
+
+            if (Element != null)
+            {
+                Element.CurrentState = (MediaElementState)((int)Control.CurrentState);
+                //((IElementController)Element).SetValueFromRenderer(MediaElement.CurrentStateProperty, (MediaElementState)((int)Control.CurrentState));
+                Element.RaiseCurrentStateChanged();
+            }
         }
 
 #if WINDOWS_UWP
@@ -169,7 +173,7 @@ namespace InTheHand.Forms.Platform.WinRT
 
         private void Control_SeekCompleted(object sender, RoutedEventArgs e)
         {
-            Element.RaiseSeekCompleted();
+            Element?.RaiseSeekCompleted();
         }
                
         protected override void OnElementPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
