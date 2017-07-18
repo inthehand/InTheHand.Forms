@@ -1,0 +1,39 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard1.0</TargetFramework>
+    <RootNamespace>InTheHand.Forms</RootNamespace>
+    <AssemblyName>InTheHand.Forms</AssemblyName>
+    <Company>In The Hand Ltd</Company>
+    <Authors>Peter Foot</Authors>
+    <PackageTargetFallback>portable-monoandroid10+net45+win+win81+wp8+wpa81+xamarinios10+xamarinmac20</PackageTargetFallback>
+    <DebugType>full</DebugType>
+    <Description>Extras for Xamarin Forms</Description>
+    <Copyright>Copyright © In The Hand Ltd 2017</Copyright>
+    <PackageProjectUrl>https://github.com/inthehand/InTheHand.Forms</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/inthehand/InTheHand.Forms/blob/master/LICENSE</PackageLicenseUrl>
+    <RepositoryUrl>https://github.com/inthehand/InTheHand.Forms</RepositoryUrl>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <OutputPath>C:\Users\peter\Source\Repos\InTheHand.Forms\InTheHand.Forms\NuGet\lib\</OutputPath>
+    <DocumentationFile>InTheHand.Forms.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\InTheHand.Forms\CheckSwitch.cs" Link="CheckSwitch.cs" />
+    <Compile Include="..\InTheHand.Forms\DesignMode.cs" Link="DesignMode.cs" />
+    <Compile Include="..\InTheHand.Forms\IPageNavigation.cs" Link="IPageNavigation.cs" />
+    <Compile Include="..\InTheHand.Forms\MediaElement.cs" Link="MediaElement.cs" />
+    <Compile Include="..\InTheHand.Forms\MediaElementState.cs" Link="MediaElementState.cs" />
+    <Compile Include="..\InTheHand.Forms\NavigationEventArgs2.cs" Link="NavigationEventArgs2.cs" />
+    <Compile Include="..\InTheHand.Forms\NavigationMode.cs" Link="NavigationMode.cs" />
+    <Compile Include="..\InTheHand.Forms\NavigationPage2.cs" Link="NavigationPage2.cs" />
+    <Compile Include="..\InTheHand.Forms\Stretch.cs" Link="Stretch.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Xamarin.Forms" Version="2.3.4.247" />
+  </ItemGroup>
+
+</Project>

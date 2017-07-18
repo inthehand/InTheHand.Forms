@@ -1,0 +1,248 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>InTheHand.Forms</name>
+    </assembly>
+    <members>
+        <member name="T:InTheHand.Forms.CheckSwitch">
+            <summary>
+            Checkbox control derived from Switch.
+            </summary>
+        </member>
+        <member name="F:InTheHand.Forms.CheckSwitch.TextProperty">
+            <summary>
+            <see cref="T:Xamarin.Forms.BindableProperty"/>. Backing store for the Text bindable property.
+            </summary>
+        </member>
+        <member name="F:InTheHand.Forms.CheckSwitch.TextColorProperty">
+            <summary>
+            <see cref="T:Xamarin.Forms.BindableProperty"/>. Backing store for the TextColor bindable property.
+            </summary>
+        </member>
+        <member name="P:InTheHand.Forms.CheckSwitch.Text">
+            <summary>
+            The text that will appear on the CheckSwitch.
+            </summary>
+        </member>
+        <member name="P:InTheHand.Forms.CheckSwitch.TextColor">
+            <summary>
+            <see cref="T:Xamarin.Forms.Color"/>. Gets or sets the Color for the text of this Label.
+            This is a bindable property.
+            </summary>
+        </member>
+        <member name="T:InTheHand.Forms.DesignMode">
+            <summary>
+            Enables you to detect whether your app is in design mode in the Xamarin Forms Previewer.
+            </summary>
+        </member>
+        <member name="P:InTheHand.Forms.DesignMode.DesignModeEnabled">
+            <summary>
+            Gets a value that indicates whether the process is running in design mode.
+            </summary>
+            <value>True if the process is running in design mode; otherwise false.</value>
+        </member>
+        <member name="T:InTheHand.Forms.MediaElement">
+            <summary>
+            Represents an object that renders audio and video to the display.
+            </summary>
+        </member>
+        <member name="F:InTheHand.Forms.MediaElement.AreTransportControlsEnabledProperty">
+            <summary>
+            Identifies the AreTransportControlsEnabled dependency property.
+            </summary>
+        </member>
+        <member name="F:InTheHand.Forms.MediaElement.AutoPlayProperty">
+            <summary>
+            Identifies the AutoPlay dependency property.
+            </summary>
+        </member>
+        <member name="F:InTheHand.Forms.MediaElement.BufferingProgressProperty">
+            <summary>
+            Identifies the BufferingProgress dependency property.
+            </summary>
+        </member>
+        <member name="F:InTheHand.Forms.MediaElement.IsLoopingProperty">
+            <summary>
+            Identifies the IsLooping dependency property.
+            </summary>
+        </member>
+        <member name="F:InTheHand.Forms.MediaElement.KeepScreenOnProperty">
+            <summary>
+            Identifies the KeepScreenOn dependency property.
+            </summary>
+        </member>
+        <member name="F:InTheHand.Forms.MediaElement.SourceProperty">
+            <summary>
+            Identifies the Source dependency property.
+            </summary>
+        </member>
+        <member name="F:InTheHand.Forms.MediaElement.CurrentStateProperty">
+            <summary>
+            Identifies the CurrentState dependency property.
+            </summary>
+        </member>
+        <member name="F:InTheHand.Forms.MediaElement.PositionProperty">
+            <summary>
+            Identifies the Position dependency property.
+            </summary>
+        </member>
+        <member name="F:InTheHand.Forms.MediaElement.StretchProperty">
+            <summary>
+            Identifies the Stretch dependency property.
+            </summary>
+        </member>
+        <member name="P:InTheHand.Forms.MediaElement.AreTransportControlsEnabled">
+            <summary>
+            Gets or sets a value that determines whether the standard transport controls are enabled.
+            </summary>
+        </member>
+        <member name="P:InTheHand.Forms.MediaElement.AutoPlay">
+            <summary>
+            Gets or sets a value that indicates whether media will begin playback automatically when the <see cref="P:InTheHand.Forms.MediaElement.Source"/> property is set.
+            </summary>
+        </member>
+        <member name="P:InTheHand.Forms.MediaElement.BufferingProgress">
+            <summary>
+            Gets a value that indicates the current buffering progress.
+            </summary>
+            <value>The amount of buffering that is completed for media content.
+            The value ranges from 0 to 1. 
+            Multiply by 100 to obtain a percentage.</value>
+        </member>
+        <member name="P:InTheHand.Forms.MediaElement.IsLooping">
+            <summary>
+            Gets or sets a value that describes whether the media source currently loaded in the media engine should automatically set the position to the media start after reaching its end.
+            </summary>
+        </member>
+        <member name="P:InTheHand.Forms.MediaElement.KeepScreenOn">
+            <summary>
+            Gets or sets a value that specifies whether the control should stop the screen from timing out when playing media.
+            </summary>
+        </member>
+        <member name="P:InTheHand.Forms.MediaElement.Source">
+            <summary>
+            Gets or sets a media source on the MediaElement.
+            </summary>
+        </member>
+        <member name="P:InTheHand.Forms.MediaElement.CurrentState">
+            <summary>
+            Gets the status of this MediaElement.
+            </summary>
+        </member>
+        <member name="P:InTheHand.Forms.MediaElement.Position">
+            <summary>
+            Gets or sets the current position of progress through the media's playback time.
+            </summary>
+        </member>
+        <member name="M:InTheHand.Forms.MediaElement.Play">
+            <summary>
+            Plays media from the current position.
+            </summary>
+        </member>
+        <member name="M:InTheHand.Forms.MediaElement.Pause">
+            <summary>
+            Pauses media at the current position.
+            </summary>
+        </member>
+        <member name="M:InTheHand.Forms.MediaElement.Stop">
+            <summary>
+            Stops and resets media to be played from the beginning.
+            </summary>
+        </member>
+        <member name="P:InTheHand.Forms.MediaElement.Stretch">
+            <summary>
+            Gets or sets a value that describes how an MediaElement should be stretched to fill the destination rectangle.
+            </summary>
+            <value>A value of the <see cref="P:InTheHand.Forms.MediaElement.Stretch"/> enumeration that specifies how the source visual media is rendered.
+            The default value is Uniform.</value>
+        </member>
+        <member name="E:InTheHand.Forms.MediaElement.CurrentStateChanged">
+            <summary>
+            Occurs when the value of the <see cref="P:InTheHand.Forms.MediaElement.CurrentState"/> property changes.
+            </summary>
+        </member>
+        <member name="E:InTheHand.Forms.MediaElement.MediaEnded">
+            <summary>
+            Occurs when the MediaElement finishes playing audio or video.
+            </summary>
+        </member>
+        <member name="E:InTheHand.Forms.MediaElement.MediaOpened">
+            <summary>
+            Occurs when the media stream has been validated and opened, and the file headers have been read.
+            </summary>
+        </member>
+        <member name="E:InTheHand.Forms.MediaElement.SeekCompleted">
+            <summary>
+            Occurs when the seek point of a requested seek operation is ready for playback.
+            </summary>
+        </member>
+        <member name="T:InTheHand.Forms.MediaElementState">
+            <summary>
+            Defines the potential states of a MediaElement object. 
+            </summary>
+        </member>
+        <member name="F:InTheHand.Forms.MediaElementState.Closed">
+            <summary>
+            The <see cref="T:InTheHand.Forms.MediaElement"/> contains no media.
+            The <see cref="T:InTheHand.Forms.MediaElement"/> displays a transparent frame.
+            </summary>
+        </member>
+        <member name="F:InTheHand.Forms.MediaElementState.Opening">
+            <summary>
+            The <see cref="T:InTheHand.Forms.MediaElement"/> is validating and attempting to load the specified source.
+            </summary>
+        </member>
+        <member name="F:InTheHand.Forms.MediaElementState.Buffering">
+            <summary>
+            The <see cref="T:InTheHand.Forms.MediaElement"/> is loading the media for playback.
+            Its <see cref="P:InTheHand.Forms.MediaElement.Position"/> does not advance during this state.
+            If the <see cref="T:InTheHand.Forms.MediaElement"/> was already playing video, it continues to display the last displayed frame.
+            </summary>
+        </member>
+        <member name="F:InTheHand.Forms.MediaElementState.Playing">
+            <summary>
+            The <see cref="T:InTheHand.Forms.MediaElement"/> is playing the current media source.
+            </summary>
+        </member>
+        <member name="F:InTheHand.Forms.MediaElementState.Paused">
+            <summary>
+            The <see cref="T:InTheHand.Forms.MediaElement"/> does not advance its <see cref="P:InTheHand.Forms.MediaElement.Position"/>.
+            If the <see cref="T:InTheHand.Forms.MediaElement"/> was playing video, it continues to display the current frame.
+            </summary>
+        </member>
+        <member name="F:InTheHand.Forms.MediaElementState.Stopped">
+            <summary>
+            The <see cref="T:InTheHand.Forms.MediaElement"/> contains media but is not playing or paused.
+            Its <see cref="P:InTheHand.Forms.MediaElement.Position"/> is 0 and does not advance.
+            If the loaded media is video, the <see cref="T:InTheHand.Forms.MediaElement"/> displays the first frame.
+            </summary>
+        </member>
+        <member name="T:InTheHand.Forms.NavigationPage2">
+            <summary>
+            Supports additional callbacks on pages exposing <see cref="T:InTheHand.Forms.IPageNavigation"/>.
+            </summary>
+        </member>
+        <member name="F:InTheHand.Forms.Stretch.None">
+            <summary>
+            The content preserves its original size.
+            </summary>
+        </member>
+        <member name="F:InTheHand.Forms.Stretch.Fill">
+            <summary>
+            The content is resized to fill the destination dimensions. 
+            The aspect ratio is not preserved.
+            </summary>
+        </member>
+        <member name="F:InTheHand.Forms.Stretch.Uniform">
+            <summary>
+            The content is resized to fit in the destination dimensions while it preserves its native aspect ratio.
+            </summary>
+        </member>
+        <member name="F:InTheHand.Forms.Stretch.UniformToFill">
+            <summary>
+            The content is resized to fill the destination dimensions while it preserves its native aspect ratio. 
+            If the aspect ratio of the destination rectangle differs from the source, the source content is clipped to fit in the destination dimensions.
+            </summary>
+        </member>
+    </members>
+</doc>
