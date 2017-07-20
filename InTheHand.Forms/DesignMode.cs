@@ -1,4 +1,5 @@
-﻿using Xamarin.Forms;
+﻿using System.Reflection;
+using Xamarin.Forms;
 
 namespace InTheHand.Forms
 {
@@ -15,7 +16,13 @@ namespace InTheHand.Forms
         {
             get
             {
-                return Application.Current == null;
+                if( Application.Current != null)
+                {
+                    object xplat = typeof(Element).GetRuntimeProperty("Platform").GetValue(Application.Current);
+                    return xplat == null;
+                }
+
+                return true;
             }
         }
     }
