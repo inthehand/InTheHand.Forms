@@ -61,7 +61,21 @@ namespace InTheHand.Forms
         /// Identifies the Position dependency property.
         /// </summary>
         public static readonly BindableProperty PositionProperty =
-          BindableProperty.Create(nameof(Position), typeof(TimeSpan), typeof(MediaElement), TimeSpan.Zero);
+          BindableProperty.Create(nameof(Position), typeof(TimeSpan), typeof(MediaElement), TimeSpan.Zero, validateValue:ValidatePosition);
+
+        private static bool ValidatePosition(BindableObject bindable, object value)
+        {
+            MediaElement element = bindable as MediaElement;
+            if (element != null)
+            {
+                if (element._renderer != null)
+                {
+                    element._renderer.Seek((TimeSpan)value);
+                }
+            }
+
+            return true;
+        }
 
         /// <summary>
         /// Identifies the Stretch dependency property.
@@ -189,11 +203,11 @@ namespace InTheHand.Forms
         {
             get
             {
-                if (_renderer != null)
+               if (_renderer != null)
                 {
                     return _renderer.Position;
                 }
-
+                
                 return (TimeSpan)GetValue(PositionProperty);
             }
 
@@ -311,5 +325,7 @@ namespace InTheHand.Forms
         int NaturalVideoWidth { get; }
 
         TimeSpan Position { get; }
+
+        void Seek(TimeSpan time);
     }
 }

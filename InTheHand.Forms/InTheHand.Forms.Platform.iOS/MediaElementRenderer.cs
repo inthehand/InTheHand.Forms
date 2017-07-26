@@ -12,7 +12,7 @@ using Xamarin.Forms;
 
 namespace InTheHand.Forms.Platform.iOS
 {
-    public sealed class MediaElementRenderer : Xamarin.Forms.Platform.iOS.ViewRenderer<MediaElement,UIView>, IMediaElementRenderer
+    public sealed class MediaElementRenderer : Xamarin.Forms.Platform.iOS.ViewRenderer<MediaElement, UIView>, IMediaElementRenderer
     {
         private AVPlayerViewController _avPlayerViewController = new AVPlayerViewController();
         private NSObject _notificationHandle;
@@ -74,11 +74,11 @@ namespace InTheHand.Forms.Platform.iOS
 
                 _avPlayerViewController.ShowsPlaybackControls = Element.AreTransportControlsEnabled;
                 _avPlayerViewController.VideoGravity = AVLayerVideoGravity.ResizeAspect;
-                if(Element.KeepScreenOn)
+                if (Element.KeepScreenOn)
                 {
                     SetKeepScreenOn(true);
                 }
-                
+
                 _notificationHandle = NSNotificationCenter.DefaultCenter.AddObserver(AVPlayerItem.DidPlayToEndTimeNotification, PlayedToEnd);
 
                 UpdateSource();
@@ -98,7 +98,7 @@ namespace InTheHand.Forms.Platform.iOS
             }
             else
             {
-                if(_idleTimerDisabled)
+                if (_idleTimerDisabled)
                 {
                     _idleTimerDisabled = false;
                     UIApplication.SharedApplication.IdleTimerDisabled = false;
@@ -111,7 +111,7 @@ namespace InTheHand.Forms.Platform.iOS
             if (Element.Source != null)
             {
                 AVAsset asset = null;
-                if(Element.Source.Scheme == "ms-appx")
+                if (Element.Source.Scheme == "ms-appx")
                 {
                     // used for a file embedded in the application package
                     asset = AVAsset.FromUrl(NSUrl.FromFilename(Element.Source.LocalPath.Substring(1)));
@@ -126,7 +126,7 @@ namespace InTheHand.Forms.Platform.iOS
                 }
 
                 AVPlayerItem item = new AVPlayerItem(asset);
-                if(observer != null)
+                if (observer != null)
                 {
                     if (_avPlayerViewController.Player != null && _avPlayerViewController.Player.CurrentItem != null)
                     {
@@ -147,7 +147,7 @@ namespace InTheHand.Forms.Platform.iOS
                 {
                     _avPlayerViewController.Player = new AVPlayer(item);
                 }
-                
+
                 if (Element.AutoPlay)
                 {
                     _avPlayerViewController.Player.Play();
@@ -176,7 +176,7 @@ namespace InTheHand.Forms.Platform.iOS
         {
             if (e.NewValue != null)
             {
-                if(_avPlayerViewController.Player.Status == AVPlayerStatus.ReadyToPlay)
+                if (_avPlayerViewController.Player.Status == AVPlayerStatus.ReadyToPlay)
                 {
                     Element.OnMediaOpened();
                 }
@@ -203,7 +203,7 @@ namespace InTheHand.Forms.Platform.iOS
                 catch { }
             }
         }
-        
+
         /*private void Touched()
         {
             if (_avPlayerViewController.Player.Rate == 1.0)
@@ -236,7 +236,7 @@ namespace InTheHand.Forms.Platform.iOS
                     break;*/
 
                 case "Source":
-                    UpdateSource();                  
+                    UpdateSource();
                     break;
 
                 case "CurrentState":
@@ -245,7 +245,7 @@ namespace InTheHand.Forms.Platform.iOS
                     {
                         case MediaElementState.Playing:
                             _avPlayerViewController.Player.Play();
-                            if(Element.KeepScreenOn)
+                            if (Element.KeepScreenOn)
                             {
                                 SetKeepScreenOn(true);
                             }
@@ -280,16 +280,17 @@ namespace InTheHand.Forms.Platform.iOS
                     }
                     break;
 
-                case "Position":
-                    _avPlayerViewController.Player.Seek(new CoreMedia.CMTime(Convert.ToInt64(Element.Position.TotalMilliseconds), 1000), SeekComplete);
-                    break;
-
                 case "Stretch":
                     _avPlayerViewController.VideoGravity = StretchToGravity(Element.Stretch);
                     break;
             }
 
             base.OnElementPropertyChanged(sender, e);
+        }
+
+        void IMediaElementRenderer.Seek(TimeSpan time)
+        {
+            _avPlayerViewController.Player.Seek(new CMTime(Convert.ToInt64(time.TotalMilliseconds), 1000), SeekComplete);
         }
 
         private static AVLayerVideoGravity StretchToGravity(Stretch stretch)

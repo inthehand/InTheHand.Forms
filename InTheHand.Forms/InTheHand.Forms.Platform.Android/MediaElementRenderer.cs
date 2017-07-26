@@ -50,6 +50,11 @@ namespace InTheHand.Forms.Platform.Android
             }
         }
 
+        void IMediaElementRenderer.Seek(TimeSpan time)
+        {
+            _view.SeekTo((int)time.TotalMilliseconds);
+        }
+
         TimeSpan IMediaElementRenderer.Position
         {
             get
@@ -174,10 +179,6 @@ namespace InTheHand.Forms.Platform.Android
 
                 case "KeepScreenOn":
                     _view.KeepScreenOn = Element.KeepScreenOn;
-                    break;
-
-                case "Position":
-                    _view.SeekTo((int)((TimeSpan)Element.GetValue(MediaElement.PositionProperty)).TotalMilliseconds);
                     break;
 
                 case "Stretch":

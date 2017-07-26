@@ -74,6 +74,11 @@ namespace InTheHand.Forms.Platform.WinRT
             }
         }
 
+        void IMediaElementRenderer.Seek(TimeSpan time)
+        {
+            Control.Position = time;
+        }
+
         protected override void OnElementChanged(ElementChangedEventArgs<MediaElement> e)
         {
             base.OnElementChanged(e);
@@ -221,10 +226,6 @@ namespace InTheHand.Forms.Platform.WinRT
                     {
                         _request.RequestRelease();
                     }
-                    break;
-                         
-                case "Position":
-                    Control.Position = (TimeSpan)Element.GetValue(MediaElement.PositionProperty);
                     break;
 
                 case "Source":
