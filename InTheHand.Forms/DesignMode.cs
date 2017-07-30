@@ -16,11 +16,16 @@ namespace InTheHand.Forms
         {
             get
             {
-                if( Application.Current != null)
+                try
                 {
-                    object xplat = typeof(Element).GetRuntimeProperty("Platform").GetValue(Application.Current);
-                    return xplat == null;
+                    if (Application.Current != null)
+                    {
+                        object xplat = typeof(Element).GetRuntimeProperty("Platform").GetValue(Application.Current);
+                        return xplat == null;
+                    }
+
                 }
+                catch { }
 
                 return true;
             }
