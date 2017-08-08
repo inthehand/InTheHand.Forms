@@ -131,7 +131,14 @@ namespace InTheHand.Forms.Platform.Android
                 }
                 else
                 {
-                    _view.SetVideoURI(global::Android.Net.Uri.Parse(Element.Source.ToString()));
+                    if (Element.Source.IsFile)
+                    {
+                        _view.SetVideoPath(Element.Source.AbsolutePath);
+                    }
+                    else
+                    {
+                        _view.SetVideoURI(global::Android.Net.Uri.Parse(Element.Source.ToString()));
+                    }
                 }
 
                 if(Element.AutoPlay)

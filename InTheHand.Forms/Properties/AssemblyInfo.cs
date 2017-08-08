@@ -27,11 +27,12 @@ using System.Runtime.InteropServices;
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.2017.0718")]
+[assembly: AssemblyFileVersion("1.0.2017.0808")]
 
 [assembly: InternalsVisibleTo("InTheHand")]
 [assembly: InternalsVisibleTo("InTheHand.Forms.Platform.Android")]
 [assembly: InternalsVisibleTo("InTheHand.Forms.Platform.iOS")]
+[assembly: InternalsVisibleTo("InTheHand.Forms.Platform.MacOS")]
 [assembly: InternalsVisibleTo("InTheHand.Forms.Platform.Tizen")]
 [assembly: InternalsVisibleTo("InTheHand.Forms.Platform.UWP")]
 [assembly: InternalsVisibleTo("InTheHand.Forms.Platform.WinRT")]

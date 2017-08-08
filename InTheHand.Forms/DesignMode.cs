@@ -20,8 +20,9 @@ namespace InTheHand.Forms
                 {
                     if (Application.Current != null)
                     {
-                        object xplat = typeof(Element).GetRuntimeProperty("Platform").GetValue(Application.Current);
-                        return xplat == null;
+                        return false;
+                        //object xplat = typeof(Element).GetRuntimeProperty("Platform").GetValue(Application.Current);
+                        //return xplat == null;
                     }
 
                 }
