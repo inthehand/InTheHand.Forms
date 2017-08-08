@@ -275,6 +275,11 @@ namespace InTheHand.Forms
         /// </summary>
         public event EventHandler MediaEnded;
 
+        internal void RaiseMediaOpened()
+        {
+            MediaOpened?.Invoke(this, EventArgs.Empty);
+        }
+
         /// <summary>
         /// Occurs when the media stream has been validated and opened, and the file headers have been read.
         /// </summary>
@@ -296,15 +301,6 @@ namespace InTheHand.Forms
             {
                 System.Diagnostics.Debug.WriteLine("Media Ended");
                 MediaEnded(this, EventArgs.Empty);
-            }
-        }
-
-        internal void OnMediaOpened()
-        {
-            if (MediaOpened != null)
-            {
-                System.Diagnostics.Debug.WriteLine("Media Opened");
-                MediaOpened(this, EventArgs.Empty);
             }
         }
 

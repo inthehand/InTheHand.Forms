@@ -126,6 +126,7 @@ namespace InTheHand.Forms.Platform.iOS
                 }
 
                 AVPlayerItem item = new AVPlayerItem(asset);
+
                 if (observer != null)
                 {
                     if (_avPlayerViewController.Player != null && _avPlayerViewController.Player.CurrentItem != null)
@@ -178,7 +179,7 @@ namespace InTheHand.Forms.Platform.iOS
             {
                 if (_avPlayerViewController.Player.Status == AVPlayerStatus.ReadyToPlay)
                 {
-                    Element.OnMediaOpened();
+                    Element?.RaiseMediaOpened();
                 }
 
                 System.Diagnostics.Debug.WriteLine(e.NewValue.ToString());
@@ -290,7 +291,28 @@ namespace InTheHand.Forms.Platform.iOS
 
         void IMediaElementRenderer.Seek(TimeSpan time)
         {
-            _avPlayerViewController.Player.Seek(new CMTime(Convert.ToInt64(time.TotalMilliseconds), 1000), SeekComplete);
+            if (_avPlayerViewController.Player.Status == AVPlayerStatus.ReadyToPlay)
+            {
+                if (_avPlayerViewController.Player.CurrentItem != null)
+                {
+                    NSValue[] ranges = _avPlayerViewController.Player.CurrentItem.SeekableTimeRanges;
+                    CMTime seekTo = new CMTime(Convert.ToInt64(time.TotalMilliseconds), 1000);
+                    bool canSeek = false;
+                    foreach (NSValue v in ranges)
+                    {
+                        if (seekTo > v.CMTimeRangeValue.Start && seekTo < (v.CMTimeRangeValue.Start + v.CMTimeRangeValue.Duration))
+                        {
+                            canSeek = true;
+                            break;
+                        }
+                    }
+
+                    if (canSeek)
+                    {
+                        _avPlayerViewController.Player.Seek(seekTo, SeekComplete);
+                    }
+                }
+            }
         }
 
         private static AVLayerVideoGravity StretchToGravity(Stretch stretch)

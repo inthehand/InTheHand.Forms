@@ -151,7 +151,7 @@ namespace InTheHand.Forms.Platform.Android
 
         private void Control_Prepared(object sender, EventArgs e)
         {
-            Element.OnMediaOpened();
+            Element?.RaiseMediaOpened();
         }
         
         protected override void OnElementPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)

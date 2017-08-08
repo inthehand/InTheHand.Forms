@@ -96,7 +96,8 @@ namespace InTheHand.Forms.Platform.WinRT
 #endif
                     Control.CurrentStateChanged -= Control_CurrentStateChanged;
                     Control.SeekCompleted -= Control_SeekCompleted;
-                    
+                    Control.MediaOpened -= Control_MediaOpened;
+
                 }
 
                 e.OldElement.SetRenderer(null);
@@ -117,6 +118,7 @@ namespace InTheHand.Forms.Platform.WinRT
 #endif
                 Control.SeekCompleted += Control_SeekCompleted;
                 Control.CurrentStateChanged += Control_CurrentStateChanged;
+                Control.MediaOpened += Control_MediaOpened;
 
                 if (Element.Source != null)
                 {
@@ -130,6 +132,11 @@ namespace InTheHand.Forms.Platform.WinRT
                     }
                 }
             }
+        }
+
+        private void Control_MediaOpened(object sender, RoutedEventArgs e)
+        {
+            Element?.RaiseMediaOpened();
         }
 
         private void Control_CurrentStateChanged(object sender, RoutedEventArgs e)
