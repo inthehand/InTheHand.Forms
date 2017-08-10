@@ -27,7 +27,7 @@ using System.Runtime.InteropServices;
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.2017.0808")]
+[assembly: AssemblyFileVersion("1.0.2017.0810")]
 
 [assembly: InternalsVisibleTo("InTheHand")]
 [assembly: InternalsVisibleTo("InTheHand.Forms.Platform.Android")]
