@@ -5,6 +5,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 using Xamarin.Forms;
 
 namespace InTheHand.Forms
@@ -14,13 +15,12 @@ namespace InTheHand.Forms
     /// </summary>
     public sealed class MediaElement : View
     {
-        
         /// <summary>
         /// Identifies the AreTransportControlsEnabled dependency property.
         /// </summary>
         public static readonly BindableProperty AreTransportControlsEnabledProperty =
           BindableProperty.Create(nameof(AreTransportControlsEnabled), typeof(bool), typeof(MediaElement), false);
-        
+
         /// <summary>
         /// Identifies the AutoPlay dependency property.
         /// </summary>
@@ -61,7 +61,7 @@ namespace InTheHand.Forms
         /// Identifies the Position dependency property.
         /// </summary>
         public static readonly BindableProperty PositionProperty =
-          BindableProperty.Create(nameof(Position), typeof(TimeSpan), typeof(MediaElement), TimeSpan.Zero, validateValue:ValidatePosition);
+          BindableProperty.Create(nameof(Position), typeof(TimeSpan), typeof(MediaElement), TimeSpan.Zero, validateValue: ValidatePosition);
 
         private static bool ValidatePosition(BindableObject bindable, object value)
         {
@@ -147,7 +147,7 @@ namespace InTheHand.Forms
         {
             get
             {
-                if(_renderer != null)
+                if (_renderer != null)
                 {
                     return _renderer.NaturalVideoHeight;
                 }
@@ -179,6 +179,15 @@ namespace InTheHand.Forms
             set { SetValue(SourceProperty, value); }
         }
 
+        private IDictionary<string, string> _httpHeaders = new Dictionary<string, string>();
+        public IDictionary<string, string> HttpHeaders
+        {
+            get
+            {
+                return _httpHeaders;
+            }
+        }
+
         /// <summary>
         /// Gets the status of this MediaElement.
         /// </summary>
@@ -187,7 +196,7 @@ namespace InTheHand.Forms
             get { return (MediaElementState)GetValue(CurrentStateProperty); }
             internal set
             {
-                SetValue(CurrentStateProperty, value);                
+                SetValue(CurrentStateProperty, value);
             }
         }
 
@@ -203,11 +212,11 @@ namespace InTheHand.Forms
         {
             get
             {
-               if (_renderer != null)
+                if (_renderer != null)
                 {
                     return _renderer.Position;
                 }
-                
+
                 return (TimeSpan)GetValue(PositionProperty);
             }
 
@@ -230,7 +239,7 @@ namespace InTheHand.Forms
         /// </summary>
         public void Pause()
         {
-            if(CurrentState == MediaElementState.Playing)
+            if (CurrentState == MediaElementState.Playing)
             {
                 CurrentState = MediaElementState.Paused;
             }
@@ -297,7 +306,7 @@ namespace InTheHand.Forms
 
         internal void OnMediaEnded()
         {
-            if(MediaEnded != null)
+            if (MediaEnded != null)
             {
                 System.Diagnostics.Debug.WriteLine("Media Ended");
                 MediaEnded(this, EventArgs.Empty);
