@@ -196,6 +196,12 @@ namespace InTheHand.Forms.Platform.Android
             base.OnElementPropertyChanged(sender, e);
         }
 
+        protected override void OnSizeChanged(int w, int h, int oldw, int oldh)
+        {
+            base.OnSizeChanged(w, h, oldw, oldh);
+            UpdateLayoutParameters();
+        }
+
         private void UpdateLayoutParameters()
         {
             float ratio = (float)Element.NaturalVideoWidth / Element.NaturalVideoHeight;

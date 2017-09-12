@@ -26,7 +26,6 @@ namespace InTheHand.Forms.Platform.Android
             MediaMetadataRetriever retriever = new MediaMetadataRetriever();
             retriever.SetDataSource(path);
             ExtractMetadata(retriever);
-
             base.SetVideoPath(path);
         }
 
@@ -34,7 +33,7 @@ namespace InTheHand.Forms.Platform.Android
         {
             _duration = TimeSpan.Zero;
             _videoWidth = int.Parse(retriever.ExtractMetadata(MetadataKey.VideoWidth));
-            _videoHeight = int.Parse(retriever.ExtractMetadata(MetadataKey.VideoWidth));
+            _videoHeight = int.Parse(retriever.ExtractMetadata(MetadataKey.VideoHeight));
 
             string durationString = retriever.ExtractMetadata(MetadataKey.Duration);
             if (!string.IsNullOrEmpty(durationString))
@@ -44,12 +43,24 @@ namespace InTheHand.Forms.Platform.Android
             }
         }
 
+        public override void SetVideoURI(global::Android.Net.Uri uri, IDictionary<string, string> headers)
+        {
+            GetMetaData(uri, headers);
+            base.SetVideoURI(uri, headers);
+        }
+
         public override void SetVideoURI(global::Android.Net.Uri uri)
+        {
+            GetMetaData(uri, new Dictionary<string, string>());
+            base.SetVideoURI(uri);
+        }
+
+        private void GetMetaData(global::Android.Net.Uri uri, IDictionary<string, string> headers)
         {
             MediaMetadataRetriever retriever = new MediaMetadataRetriever();
             if (uri.Scheme.StartsWith("http"))
             {
-                retriever.SetDataSource(uri.ToString(), new Dictionary<string, string>());
+                retriever.SetDataSource(uri.ToString(), headers);
             }
             else
             {
@@ -57,8 +68,6 @@ namespace InTheHand.Forms.Platform.Android
             }
 
             ExtractMetadata(retriever);
-
-            base.SetVideoURI(uri);
         }
 
         public int VideoHeight
@@ -84,6 +93,6 @@ namespace InTheHand.Forms.Platform.Android
                 return _duration;
             }
         }
-        
+
     }
 }
