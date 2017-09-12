@@ -72,7 +72,7 @@ namespace InTheHand.Forms.Platform.Android
         {
             base.OnElementChanged(e);
 
-            if(e.OldElement != null)
+            if (e.OldElement != null)
             {
                 e.OldElement.SetRenderer(null);
 
@@ -83,7 +83,7 @@ namespace InTheHand.Forms.Platform.Android
                     _view.Dispose();
                 }
 
-                if(_controller != null)
+                if (_controller != null)
                 {
                     _controller.Dispose();
                     _controller = null;
@@ -127,7 +127,7 @@ namespace InTheHand.Forms.Platform.Android
                 }
                 else if (Element.Source.Scheme == "ms-appdata")
                 {
-                    _view.SetVideoPath(System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),Element.Source.LocalPath.Substring(1)));
+                    _view.SetVideoPath(System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), Element.Source.LocalPath.Substring(1)));
                 }
                 else
                 {
@@ -137,11 +137,11 @@ namespace InTheHand.Forms.Platform.Android
                     }
                     else
                     {
-                        _view.SetVideoURI(global::Android.Net.Uri.Parse(Element.Source.ToString()));
+                        _view.SetVideoURI(global::Android.Net.Uri.Parse(Element.Source.ToString()), Element.HttpHeaders);
                     }
                 }
 
-                if(Element.AutoPlay)
+                if (Element.AutoPlay)
                 {
                     _view.Start();
                 }
@@ -153,10 +153,10 @@ namespace InTheHand.Forms.Platform.Android
         {
             Element?.RaiseMediaOpened();
         }
-        
+
         protected override void OnElementPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            switch(e.PropertyName)
+            switch (e.PropertyName)
             {
                 case "AreTransportControlsEnabled":
                     _controller.Visibility = Element.AreTransportControlsEnabled ? ViewStates.Visible : ViewStates.Gone;
@@ -167,7 +167,7 @@ namespace InTheHand.Forms.Platform.Android
                     break;
 
                 case "CurrentState":
-                    switch(Element.CurrentState)
+                    switch (Element.CurrentState)
                     {
                         case MediaElementState.Playing:
                             _view.Start();
@@ -194,6 +194,12 @@ namespace InTheHand.Forms.Platform.Android
             }
 
             base.OnElementPropertyChanged(sender, e);
+        }
+
+        protected override void OnSizeChanged(int w, int h, int oldw, int oldh)
+        {
+            base.OnSizeChanged(w, h, oldw, oldh);
+            UpdateLayoutParameters();
         }
 
         private void UpdateLayoutParameters()

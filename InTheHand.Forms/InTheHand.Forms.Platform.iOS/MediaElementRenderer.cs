@@ -4,6 +4,7 @@ using CoreMedia;
 using Foundation;
 using InTheHand.Forms;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using UIKit;
 using Xamarin.Forms;
@@ -106,6 +107,25 @@ namespace InTheHand.Forms.Platform.iOS
             }
         }
 
+        private AVUrlAssetOptions GetOptionsWithHeaders(IDictionary<string, string> headers)
+        {
+            var nativeHeaders = new NSMutableDictionary();
+
+            foreach (var header in headers)
+            {
+                nativeHeaders.Add((NSString)header.Key, (NSString)header.Value);
+            }
+
+            var nativeHeadersKey = (NSString)"AVURLAssetHTTPHeaderFieldsKey";
+
+            var options = new AVUrlAssetOptions(NSDictionary.FromObjectAndKey(
+                nativeHeaders,
+                nativeHeadersKey
+            ));
+
+            return options;
+        }
+
         private void UpdateSource()
         {
             if (Element.Source != null)
@@ -122,7 +142,7 @@ namespace InTheHand.Forms.Platform.iOS
                 }
                 else
                 {
-                    asset = AVAsset.FromUrl(NSUrl.FromString(Element.Source.ToString()));
+                    asset = AVUrlAsset.Create(NSUrl.FromString(Element.Source.ToString()), GetOptionsWithHeaders(Element.HttpHeaders));
                 }
 
                 AVPlayerItem item = new AVPlayerItem(asset);
@@ -317,7 +337,7 @@ namespace InTheHand.Forms.Platform.iOS
 
         private static AVLayerVideoGravity StretchToGravity(Stretch stretch)
         {
-            switch(stretch)
+            switch (stretch)
             {
                 case Stretch.Fill:
                     return AVLayerVideoGravity.Resize;
