@@ -250,7 +250,7 @@ namespace InTheHand.Forms
         /// </summary>
         public void Stop()
         {
-            if (CurrentState != MediaElementState.Closed)
+            if (CurrentState != MediaElementState.Stopped)
             {
                 CurrentState = MediaElementState.Stopped;
             }

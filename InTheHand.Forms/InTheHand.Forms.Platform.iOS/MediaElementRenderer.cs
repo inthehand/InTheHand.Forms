@@ -172,6 +172,7 @@ namespace InTheHand.Forms.Platform.iOS
                 if (Element.AutoPlay)
                 {
                     _avPlayerViewController.Player.Play();
+                    Element.CurrentState = MediaElementState.Playing;
                 }
             }
         }
