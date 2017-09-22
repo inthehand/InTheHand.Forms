@@ -17,6 +17,7 @@ namespace InTheHand.Forms.Platform.Android
     {
         private MediaController _controller;
         private VideoViewEx _view;
+        private MediaPlayer _audioView;
 
         double IMediaElementRenderer.BufferingProgress
         {
@@ -144,6 +145,7 @@ namespace InTheHand.Forms.Platform.Android
                 if (Element.AutoPlay)
                 {
                     _view.Start();
+                    Element.CurrentState = MediaElementState.Playing;
                 }
 
             }
