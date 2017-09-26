@@ -58,7 +58,7 @@ namespace InTheHand.Forms.Platform.Android
         private void GetMetaData(global::Android.Net.Uri uri, IDictionary<string, string> headers)
         {
             MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-            if (uri.Scheme.StartsWith("http"))
+            if (uri.Scheme != null && uri.Scheme.StartsWith("http"))
             {
                 retriever.SetDataSource(uri.ToString(), headers);
             }
