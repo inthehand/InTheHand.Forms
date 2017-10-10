@@ -120,7 +120,11 @@ namespace InTheHand.Forms.Platform.Android
         {
             if (Element.Source != null)
             {
-                if (Element.Source.Scheme == "ms-appx")
+                if(Element.Source.Scheme == null)
+                {
+                    _view.SetVideoPath(Element.Source.AbsolutePath);
+                }
+                else if (Element.Source.Scheme == "ms-appx")
                 {
                     // video resources should be in the raw folder with Build Action set to AndroidResource
                     string uri = "android.resource://" + Context.PackageName + "/raw/" + Element.Source.LocalPath.Substring(1, Element.Source.LocalPath.LastIndexOf('.') - 1).ToLower();
