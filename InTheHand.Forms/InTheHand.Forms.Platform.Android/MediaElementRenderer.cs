@@ -13,11 +13,11 @@ using Android.Runtime;
 
 namespace InTheHand.Forms.Platform.Android
 {
-    public sealed class MediaElementRenderer : ViewRenderer<MediaElement, FrameLayout>, MediaPlayer.IOnCompletionListener, IMediaElementRenderer
+    public sealed class MediaElementRenderer : ViewRenderer<MediaElement, FrameLayout>, MediaPlayer.IOnCompletionListener, MediaPlayer.IOnPreparedListener, IMediaElementRenderer
     {
         private MediaController _controller;
         private VideoViewEx _view;
-        private MediaPlayer _audioView;
+        private MediaPlayer _mediaPlayer;
 
         double IMediaElementRenderer.BufferingProgress
         {
@@ -97,17 +97,28 @@ namespace InTheHand.Forms.Platform.Android
                 {
                     try
                     {
-                        SetNativeControl(new FrameLayout(Context));// new VideoViewEx(Context));
-                        _view = new VideoViewEx(Context);
-                        Control.AddView(_view);
                         e.NewElement.SetRenderer(this);
+
+                        _view = new VideoViewEx(Context);
+                        SetNativeControl(new FrameLayout(Context));// new VideoViewEx(Context));
+                        Control.LayoutParameters = new LayoutParams(LayoutParams.MatchParent, LayoutParams.MatchParent);
+                        //_view.LayoutParameters = new LayoutParams(LayoutParams.MatchParent, LayoutParams.MatchParent);
+
+                        //_view.SetZOrderOnTop(true);
+                        _view.SetZOrderMediaOverlay(true);
                         _view.Prepared += Control_Prepared;
                         _view.SetOnCompletionListener(this);
+                        _view.SetOnPreparedListener(this);
                         _view.KeepScreenOn = Element.KeepScreenOn;
 
+                        Control.AddView(_view);
+                        //Control.ForceLayout();
+
                         _controller = new MediaController(Context);
+                        _controller.SetAnchorView(_view);
                         _controller.Visibility = Element.AreTransportControlsEnabled ? ViewStates.Visible : ViewStates.Gone;
                         _view.SetMediaController(_controller);
+                        
                         UpdateSource();
                     }
                     catch
@@ -176,7 +187,11 @@ namespace InTheHand.Forms.Platform.Android
                     switch (Element.CurrentState)
                     {
                         case MediaElementState.Playing:
-                            _view.Start();
+                            if (!_view.IsPlaying)
+                            {
+                                _view.Start();
+                            }
+                            Element.CurrentState = _view.IsPlaying ? MediaElementState.Playing : MediaElementState.Stopped;
                             break;
 
                         case MediaElementState.Paused:
@@ -184,9 +199,21 @@ namespace InTheHand.Forms.Platform.Android
                             break;
 
                         case MediaElementState.Stopped:
-                            _view.SeekTo(0);
-                            _view.StopPlayback();
+                            if (_view.IsPlaying)
+                            {
+                                _view.SeekTo(0);
+                                _view.StopPlayback();
+                            }
+                            Element.CurrentState = _view.IsPlaying ? MediaElementState.Playing : MediaElementState.Stopped;
                             break;
+                    }
+                    
+                    break;
+
+                case "IsLooping":
+                    if(_mediaPlayer != null)
+                    {
+                        _mediaPlayer.Looping = Element.IsLooping;
                     }
                     break;
 
@@ -211,38 +238,46 @@ namespace InTheHand.Forms.Platform.Android
         private void UpdateLayoutParameters()
         {
             float ratio = (float)Element.NaturalVideoWidth / Element.NaturalVideoHeight;
-            float controlRatio = (float)Control.Width / Control.Height;
+            float controlRatio = (float)Width / Height;
 
             switch (Element.Stretch)
             {
                 case Stretch.None:
-                    _view.LayoutParameters = new FrameLayout.LayoutParams(Control.Width, Control.Height, GravityFlags.CenterHorizontal | GravityFlags.CenterVertical);
+                    _view.LayoutParameters = new FrameLayout.LayoutParams(Width, Height, GravityFlags.CenterHorizontal | GravityFlags.CenterVertical);
                     break;
 
                 case Stretch.Fill:
                     // TODO: this doesn't stretch like other platforms...
-                    _view.LayoutParameters = new FrameLayout.LayoutParams(Control.Width, Control.Height, GravityFlags.FillHorizontal | GravityFlags.FillVertical | GravityFlags.CenterHorizontal | GravityFlags.CenterVertical) { LeftMargin = 0, RightMargin = 0, TopMargin = 0, BottomMargin = 0 };
+                    _view.LayoutParameters = new FrameLayout.LayoutParams(Width, Height, GravityFlags.FillHorizontal | GravityFlags.FillVertical | GravityFlags.CenterHorizontal | GravityFlags.CenterVertical) { LeftMargin = 0, RightMargin = 0, TopMargin = 0, BottomMargin = 0 };
                     break;
 
                 case Stretch.Uniform:
                     if (ratio > controlRatio)
                     {
-                        _view.LayoutParameters = new FrameLayout.LayoutParams(Control.Width, (int)(Control.Width / ratio), GravityFlags.FillHorizontal | GravityFlags.CenterVertical);
+                        int requiredHeight = (int)(Width / ratio);
+                        int vertMargin = (Height - requiredHeight) / 2;
+                        _view.LayoutParameters = new FrameLayout.LayoutParams(Width, requiredHeight, GravityFlags.FillHorizontal | GravityFlags.CenterVertical) { LeftMargin = 0, RightMargin = 0, TopMargin = vertMargin, BottomMargin = vertMargin };
                     }
                     else
                     {
-                        _view.LayoutParameters = new FrameLayout.LayoutParams((int)(Control.Height * ratio), Control.Height, GravityFlags.CenterHorizontal | GravityFlags.FillVertical) { LeftMargin = 0, RightMargin = 0, TopMargin = 0, BottomMargin = 0 };
+                        int requiredWidth = (int)(Height * ratio);
+                        int horizMargin = (Width - requiredWidth) / 2;
+                        _view.LayoutParameters = new FrameLayout.LayoutParams(requiredWidth, Height, GravityFlags.CenterHorizontal | GravityFlags.FillVertical) { LeftMargin = horizMargin, RightMargin = horizMargin, TopMargin = 0, BottomMargin = 0 };
                     }
                     break;
 
                 case Stretch.UniformToFill:
                     if (ratio > controlRatio)
                     {
-                        _view.LayoutParameters = new FrameLayout.LayoutParams((int)(Control.Height * ratio), Control.Height, GravityFlags.CenterHorizontal | GravityFlags.FillVertical) { TopMargin = 0, BottomMargin = 0 };
+                        int requiredWidth = (int)(Height / ratio);
+                        int horizMargin = (Width - requiredWidth) / 2;
+                        _view.LayoutParameters = new FrameLayout.LayoutParams((int)(Height * ratio), Height, GravityFlags.CenterHorizontal | GravityFlags.FillVertical) { TopMargin = 0, BottomMargin = 0, LeftMargin=horizMargin, RightMargin=horizMargin };
                     }
                     else
                     {
-                        _view.LayoutParameters = new FrameLayout.LayoutParams(Control.Width, (int)(Control.Width * ratio), GravityFlags.FillHorizontal | GravityFlags.CenterVertical) { LeftMargin = 0, RightMargin = 0, TopMargin = 0, BottomMargin = 0 };
+                        int requiredHeight = (int)(Width / ratio);
+                        int vertMargin = (Height - requiredHeight) / 2;
+                        _view.LayoutParameters = new FrameLayout.LayoutParams(Width, requiredHeight, GravityFlags.FillHorizontal | GravityFlags.CenterVertical) { LeftMargin = 0, RightMargin = 0, TopMargin = vertMargin, BottomMargin = vertMargin };
                     }
 
                     break;
@@ -251,15 +286,14 @@ namespace InTheHand.Forms.Platform.Android
 
         void MediaPlayer.IOnCompletionListener.OnCompletion(MediaPlayer mp)
         {
-            if (Element.IsLooping)
-            {
-                mp.SeekTo(0);
-                mp.Start();
-            }
-            else
-            {
-                this.Element.OnMediaEnded();
-            }
+            mp.SeekTo(0);
+            this.Element.OnMediaEnded();
+        }
+
+        public void OnPrepared(MediaPlayer mp)
+        {
+            _mediaPlayer = mp;
+            mp.Looping = Element.IsLooping;
         }
     }
 }

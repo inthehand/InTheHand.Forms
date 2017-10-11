@@ -306,6 +306,8 @@ namespace InTheHand.Forms
 
         internal void OnMediaEnded()
         {
+            CurrentState = MediaElementState.Stopped;
+
             if (MediaEnded != null)
             {
                 System.Diagnostics.Debug.WriteLine("Media Ended");
