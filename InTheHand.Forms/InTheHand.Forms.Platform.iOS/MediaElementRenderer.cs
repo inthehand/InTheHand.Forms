@@ -131,7 +131,12 @@ namespace InTheHand.Forms.Platform.iOS
             if (Element.Source != null)
             {
                 AVAsset asset = null;
-                if (Element.Source.Scheme == "ms-appx")
+                if(Element.Source.Scheme == null)
+                {
+                    // file path
+                    asset = AVAsset.FromUrl(NSUrl.FromFilename(Element.Source.OriginalString));
+                }
+                else if (Element.Source.Scheme == "ms-appx")
                 {
                     // used for a file embedded in the application package
                     asset = AVAsset.FromUrl(NSUrl.FromFilename(Element.Source.LocalPath.Substring(1)));
