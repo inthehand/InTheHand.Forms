@@ -60,7 +60,14 @@ namespace InTheHand.Forms.Platform.Android
         {
             get
             {
-                return TimeSpan.FromMilliseconds(_view.CurrentPosition);
+                try
+                {
+                    return TimeSpan.FromMilliseconds(_view.CurrentPosition);
+                }
+                catch
+                {
+                    return TimeSpan.Zero;
+                }
             }
         }
 
