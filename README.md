@@ -1,4 +1,3 @@
-
 # InTheHand.Forms
 Extra Xamarin Forms APIs
 
@@ -17,8 +16,8 @@ Supports Android, iOS and Windows platforms.
 - Android
 - iOS
 - Windows UWP
-- Windows 8.1 Store
-- Windows Phone 8.1
+- Windows 8.1 Store (Deprecated)
+- Windows Phone 8.1 (Deprecated)
 
 ## Samples:-
 - [MediaPlayer Sample](https://github.com/inthehand/InTheHand.Forms/tree/master/MediaPlayerSample/MediaPlayerSample)
