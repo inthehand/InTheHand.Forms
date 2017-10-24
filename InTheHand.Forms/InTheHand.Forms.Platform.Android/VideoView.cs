@@ -32,8 +32,10 @@ namespace InTheHand.Forms.Platform.Android
         private void ExtractMetadata(MediaMetadataRetriever retriever)
         {
             _duration = TimeSpan.Zero;
-            _videoWidth = int.Parse(retriever.ExtractMetadata(MetadataKey.VideoWidth));
-            _videoHeight = int.Parse(retriever.ExtractMetadata(MetadataKey.VideoHeight));
+            _videoWidth = 0;
+            int.TryParse(retriever.ExtractMetadata(MetadataKey.VideoWidth), out _videoWidth);
+            _videoHeight = 0;
+            int.TryParse(retriever.ExtractMetadata(MetadataKey.VideoHeight), out _videoHeight);
 
             string durationString = retriever.ExtractMetadata(MetadataKey.Duration);
             if (!string.IsNullOrEmpty(durationString))
