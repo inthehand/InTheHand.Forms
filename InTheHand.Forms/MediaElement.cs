@@ -143,6 +143,19 @@ namespace InTheHand.Forms
             set { SetValue(KeepScreenOnProperty, value); }
         }
 
+        public TimeSpan NaturalDuration
+        {
+            get
+            {
+                if(_renderer != null)
+                {
+                    return _renderer.NaturalDuration;
+                }
+
+                return TimeSpan.Zero;
+            }
+        }
+
         public int NaturalVideoHeight
         {
             get

@@ -31,7 +31,7 @@ namespace InTheHand.Forms.Platform.Android
         {
             get
             {
-                return _view.Duration;
+                return _view.NaturalDuration;
             }
         }
 

@@ -88,7 +88,7 @@ namespace InTheHand.Forms.Platform.Android
             }
         }
 
-        public TimeSpan Duration
+        public TimeSpan NaturalDuration
         {
             get
             {
