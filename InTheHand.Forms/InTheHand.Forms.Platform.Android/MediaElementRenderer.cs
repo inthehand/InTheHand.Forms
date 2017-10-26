@@ -239,6 +239,12 @@ namespace InTheHand.Forms.Platform.Android
 
         private void UpdateLayoutParameters()
         {
+            if(Element.NaturalVideoHeight == 0)
+            {
+                _view.LayoutParameters = new FrameLayout.LayoutParams(Width, Height, GravityFlags.Fill);
+                return;
+            }
+
             float ratio = (float)Element.NaturalVideoWidth / Element.NaturalVideoHeight;
             float controlRatio = (float)Width / Height;
 
