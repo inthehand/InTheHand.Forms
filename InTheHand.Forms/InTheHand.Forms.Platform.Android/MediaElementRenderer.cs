@@ -103,10 +103,8 @@ namespace InTheHand.Forms.Platform.Android
 
                         _view = new VideoViewEx(Context);
                         SetNativeControl(new FrameLayout(Context));// new VideoViewEx(Context));
-                        Control.LayoutParameters = new LayoutParams(LayoutParams.MatchParent, LayoutParams.MatchParent);
-                        //_view.LayoutParameters = new LayoutParams(LayoutParams.MatchParent, LayoutParams.MatchParent);
-
-                        //_view.SetZOrderOnTop(true);
+                        //Control.LayoutParameters = new LayoutParams(LayoutParams.MatchParent, LayoutParams.MatchParent);
+                        
                         _view.SetZOrderMediaOverlay(true);
                         _view.Prepared += Control_Prepared;
                         _view.SetOnCompletionListener(this);
@@ -114,7 +112,6 @@ namespace InTheHand.Forms.Platform.Android
                         _view.KeepScreenOn = Element.KeepScreenOn;
 
                         Control.AddView(_view);
-                        //Control.ForceLayout();
 
                         _controller = new MediaController(Context);
                         _controller.SetAnchorView(_view);
@@ -277,7 +274,7 @@ namespace InTheHand.Forms.Platform.Android
                 case Stretch.UniformToFill:
                     if (ratio > controlRatio)
                     {
-                        int requiredWidth = (int)(Height / ratio);
+                        int requiredWidth = (int)(Height * ratio);
                         int horizMargin = (Width - requiredWidth) / 2;
                         _view.LayoutParameters = new FrameLayout.LayoutParams((int)(Height * ratio), Height, GravityFlags.CenterHorizontal | GravityFlags.FillVertical) { TopMargin = 0, BottomMargin = 0, LeftMargin=horizMargin, RightMargin=horizMargin };
                     }
