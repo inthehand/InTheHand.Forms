@@ -23,9 +23,13 @@ namespace InTheHand.Forms.Platform.Android
 
         public override void SetVideoPath(string path)
         {
-            MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-            retriever.SetDataSource(path);
-            ExtractMetadata(retriever);
+            if (System.IO.File.Exists(path))
+            {
+                MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+                retriever.SetDataSource(path);
+                ExtractMetadata(retriever);
+            }
+
             base.SetVideoPath(path);
         }
 

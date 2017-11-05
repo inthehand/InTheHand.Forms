@@ -114,7 +114,7 @@ namespace InTheHand.Forms.Platform.Android
                         Control.AddView(_view);
 
                         _controller = new MediaController(Context);
-                        _controller.SetAnchorView(_view);
+                        _controller.SetAnchorView(this);
                         _controller.Visibility = Element.AreTransportControlsEnabled ? ViewStates.Visible : ViewStates.Gone;
                         _view.SetMediaController(_controller);
                         
