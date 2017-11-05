@@ -81,7 +81,7 @@ namespace InTheHand.Forms.Platform.Android
 
                 if (_view != null)
                 {
-                    _view.Prepared -= Control_Prepared;
+                    _view.SetOnPreparedListener(null);
                     _view.SetOnCompletionListener(null);
                     _view.Dispose();
                 }
@@ -106,7 +106,6 @@ namespace InTheHand.Forms.Platform.Android
                         //Control.LayoutParameters = new LayoutParams(LayoutParams.MatchParent, LayoutParams.MatchParent);
                         
                         _view.SetZOrderMediaOverlay(true);
-                        _view.Prepared += Control_Prepared;
                         _view.SetOnCompletionListener(this);
                         _view.SetOnPreparedListener(this);
                         _view.KeepScreenOn = Element.KeepScreenOn;
@@ -163,11 +162,6 @@ namespace InTheHand.Forms.Platform.Android
                 }
 
             }
-        }
-
-        private void Control_Prepared(object sender, EventArgs e)
-        {
-            Element?.RaiseMediaOpened();
         }
 
         protected override void OnElementPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -297,8 +291,18 @@ namespace InTheHand.Forms.Platform.Android
 
         public void OnPrepared(MediaPlayer mp)
         {
+            Element?.RaiseMediaOpened();
+            
+            UpdateLayoutParameters();
+
             _mediaPlayer = mp;
             mp.Looping = Element.IsLooping;
+            mp.SeekTo(0);
+
+            if(Element.AutoPlay)
+            {
+                Element.CurrentState = MediaElementState.Playing;
+            }
         }
     }
 }
