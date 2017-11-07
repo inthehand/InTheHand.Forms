@@ -9,6 +9,7 @@ Supports Android, iOS and Windows platforms.
 - CheckSwitch
 - ColorExtensions (UWP)
 - DesignMode
+- FormattedButton
 - MediaElement
 - NavigationPage2
 
