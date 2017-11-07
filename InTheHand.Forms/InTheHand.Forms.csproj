@@ -36,6 +36,7 @@
     <DocumentationFile>NuGet\lib\portable-net45+netcore45+wpa81+wp8\InTheHand.Forms.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Button.cs" />
     <Compile Include="CheckSwitch.cs" />
     <Compile Include="DesignMode.cs" />
     <Compile Include="IPageNavigation.cs" />

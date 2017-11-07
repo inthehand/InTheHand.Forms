@@ -99,6 +99,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ButtonRenderer.cs" />
     <Compile Include="CheckSwitchRenderer.cs" />
     <Compile Include="InTheHandForms.cs" />
     <Compile Include="MediaElementRenderer.cs" />

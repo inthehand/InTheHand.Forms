@@ -61,6 +61,7 @@
     <Compile Include="..\InTheHand.Forms.Platform.Android\InTheHandForms.cs">
       <Link>InTheHandForms.cs</Link>
     </Compile>
+    <Compile Include="ButtonRenderer.cs" />
     <Compile Include="CheckSwitchRenderer.cs" />
     <Compile Include="MediaElementRenderer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

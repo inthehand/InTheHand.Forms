@@ -53,7 +53,7 @@ namespace InTheHand.Forms.Platform.Android
 
         void IMediaElementRenderer.Seek(TimeSpan time)
         {
-            _view.SeekTo((int)time.TotalMilliseconds);
+            _view?.SeekTo((int)time.TotalMilliseconds);
         }
 
         TimeSpan IMediaElementRenderer.Position
