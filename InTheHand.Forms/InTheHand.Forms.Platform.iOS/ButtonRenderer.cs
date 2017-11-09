@@ -1,4 +1,6 @@
-﻿using InTheHand.Forms;
+﻿using CoreGraphics;
+using InTheHand.Forms;
+using System;
 using System.ComponentModel;
 using UIKit;
 using Xamarin.Forms;
@@ -63,6 +65,15 @@ namespace InTheHand.Forms.Platform.iOS
                     Control.LineBreakMode = UILineBreakMode.WordWrap;
                     break;
             }
+        }
+
+        public override CGSize SizeThatFits(CGSize size)
+        {
+            var s = base.SizeThatFits(size);
+            // as we are adding an 8pt border left/right deduct this when calculating fit
+            var c = Control.TitleLabel.SizeThatFits(new CGSize(nfloat.IsInfinity(size.Width) ? size.Width : Math.Min(size.Width, s.Width) - 8, nfloat.IsInfinity(size.Height) ? size.Height : Math.Min(size.Height, s.Height)));
+            // because this is the label size add some height for standard margins to match regular buttons
+            return new CGSize(c.Width, c.Height + 24);
         }
     }
 }
