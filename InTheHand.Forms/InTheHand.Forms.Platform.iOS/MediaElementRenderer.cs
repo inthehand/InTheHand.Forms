@@ -66,6 +66,9 @@ namespace InTheHand.Forms.Platform.iOS
             if (e.OldElement != null)
             {
                 e.OldElement.SetRenderer(null);
+                //stop video if playing
+                _avPlayerViewController?.Player?.Pause();
+                _avPlayerViewController?.Player?.Seek(CMTime.Zero);
             }
 
             if (e.NewElement != null)
