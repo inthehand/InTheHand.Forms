@@ -196,6 +196,7 @@ namespace InTheHand.Forms.Platform.iOS
             if (observer != null)
             {
                 _avPlayerViewController?.Player?.CurrentItem?.RemoveObserver(observer, "status");
+                observer.Dispose();
                 observer = null;
             }
 

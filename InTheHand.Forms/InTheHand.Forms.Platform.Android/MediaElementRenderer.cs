@@ -285,8 +285,12 @@ namespace InTheHand.Forms.Platform.Android
 
         void MediaPlayer.IOnCompletionListener.OnCompletion(MediaPlayer mp)
         {
-            mp.SeekTo(0);
-            this.Element.OnMediaEnded();
+            if (mp.CurrentPosition > 0)
+            {
+                mp.SeekTo(0);
+            }
+
+            Element.OnMediaEnded();
         }
 
         public void OnPrepared(MediaPlayer mp)
