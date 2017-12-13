@@ -178,10 +178,6 @@ namespace InTheHand.Forms.Platform.WinRT
         private void PositionChanged(DependencyObject sender, DependencyProperty dp)
         {
             Debug.WriteLine("Position");
-            if (Element.Position != Control.Position)
-            {
-                ((IElementController)Element).SetValueFromRenderer(MediaElement.PositionProperty, Control.Position);
-            }
         }     
 #endif  
 
