@@ -11,6 +11,7 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Android.Media;
+using System.Diagnostics;
 
 namespace InTheHand.Forms.Platform.Android
 {
@@ -52,6 +53,7 @@ namespace InTheHand.Forms.Platform.Android
         public override void SetVideoURI(global::Android.Net.Uri uri, IDictionary<string, string> headers)
         {
             GetMetaData(uri, headers);
+            
             base.SetVideoURI(uri, headers);
         }
 
@@ -64,7 +66,7 @@ namespace InTheHand.Forms.Platform.Android
         private void GetMetaData(global::Android.Net.Uri uri, IDictionary<string, string> headers)
         {
             MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-            if (uri.Scheme != null && uri.Scheme.StartsWith("http"))
+            if (uri.Scheme != null && uri.Scheme.StartsWith("http") && headers != null)
             {
                 retriever.SetDataSource(uri.ToString(), headers);
             }

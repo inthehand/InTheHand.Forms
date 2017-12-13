@@ -154,7 +154,7 @@ namespace InTheHand.Forms.Platform.Android
                         _view.SetVideoURI(global::Android.Net.Uri.Parse(Element.Source.ToString()), Element.HttpHeaders);
                     }
                 }
-
+                
                 if (Element.AutoPlay)
                 {
                     _view.Start();
