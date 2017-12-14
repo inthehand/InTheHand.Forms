@@ -179,6 +179,7 @@ namespace InTheHand.Forms.Platform.iOS
 
                 if (Element.AutoPlay)
                 {
+                    AVAudioSession.SharedInstance().SetCategory(AVAudioSession.CategoryPlayback);
                     _avPlayerViewController.Player.Play();
                     Element.CurrentState = MediaElementState.Playing;
                 }
@@ -275,6 +276,7 @@ namespace InTheHand.Forms.Platform.iOS
                     switch (Element.CurrentState)
                     {
                         case MediaElementState.Playing:
+                            AVAudioSession.SharedInstance().SetCategory(AVAudioSession.CategoryPlayback);
                             _avPlayerViewController.Player.Play();
                             if (Element.KeepScreenOn)
                             {
