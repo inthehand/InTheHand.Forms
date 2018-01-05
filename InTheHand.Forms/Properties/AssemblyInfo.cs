@@ -11,7 +11,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("In The Hand Ltd")]
 [assembly: AssemblyProduct("InTheHand.Forms")]
-[assembly: AssemblyCopyright("Copyright © In The Hand Ltd 2017")]
+[assembly: AssemblyCopyright("Copyright © In The Hand Ltd 2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: NeutralResourcesLanguage("en")]
@@ -27,7 +27,7 @@ using System.Runtime.InteropServices;
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.2017.1214")]
+[assembly: AssemblyFileVersion("1.0.2018.0105")]
 
 [assembly: InternalsVisibleTo("InTheHand")]
 [assembly: InternalsVisibleTo("InTheHand.Forms.Platform.Android")]

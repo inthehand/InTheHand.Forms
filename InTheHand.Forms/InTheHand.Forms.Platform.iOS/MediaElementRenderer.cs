@@ -159,7 +159,11 @@ namespace InTheHand.Forms.Platform.iOS
                 {
                     if (_avPlayerViewController.Player != null && _avPlayerViewController.Player.CurrentItem != null)
                     {
-                        _avPlayerViewController.Player.CurrentItem.RemoveObserver(observer, "status");
+                        try
+                        {
+                            _avPlayerViewController.Player.CurrentItem.RemoveObserver(observer, "status");
+                        }
+                        catch { }
                     }
 
                     observer.Dispose();
@@ -196,9 +200,16 @@ namespace InTheHand.Forms.Platform.iOS
 
             if (observer != null)
             {
-                _avPlayerViewController?.Player?.CurrentItem?.RemoveObserver(observer, "status");
-                observer.Dispose();
-                observer = null;
+                try
+                {
+                    _avPlayerViewController?.Player?.CurrentItem?.RemoveObserver(observer, "status");
+                    observer.Dispose();
+                }
+                catch { }
+                finally
+                {
+                    observer = null;
+                }
             }
 
             base.Dispose(disposing);
