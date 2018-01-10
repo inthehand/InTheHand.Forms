@@ -188,6 +188,13 @@ namespace InTheHand.Forms.Platform.iOS
                     Element.CurrentState = MediaElementState.Playing;
                 }
             }
+            else
+            {
+                if (Element.CurrentState == MediaElementState.Playing || Element.CurrentState == MediaElementState.Buffering)
+                {
+                    Element.Stop();
+                }
+            }
         }
 
         protected override void Dispose(bool disposing)

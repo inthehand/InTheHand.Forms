@@ -162,6 +162,13 @@ namespace InTheHand.Forms.Platform.Android
                 }
 
             }
+            else
+            {
+                if(Element.CurrentState == MediaElementState.Playing || Element.CurrentState == MediaElementState.Buffering)
+                {
+                    Element.Stop();
+                }
+            }
         }
 
         protected override void OnElementPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
