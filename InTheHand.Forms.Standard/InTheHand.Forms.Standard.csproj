@@ -9,10 +9,12 @@
     <PackageTargetFallback>portable-monoandroid10+net45+win+win81+wp8+wpa81+xamarinios10+xamarinmac20</PackageTargetFallback>
     <DebugType>full</DebugType>
     <Description>Extras for Xamarin Forms</Description>
-    <Copyright>Copyright © In The Hand Ltd 2017</Copyright>
+    <Copyright>Copyright © In The Hand Ltd 2018</Copyright>
     <PackageProjectUrl>https://github.com/inthehand/InTheHand.Forms</PackageProjectUrl>
     <PackageLicenseUrl>https://github.com/inthehand/InTheHand.Forms/blob/master/LICENSE</PackageLicenseUrl>
     <RepositoryUrl>https://github.com/inthehand/InTheHand.Forms</RepositoryUrl>
+    <AssemblyVersion>10.2018.0.0</AssemblyVersion>
+    <Version>10.2018.0110.0</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
