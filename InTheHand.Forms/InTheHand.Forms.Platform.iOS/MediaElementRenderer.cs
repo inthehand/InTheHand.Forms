@@ -17,7 +17,7 @@ namespace InTheHand.Forms.Platform.iOS
     {
         private AVPlayerViewController _avPlayerViewController = new AVPlayerViewController();
         private NSObject _notificationHandle;
-        private NSObject observer;
+        private NSObject _observer;
 
         public double BufferingProgress
         {
@@ -65,10 +65,21 @@ namespace InTheHand.Forms.Platform.iOS
 
             if (e.OldElement != null)
             {
+                System.Diagnostics.Debug.WriteLine("OnElementChanged e.OldElement != null");
+
                 e.OldElement.SetRenderer(null);
+
+                if(_notificationHandle != null)
+                {
+                    NSNotificationCenter.DefaultCenter.RemoveObserver(_notificationHandle);
+                    _notificationHandle = null;
+                }
+
                 //stop video if playing
                 if (_avPlayerViewController?.Player?.CurrentItem != null)
                 {
+                    RemoveStatusObserver();
+
                     _avPlayerViewController?.Player?.Pause();
                     _avPlayerViewController?.Player?.Seek(CMTime.Zero);
                     _avPlayerViewController?.Player?.ReplaceCurrentItemWithPlayerItem(null);
@@ -135,6 +146,9 @@ namespace InTheHand.Forms.Platform.iOS
 
         private void UpdateSource()
         {
+            System.Diagnostics.Debug.WriteLine("UpdateSource");
+
+
             if (Element.Source != null)
             {
                 AVAsset asset = null;
@@ -159,22 +173,9 @@ namespace InTheHand.Forms.Platform.iOS
 
                 AVPlayerItem item = new AVPlayerItem(asset);
 
-                if (observer != null)
-                {
-                    if (_avPlayerViewController.Player != null && _avPlayerViewController.Player.CurrentItem != null)
-                    {
-                        try
-                        {
-                            _avPlayerViewController.Player.CurrentItem.RemoveObserver(observer, "status");
-                        }
-                        catch { }
-                    }
+                RemoveStatusObserver();
 
-                    observer.Dispose();
-                    observer = null;
-                }
-
-                observer = (NSObject)item.AddObserver("status", 0, ObserveStatus);
+                _observer = (NSObject)item.AddObserver("status", NSKeyValueObservingOptions.New, ObserveStatus);
 
                 if (_avPlayerViewController.Player != null)
                 {
@@ -203,27 +204,37 @@ namespace InTheHand.Forms.Platform.iOS
 
         protected override void Dispose(bool disposing)
         {
+            System.Diagnostics.Debug.WriteLine(DateTimeOffset.Now + " Dispose " + this.GetHashCode());
+
             if (_notificationHandle != null)
             {
                 NSNotificationCenter.DefaultCenter.RemoveObserver(_notificationHandle);
                 _notificationHandle = null;
             }
 
-            if (observer != null)
+            RemoveStatusObserver();
+
+            _avPlayerViewController?.Player?.Pause();
+            _avPlayerViewController?.Player?.ReplaceCurrentItemWithPlayerItem(null);
+
+            base.Dispose(disposing);
+        }
+
+        private void RemoveStatusObserver()
+        {
+            if (_observer != null)
             {
                 try
                 {
-                    _avPlayerViewController?.Player?.CurrentItem?.RemoveObserver(observer, "status");
-                    observer.Dispose();
+                    _avPlayerViewController?.Player?.CurrentItem?.RemoveObserver(_observer, "status");
                 }
                 catch { }
                 finally
                 {
-                    observer = null;
+                    
+                    _observer = null;
                 }
             }
-
-            base.Dispose(disposing);
         }
 
         private void ObserveStatus(NSObservedChange e)
@@ -235,7 +246,7 @@ namespace InTheHand.Forms.Platform.iOS
                     Element?.RaiseMediaOpened();
                 }
 
-                System.Diagnostics.Debug.WriteLine(e.NewValue.ToString());
+                System.Diagnostics.Debug.WriteLine(DateTimeOffset.Now + " " + e.NewValue.ToString());
             }
         }
 
