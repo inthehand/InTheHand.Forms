@@ -17,7 +17,7 @@ namespace InTheHand.Forms.Platform.WinRT
         public static void Init()
         {
             //this call is necessary just to ensure the platform library is loaded so the renderers will be used.
-            var t = new MediaElementRenderer();
+            var t = typeof(MediaElementRenderer);
         }
     }
 }

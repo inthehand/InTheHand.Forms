@@ -27,8 +27,12 @@ namespace InTheHand.Forms.Platform.Android
             if (System.IO.File.Exists(path))
             {
                 MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-                retriever.SetDataSource(path);
-                ExtractMetadata(retriever);
+                try
+                {
+                    retriever.SetDataSource(path);
+                    ExtractMetadata(retriever);
+                }
+                catch { }
             }
 
             base.SetVideoPath(path);
@@ -66,16 +70,20 @@ namespace InTheHand.Forms.Platform.Android
         private void GetMetaData(global::Android.Net.Uri uri, IDictionary<string, string> headers)
         {
             MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-            if (uri.Scheme != null && uri.Scheme.StartsWith("http") && headers != null)
+            try
             {
-                retriever.SetDataSource(uri.ToString(), headers);
-            }
-            else
-            {
-                retriever.SetDataSource(Context, uri);
-            }
+                if (uri.Scheme != null && uri.Scheme.StartsWith("http") && headers != null)
+                {
+                    retriever.SetDataSource(uri.ToString(), headers);
+                }
+                else
+                {
+                    retriever.SetDataSource(Context, uri);
+                }
 
-            ExtractMetadata(retriever);
+                ExtractMetadata(retriever);
+            }
+            catch { }
         }
 
         public int VideoHeight

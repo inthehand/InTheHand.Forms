@@ -13,8 +13,8 @@
     <PackageProjectUrl>https://github.com/inthehand/InTheHand.Forms</PackageProjectUrl>
     <PackageLicenseUrl>https://github.com/inthehand/InTheHand.Forms/blob/master/LICENSE</PackageLicenseUrl>
     <RepositoryUrl>https://github.com/inthehand/InTheHand.Forms</RepositoryUrl>
-    <AssemblyVersion>10.2018.0.0</AssemblyVersion>
-    <Version>10.2018.0110.0</Version>
+    <AssemblyVersion>1.2018.0.0</AssemblyVersion>
+    <Version>1.2018.413</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -35,7 +35,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Xamarin.Forms" Version="2.4.0.91020" />
+    <PackageReference Include="Xamarin.Forms" Version="2.5.1.444934" />
   </ItemGroup>
 
 </Project>

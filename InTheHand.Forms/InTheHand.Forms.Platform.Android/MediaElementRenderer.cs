@@ -18,12 +18,22 @@ namespace InTheHand.Forms.Platform.Android
         private MediaController _controller;
         private VideoViewEx _view;
         private MediaPlayer _mediaPlayer;
+        
+        public MediaElementRenderer(Context context) : base(context)
+        {
+
+        }
 
         double IMediaElementRenderer.BufferingProgress
         {
             get
             {
-                return _view.BufferPercentage / 100;
+                if (_view != null)
+                {
+                    return _view.BufferPercentage / 100;
+                }
+
+                return 0.0;
             }
         }
 
@@ -31,7 +41,12 @@ namespace InTheHand.Forms.Platform.Android
         {
             get
             {
-                return _view.NaturalDuration;
+                if (_view != null)
+                {
+                    return _view.NaturalDuration;
+                }
+
+                return TimeSpan.Zero;
             }
         }
 
@@ -39,7 +54,12 @@ namespace InTheHand.Forms.Platform.Android
         {
             get
             {
-                return _view.VideoHeight;
+                if (_view != null)
+                {
+                    return _view.VideoHeight;
+                }
+
+                return 0;
             }
         }
 
@@ -47,13 +67,27 @@ namespace InTheHand.Forms.Platform.Android
         {
             get
             {
-                return _view.VideoWidth;
+                if (_view != null)
+                {
+                    return _view.VideoWidth;
+                }
+
+                return 0;
             }
         }
 
         void IMediaElementRenderer.Seek(TimeSpan time)
         {
-            _view?.SeekTo((int)time.TotalMilliseconds);
+            if (Control != null)
+            {
+                try
+                {
+                    _view?.SeekTo((int)time.TotalMilliseconds);
+                }
+                catch ( ObjectDisposedException ode)
+                {
+                }
+            }
         }
 
         TimeSpan IMediaElementRenderer.Position
@@ -71,6 +105,38 @@ namespace InTheHand.Forms.Platform.Android
             }
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            if (Control != null)
+            {
+                Control.RemoveAllViews();
+            }
+
+            if (_view != null)
+            {
+
+
+                _view.SetOnPreparedListener(null);
+                _view.SetOnCompletionListener(null);
+                _view.Dispose();
+                _view = null;
+            }
+
+            if (_controller != null)
+            {
+                _controller.Dispose();
+                _controller = null;
+            }
+
+            if (_mediaPlayer != null)
+            {
+                _mediaPlayer.Dispose();
+                _mediaPlayer = null;
+            }
+
+            base.Dispose(disposing);
+        }
+
         protected override void OnElementChanged(ElementChangedEventArgs<MediaElement> e)
         {
             base.OnElementChanged(e);
@@ -84,12 +150,19 @@ namespace InTheHand.Forms.Platform.Android
                     _view.SetOnPreparedListener(null);
                     _view.SetOnCompletionListener(null);
                     _view.Dispose();
+                    _view = null;
                 }
 
                 if (_controller != null)
                 {
                     _controller.Dispose();
                     _controller = null;
+                }
+
+                if (_mediaPlayer != null)
+                {
+                    _mediaPlayer.Dispose();
+                    _mediaPlayer = null;
                 }
             }
 
