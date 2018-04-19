@@ -83,6 +83,7 @@ namespace InTheHand.Forms.Platform.iOS
                     _avPlayerViewController?.Player?.Pause();
                     _avPlayerViewController?.Player?.Seek(CMTime.Zero);
                     _avPlayerViewController?.Player?.ReplaceCurrentItemWithPlayerItem(null);
+                    AVAudioSession.SharedInstance().SetActive(false);
                 }
             }
 
@@ -188,7 +189,11 @@ namespace InTheHand.Forms.Platform.iOS
 
                 if (Element.AutoPlay)
                 {
-                    AVAudioSession.SharedInstance().SetCategory(AVAudioSession.CategoryPlayback);
+                    var audioSession = AVAudioSession.SharedInstance();
+                    NSError err = audioSession.SetCategory(AVAudioSession.CategoryPlayback);
+                    audioSession.SetMode(AVAudioSession.ModeMoviePlayback, out err);
+                    err = audioSession.SetActive(true);
+
                     _avPlayerViewController.Player.Play();
                     Element.CurrentState = MediaElementState.Playing;
                 }
@@ -309,7 +314,11 @@ namespace InTheHand.Forms.Platform.iOS
                     switch (Element.CurrentState)
                     {
                         case MediaElementState.Playing:
-                            AVAudioSession.SharedInstance().SetCategory(AVAudioSession.CategoryPlayback);
+                            var audioSession = AVAudioSession.SharedInstance();
+                            NSError err = audioSession.SetCategory(AVAudioSession.CategoryPlayback);
+                            audioSession.SetMode(AVAudioSession.ModeMoviePlayback, out err);
+                            err = audioSession.SetActive(true);
+
                             _avPlayerViewController.Player.Play();
                             if (Element.KeepScreenOn)
                             {
@@ -334,6 +343,8 @@ namespace InTheHand.Forms.Platform.iOS
                             //ios has no stop...
                             _avPlayerViewController.Player.Pause();
                             _avPlayerViewController.Player.Seek(CMTime.Zero);
+
+                            err = AVAudioSession.SharedInstance().SetActive(false);
                             break;
                     }
 
@@ -365,7 +376,7 @@ namespace InTheHand.Forms.Platform.iOS
                     bool canSeek = false;
                     foreach (NSValue v in ranges)
                     {
-                        if (seekTo > v.CMTimeRangeValue.Start && seekTo < (v.CMTimeRangeValue.Start + v.CMTimeRangeValue.Duration))
+                        if (seekTo >= v.CMTimeRangeValue.Start && seekTo < (v.CMTimeRangeValue.Start + v.CMTimeRangeValue.Duration))
                         {
                             canSeek = true;
                             break;

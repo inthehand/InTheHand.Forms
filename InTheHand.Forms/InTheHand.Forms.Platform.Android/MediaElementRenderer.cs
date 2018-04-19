@@ -19,11 +19,6 @@ namespace InTheHand.Forms.Platform.Android
         private VideoViewEx _view;
         private MediaPlayer _mediaPlayer;
         
-        public MediaElementRenderer(Context context) : base(context)
-        {
-
-        }
-
         double IMediaElementRenderer.BufferingProgress
         {
             get
