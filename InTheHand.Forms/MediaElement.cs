@@ -1,12 +1,21 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="MediaElement.cs" company="In The Hand Ltd">
-//   Copyright (c) 2017 In The Hand Ltd, All rights reserved.
+//   Copyright (c) 2017-18 In The Hand Ltd, All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Xamarin.Forms;
+
+[assembly: InternalsVisibleTo("InTheHand.Forms.Platform.Android")]
+[assembly: InternalsVisibleTo("InTheHand.Forms.Platform.iOS")]
+[assembly: InternalsVisibleTo("InTheHand.Forms.Platform.MacOS")]
+[assembly: InternalsVisibleTo("InTheHand.Forms.Platform.Tizen")]
+[assembly: InternalsVisibleTo("InTheHand.Forms.Platform.UWP")]
+[assembly: InternalsVisibleTo("InTheHand.Forms.Platform.WinRT")]
+[assembly: InternalsVisibleTo("InTheHand.Forms.Platform.wpa81")]
 
 namespace InTheHand.Forms
 {

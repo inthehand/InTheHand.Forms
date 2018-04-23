@@ -1,8 +1,9 @@
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="InTheHandForms.cs" company="In The Hand Ltd">
-//   Copyright (c) 2017 In The Hand Ltd, All rights reserved.
+//   Copyright (c) 2017-18 In The Hand Ltd, All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
+
 
 #if __ANDROID__
 namespace InTheHand.Forms.Platform.Android

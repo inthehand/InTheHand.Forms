@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("In The Hand Ltd")]
 [assembly: AssemblyProduct("InTheHand.Forms")]
-[assembly: AssemblyCopyright("Copyright © In The Hand Ltd 2017")]
+[assembly: AssemblyCopyright("Copyright © In The Hand Ltd 2017-18")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

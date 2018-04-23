@@ -118,9 +118,9 @@
     <EmbeddedResource Include="Properties\InTheHand.Forms.Platform.UWP.rd.xml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\InTheHand.Forms.csproj">
-      <Project>{67f9d3a8-f71e-4428-913f-c37ae82cdb24}</Project>
-      <Name>InTheHand.Forms</Name>
+    <ProjectReference Include="..\..\InTheHand.Forms.Standard\InTheHand.Forms.Standard.csproj">
+      <Project>{17afe7fa-c49f-4bd2-bd2b-48eb1436716b}</Project>
+      <Name>InTheHand.Forms.Standard</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
