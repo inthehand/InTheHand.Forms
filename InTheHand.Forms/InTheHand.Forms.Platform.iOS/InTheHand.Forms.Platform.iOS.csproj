@@ -59,6 +59,7 @@
       <Link>InTheHandForms.cs</Link>
     </Compile>
     <Compile Include="AutoViewCellRenderer.cs" />
+    <Compile Include="ButtonLineBreakModeEffect.cs" />
     <Compile Include="ButtonRenderer.cs" />
     <Compile Include="CheckSwitchRenderer.cs" />
     <Compile Include="MediaElementRenderer.cs" />

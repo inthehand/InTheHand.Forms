@@ -38,6 +38,7 @@
   <ItemGroup>
     <Compile Include="AutoViewCell.cs" />
     <Compile Include="Button.cs" />
+    <Compile Include="ButtonLineBreakModeEffect.cs" />
     <Compile Include="CheckSwitch.cs" />
     <Compile Include="DesignMode.cs" />
     <Compile Include="IPageNavigation.cs" />

@@ -111,6 +111,7 @@
     <Compile Include="..\InTheHand.Forms.Platform.Android\InTheHandForms.cs">
       <Link>InTheHandForms.cs</Link>
     </Compile>
+    <Compile Include="ButtonLineBreakModeEffect.cs" />
     <Compile Include="CheckSwitchRenderer.cs" />
     <Compile Include="ColorExtensions.cs" />
     <Compile Include="MediaElementRenderer.cs" />
