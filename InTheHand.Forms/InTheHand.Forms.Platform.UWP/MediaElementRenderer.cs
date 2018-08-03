@@ -97,7 +97,7 @@ namespace InTheHand.Forms.Platform.WinRT
                     Control.CurrentStateChanged -= Control_CurrentStateChanged;
                     Control.SeekCompleted -= Control_SeekCompleted;
                     Control.MediaOpened -= Control_MediaOpened;
-
+                    Control.MediaEnded -= Control_MediaEnded;
                 }
 
                 e.OldElement.SetRenderer(null);
@@ -119,6 +119,7 @@ namespace InTheHand.Forms.Platform.WinRT
                 Control.SeekCompleted += Control_SeekCompleted;
                 Control.CurrentStateChanged += Control_CurrentStateChanged;
                 Control.MediaOpened += Control_MediaOpened;
+                Control.MediaEnded += Control_MediaEnded;
 
                 if (Element.Source != null)
                 {
@@ -132,6 +133,11 @@ namespace InTheHand.Forms.Platform.WinRT
                     }
                 }
             }
+        }
+
+        private void Control_MediaEnded(object sender, RoutedEventArgs e)
+        {
+            Element?.OnMediaEnded();
         }
 
         private void Control_MediaOpened(object sender, RoutedEventArgs e)
