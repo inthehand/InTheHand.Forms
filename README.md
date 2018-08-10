@@ -6,10 +6,11 @@ Supports Android, iOS and Windows platforms.
 [![NuGet version](https://badge.fury.io/nu/inthehand.forms.svg)](https://badge.fury.io/nu/inthehand.forms)
 
 ## Contains:-
+- ButtonLineBreakModeEffect
 - CheckSwitch
 - ColorExtensions (UWP)
 - DesignMode
-- FormattedButton
+- FormattedButton (Deprecated)
 - MediaElement
 - NavigationPage2
 
