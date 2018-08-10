@@ -153,7 +153,7 @@ namespace InTheHand.Forms.Platform.iOS
             if (Element.Source != null)
             {
                 AVAsset asset = null;
-                if(Element.Source.Scheme == null)
+                if (Element.Source.Scheme == null)
                 {
                     // file path
                     asset = AVAsset.FromUrl(NSUrl.FromFilename(Element.Source.OriginalString));
@@ -165,7 +165,18 @@ namespace InTheHand.Forms.Platform.iOS
                 }
                 else if (Element.Source.Scheme == "ms-appdata")
                 {
-                    asset = AVAsset.FromUrl(NSUrl.FromFilename(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), Element.Source.LocalPath.Substring(1))));
+                    string filePath = string.Empty;
+
+                    if (Element.Source.LocalPath.StartsWith("/local"))
+                    {
+                        filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), Element.Source.LocalPath.Substring(7));
+                    }
+                    else if (Element.Source.LocalPath.StartsWith("/temp"))
+                    {
+                        filePath = Path.Combine(Path.GetTempPath(), Element.Source.LocalPath.Substring(6));
+                    }
+
+                    asset = AVAsset.FromUrl(NSUrl.FromFilename(filePath));
                 }
                 else
                 {
