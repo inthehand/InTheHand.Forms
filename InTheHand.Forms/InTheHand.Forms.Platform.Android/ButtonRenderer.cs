@@ -1,9 +1,10 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="FormattedButtonRenderer.cs" company="In The Hand Ltd">
-//   Copyright (c) 2017 In The Hand Ltd, All rights reserved.
+//   Copyright (c) 2017-19 In The Hand Ltd, All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+using Android.Content;
 using Android.Text;
 
 using InTheHand.Forms;
@@ -19,6 +20,11 @@ namespace InTheHand.Forms.Platform.Android
 {
     public class FormattedButtonRenderer : Xamarin.Forms.Platform.Android.AppCompat.ButtonRenderer
     {
+        public FormattedButtonRenderer(Context c) : base(c)
+        {
+
+        }
+
         protected override void OnElementChanged(ElementChangedEventArgs<Button> e)
         {
             base.OnElementChanged(e);

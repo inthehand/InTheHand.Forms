@@ -1,18 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using Android.App;
 using Android.Content;
-using Android.OS;
-using Android.Runtime;
-using Android.Views;
 using Android.Widget;
+using InTheHand.Forms;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
-using Android.Graphics;
-using InTheHand.Forms;
 
 [assembly: ExportRenderer(typeof(CheckSwitch), typeof(InTheHand.Forms.Platform.Android.CheckSwitchRenderer))]
 
@@ -20,6 +10,9 @@ namespace InTheHand.Forms.Platform.Android
 {
     public sealed class CheckSwitchRenderer : ViewRenderer<CheckSwitch, CheckBox>
     {
+        public CheckSwitchRenderer(Context c) : base(c)
+        { }
+
         protected override void OnElementChanged(ElementChangedEventArgs<CheckSwitch> e)
         {
             base.OnElementChanged(e);

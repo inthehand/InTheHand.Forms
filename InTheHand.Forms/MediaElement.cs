@@ -1,34 +1,28 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="MediaElement.cs" company="In The Hand Ltd">
-//   Copyright (c) 2017-18 In The Hand Ltd, All rights reserved.
+//   Copyright (c) 2017-19 In The Hand Ltd, All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
 using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
+using System.ComponentModel;
 using Xamarin.Forms;
-
-[assembly: InternalsVisibleTo("InTheHand.Forms.Platform.Android")]
-[assembly: InternalsVisibleTo("InTheHand.Forms.Platform.iOS")]
-[assembly: InternalsVisibleTo("InTheHand.Forms.Platform.MacOS")]
-[assembly: InternalsVisibleTo("InTheHand.Forms.Platform.Tizen")]
-[assembly: InternalsVisibleTo("InTheHand.Forms.Platform.UWP")]
-[assembly: InternalsVisibleTo("InTheHand.Forms.Platform.WinRT")]
-[assembly: InternalsVisibleTo("InTheHand.Forms.Platform.wpa81")]
 
 namespace InTheHand.Forms
 {
     /// <summary>
     /// Represents an object that renders audio and video to the display.
     /// </summary>
-    public sealed class MediaElement : View
+    public sealed class MediaElement : View, IMediaElementController
     {
         /// <summary>
-        /// Identifies the AreTransportControlsEnabled dependency property.
+        /// Gets or sets a value that describes how an MediaElement should be stretched to fill the destination rectangle.
         /// </summary>
-        public static readonly BindableProperty AreTransportControlsEnabledProperty =
-          BindableProperty.Create(nameof(AreTransportControlsEnabled), typeof(bool), typeof(MediaElement), false);
+        /// <value>A value of the <see cref="Aspect"/> enumeration that specifies how the source visual media is rendered.
+        /// The default value is AspectFit.</value>
+        public static readonly BindableProperty AspectProperty =
+             BindableProperty.Create(nameof(Aspect), typeof(Aspect), typeof(MediaElement), Aspect.AspectFit);
 
         /// <summary>
         /// Identifies the AutoPlay dependency property.
@@ -43,6 +37,15 @@ namespace InTheHand.Forms
           BindableProperty.Create(nameof(BufferingProgress), typeof(double), typeof(MediaElement), 0.0);
 
         /// <summary>
+        /// Identifies the CurrentState dependency property.
+        /// </summary>
+        public static readonly BindableProperty CurrentStateProperty =
+          BindableProperty.Create(nameof(CurrentState), typeof(MediaElementState), typeof(MediaElement), MediaElementState.Closed);
+
+        public static readonly BindableProperty DurationProperty =
+          BindableProperty.Create(nameof(Duration), typeof(TimeSpan?), typeof(MediaElement), null);
+
+        /// <summary>
         /// Identifies the IsLooping dependency property.
         /// </summary>
         public static readonly BindableProperty IsLoopingProperty =
@@ -55,60 +58,43 @@ namespace InTheHand.Forms
           BindableProperty.Create(nameof(KeepScreenOn), typeof(bool), typeof(MediaElement), false);
 
         /// <summary>
+        /// Identifies the ShowsPlaybackControls dependency property.
+        /// </summary>
+        public static readonly BindableProperty ShowsPlaybackControlsProperty =
+          BindableProperty.Create(nameof(ShowsPlaybackControls), typeof(bool), typeof(MediaElement), false);
+
+        /// <summary>
         /// Identifies the Source dependency property.
         /// </summary>
         public static readonly BindableProperty SourceProperty =
           BindableProperty.Create(nameof(Source), typeof(Uri), typeof(MediaElement));
 
-        /// <summary>
-        /// Identifies the CurrentState dependency property.
-        /// </summary>
-        public static readonly BindableProperty CurrentStateProperty =
-          BindableProperty.Create(nameof(CurrentState), typeof(MediaElementState), typeof(MediaElement), MediaElementState.Closed);
-
-        /// <summary>
+           /// <summary>
         /// Identifies the Position dependency property.
         /// </summary>
         public static readonly BindableProperty PositionProperty =
-          BindableProperty.Create(nameof(Position), typeof(TimeSpan), typeof(MediaElement), TimeSpan.Zero, validateValue: ValidatePosition);
+          BindableProperty.Create(nameof(Position), typeof(TimeSpan), typeof(MediaElement), TimeSpan.Zero);
 
-        private static bool ValidatePosition(BindableObject bindable, object value)
+        public static readonly BindableProperty VideoHeightProperty =
+          BindableProperty.Create(nameof(VideoHeight), typeof(int), typeof(MediaElement));
+
+        public static readonly BindableProperty VideoWidthProperty =
+          BindableProperty.Create(nameof(VideoWidth), typeof(int), typeof(MediaElement));
+
+        public static readonly BindableProperty VolumeProperty =
+		  BindableProperty.Create(nameof(Volume), typeof(double), typeof(MediaElement), 1.0, BindingMode.TwoWay, new BindableProperty.ValidateValueDelegate(ValidateVolume));
+
+        private static bool ValidateVolume(BindableObject o, object newValue)
+		{
+			double d = (double)newValue;
+
+			return d >= 0.0 && d <= 1.0;
+		}
+        
+        public Aspect Aspect
         {
-            MediaElement element = bindable as MediaElement;
-            if (element != null)
-            {
-                if (element._renderer != null)
-                {
-                    element._renderer.Seek((TimeSpan)value);
-                }
-            }
-
-            return true;
-        }
-
-        /// <summary>
-        /// Identifies the Stretch dependency property.
-        /// </summary>
-        public static readonly BindableProperty StretchProperty =
-          BindableProperty.Create(nameof(Stretch), typeof(Stretch), typeof(MediaElement), Stretch.Uniform);
-
-
-
-        private IMediaElementRenderer _renderer = null;
-
-        internal void SetRenderer(IMediaElementRenderer renderer)
-        {
-            _renderer = renderer;
-        }
-
-
-        /// <summary>
-        /// Gets or sets a value that determines whether the standard transport controls are enabled.
-        /// </summary>
-        public bool AreTransportControlsEnabled
-        {
-            get { return (bool)GetValue(AreTransportControlsEnabledProperty); }
-            set { SetValue(AreTransportControlsEnabledProperty, value); }
+            get => (Aspect)GetValue(AspectProperty);
+            set => SetValue(AspectProperty, value);
         }
 
         /// <summary>
@@ -135,6 +121,21 @@ namespace InTheHand.Forms
         }
 
         /// <summary>
+        /// Gets the status of this MediaElement.
+        /// </summary>
+        public MediaElementState CurrentState
+        {
+            get { return (MediaElementState)GetValue(CurrentStateProperty); }
+        }
+
+        public TimeSpan? Duration
+        {
+            get { return (TimeSpan?)GetValue(DurationProperty); }
+        }
+
+        public IDictionary<string, string> HttpHeaders { get; } = new Dictionary<string, string>();
+
+        /// <summary>
         /// Gets or sets a value that describes whether the media source currently loaded in the media engine should automatically set the position to the media start after reaching its end.
         /// </summary>
         public bool IsLooping
@@ -152,45 +153,6 @@ namespace InTheHand.Forms
             set { SetValue(KeepScreenOnProperty, value); }
         }
 
-        public TimeSpan NaturalDuration
-        {
-            get
-            {
-                if(_renderer != null)
-                {
-                    return _renderer.NaturalDuration;
-                }
-
-                return TimeSpan.Zero;
-            }
-        }
-
-        public int NaturalVideoHeight
-        {
-            get
-            {
-                if (_renderer != null)
-                {
-                    return _renderer.NaturalVideoHeight;
-                }
-
-                return 0;
-            }
-        }
-
-        public int NaturalVideoWidth
-        {
-            get
-            {
-                if (_renderer != null)
-                {
-                    return _renderer.NaturalVideoWidth;
-                }
-
-                return 0;
-            }
-        }
-
         /// <summary>
         /// Gets or sets a media source on the MediaElement.
         /// </summary>
@@ -201,59 +163,73 @@ namespace InTheHand.Forms
             set { SetValue(SourceProperty, value); }
         }
 
-        private IDictionary<string, string> _httpHeaders = new Dictionary<string, string>();
-        public IDictionary<string, string> HttpHeaders
-        {
-            get
-            {
-                return _httpHeaders;
-            }
-        }
-
         /// <summary>
-        /// Gets the status of this MediaElement.
+        /// Gets or sets a value that determines whether the standard transport controls are enabled.
         /// </summary>
-        public MediaElementState CurrentState
+        public bool ShowsPlaybackControls
         {
-            get { return (MediaElementState)GetValue(CurrentStateProperty); }
-            internal set
-            {
-                SetValue(CurrentStateProperty, value);
-            }
-        }
-
-        internal void RaiseCurrentStateChanged()
-        {
-            CurrentStateChanged?.Invoke(this, EventArgs.Empty);
+            get { return (bool)GetValue(ShowsPlaybackControlsProperty); }
+            set { SetValue(ShowsPlaybackControlsProperty, value); }
         }
 
         /// <summary>
         /// Gets or sets the current position of progress through the media's playback time.
         /// </summary>
-        public System.TimeSpan Position
+        public TimeSpan Position
         {
             get
             {
-                if (_renderer != null)
-                {
-                    return _renderer.Position;
-                }
-
+                PositionRequested?.Invoke(this, EventArgs.Empty);
                 return (TimeSpan)GetValue(PositionProperty);
             }
 
             set
             {
-                SetValue(PositionProperty, value);
+                SeekRequested?.Invoke(this, new SeekRequested(value));
             }
         }
+
+        public int VideoHeight
+        {
+            get { return (int)GetValue(VideoHeightProperty); }
+        }
+
+        public int VideoWidth
+        {
+            get { return (int)GetValue(VideoWidthProperty); }
+        }
+
+        public double Volume
+        {
+            get
+            {
+                VolumeRequested?.Invoke(this, EventArgs.Empty);
+                return (double)GetValue(VolumeProperty);
+            }
+            set
+            {
+                SetValue(VolumeProperty, value);
+            }
+        }
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public event EventHandler<SeekRequested> SeekRequested;
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public event EventHandler<StateRequested> StateRequested;
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public event EventHandler PositionRequested;
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public event EventHandler VolumeRequested;
 
         /// <summary>
         /// Plays media from the current position.
         /// </summary>
         public void Play()
         {
-            CurrentState = MediaElementState.Playing;
+            StateRequested?.Invoke(this, new StateRequested(MediaElementState.Playing));
         }
 
         /// <summary>
@@ -261,10 +237,7 @@ namespace InTheHand.Forms
         /// </summary>
         public void Pause()
         {
-            if (CurrentState == MediaElementState.Playing)
-            {
-                CurrentState = MediaElementState.Paused;
-            }
+            StateRequested?.Invoke(this, new StateRequested(MediaElementState.Paused));
         }
 
         /// <summary>
@@ -272,41 +245,64 @@ namespace InTheHand.Forms
         /// </summary>
         public void Stop()
         {
-            if (CurrentState != MediaElementState.Stopped)
-            {
-                CurrentState = MediaElementState.Stopped;
-            }
+            StateRequested?.Invoke(this, new StateRequested(MediaElementState.Stopped));
         }
-
-        /// <summary>
-        /// Gets or sets a value that describes how an MediaElement should be stretched to fill the destination rectangle.
-        /// </summary>
-        /// <value>A value of the <see cref="Stretch"/> enumeration that specifies how the source visual media is rendered.
-        /// The default value is Uniform.</value>
-        public Stretch Stretch
+        
+        double IMediaElementController.BufferingProgress
         {
-            get
-            {
-                return (Stretch)GetValue(StretchProperty);
-            }
-
-            set
-            {
-                SetValue(StretchProperty, value);
-            }
+            get => (double)GetValue(BufferingProgressProperty);
+            set => SetValue(BufferingProgressProperty, value);
+        }
+        MediaElementState IMediaElementController.CurrentState
+        {
+            get => (MediaElementState)GetValue(CurrentStateProperty);
+            set => SetValue(CurrentStateProperty, value);
+        }
+        TimeSpan? IMediaElementController.Duration
+        {
+            get => (TimeSpan?)GetValue(DurationProperty);
+            set => SetValue(DurationProperty, value);
+        }
+        TimeSpan IMediaElementController.Position
+        {
+            get => (TimeSpan)GetValue(PositionProperty);
+            set => SetValue(PositionProperty, value);
+        }
+        int IMediaElementController.VideoHeight
+        {
+            get => (int)GetValue(VideoHeightProperty);
+            set => SetValue(VideoHeightProperty, value);
+        }
+        int IMediaElementController.VideoWidth
+        {
+            get => (int)GetValue(VideoWidthProperty);
+            set => SetValue(VideoWidthProperty, value);
+        }
+        double IMediaElementController.Volume
+        {
+            get => (double)GetValue(VolumeProperty);
+            set => SetValue(VolumeProperty, value);
         }
 
-        /// <summary>
-        /// Occurs when the value of the <see cref="CurrentState"/> property changes.
-        /// </summary>
-        public event EventHandler CurrentStateChanged;
+        void IMediaElementController.OnMediaEnded()
+        {
+            SetValue(CurrentStateProperty, MediaElementState.Stopped);
+            MediaEnded?.Invoke(this, EventArgs.Empty);
+        }
 
         /// <summary>
         /// Occurs when the MediaElement finishes playing audio or video.
         /// </summary>
         public event EventHandler MediaEnded;
 
-        internal void RaiseMediaOpened()
+        void IMediaElementController.OnMediaFailed()
+        {
+            MediaFailed?.Invoke(this, EventArgs.Empty);
+        }
+
+        public event EventHandler MediaFailed;
+
+        void IMediaElementController.OnMediaOpened()
         {
             MediaOpened?.Invoke(this, EventArgs.Empty);
         }
@@ -316,7 +312,7 @@ namespace InTheHand.Forms
         /// </summary>
         public event EventHandler MediaOpened;
 
-        internal void RaiseSeekCompleted()
+        void IMediaElementController.OnSeekCompleted()
         {
             SeekCompleted?.Invoke(this, EventArgs.Empty);
         }
@@ -326,35 +322,48 @@ namespace InTheHand.Forms
         /// </summary>
         public event EventHandler SeekCompleted;
 
-        internal void OnMediaEnded()
-        {
-            CurrentState = MediaElementState.Stopped;
-
-            if (MediaEnded != null)
-            {
-                System.Diagnostics.Debug.WriteLine("Media Ended");
-                MediaEnded(this, EventArgs.Empty);
-            }
-        }
-
         internal void RaisePropertyChanged(string propertyName)
         {
             OnPropertyChanged(propertyName);
         }
     }
 
-    internal interface IMediaElementRenderer
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public class SeekRequested : EventArgs
     {
-        double BufferingProgress { get; }
+        public TimeSpan Position { get; }
 
-        TimeSpan NaturalDuration { get; }
+        public SeekRequested(TimeSpan position)
+        {
+            Position = position;
+        }
+    }
 
-        int NaturalVideoHeight { get; }
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public class StateRequested : EventArgs
+    {
+        public MediaElementState State { get; }
 
-        int NaturalVideoWidth { get; }
+        public StateRequested(MediaElementState state)
+        {
+            State = state;
+        }
+    }
 
-        TimeSpan Position { get; }
+    public interface IMediaElementController
+    {
+        double BufferingProgress { get; set; }
+        MediaElementState CurrentState { get; set; }
+        TimeSpan? Duration { get; set; }
+        TimeSpan Position { get; set; }
+        int VideoHeight { get; set; }
+        int VideoWidth { get; set; }
+        double Volume { get; set; }
 
-        void Seek(TimeSpan time);
+        void OnMediaEnded();
+        void OnMediaFailed();
+        void OnMediaOpened();
+        void OnSeekCompleted();
+
     }
 }

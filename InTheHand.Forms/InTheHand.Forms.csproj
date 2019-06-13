@@ -1,82 +1,64 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <MinimumVisualStudioVersion>10.0</MinimumVisualStudioVersion>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{67F9D3A8-F71E-4428-913F-C37AE82CDB24}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <TargetFramework>netstandard1.0</TargetFramework>
     <RootNamespace>InTheHand.Forms</RootNamespace>
     <AssemblyName>InTheHand.Forms</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Profile259</TargetFrameworkProfile>
-    <FileAlignment>512</FileAlignment>
-    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
+    <Company>In The Hand Ltd</Company>
+    <Authors>Peter Foot</Authors>
+    <PackageTargetFallback>portable-monoandroid10+net45+win+win81+wp8+wpa81+xamarinios10+xamarinmac20</PackageTargetFallback>
     <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <Description>Extras for Xamarin Forms</Description>
+    <Copyright>Copyright © In The Hand Ltd 2017-19</Copyright>
+    <PackageProjectUrl>https://github.com/inthehand/InTheHand.Forms</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/inthehand/InTheHand.Forms/blob/master/LICENSE</PackageLicenseUrl>
+    <RepositoryUrl>https://github.com/inthehand/InTheHand.Forms</RepositoryUrl>
+    <AssemblyVersion>2.0.2019.0</AssemblyVersion>
+    <Version>2.2019.606</Version>
+    <FileVersion>2.0.2019.606</FileVersion>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>NuGet\lib\portable-net45+netcore45+wpa81+wp8\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <DocumentationFile>NuGet\lib\portable-net45+netcore45+wpa81+wp8\InTheHand.Forms.XML</DocumentationFile>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <OutputPath>NuGet\lib\netstandard1.0\</OutputPath>
+    <DocumentationFile>InTheHand.Forms.xml</DocumentationFile>
   </PropertyGroup>
+
+<ItemGroup>
+<Compile Remove="ChatList\**" />
+<Compile Remove="InTheHand.Forms.Platform.Android\**" />
+<Compile Remove="InTheHand.Forms.Platform.iOS\**" />
+<Compile Remove="InTheHand.Forms.Platform.Tizen\**" />
+<Compile Remove="InTheHand.Forms.Platform.UWP\**" />
+<Compile Remove="InTheHand.Forms.Platform.WinRT\**" />
+<Compile Remove="InTheHand.Forms.Platform.wpa81\**" />
+<Compile Remove="packages\**" />
+</ItemGroup>
+
+<ItemGroup>
+  <EmbeddedResource Remove="ChatList\**" />
+  <EmbeddedResource Remove="InTheHand.Forms.Platform.Android\**" />
+  <EmbeddedResource Remove="InTheHand.Forms.Platform.iOS\**" />
+  <EmbeddedResource Remove="InTheHand.Forms.Platform.Tizen\**" />
+  <EmbeddedResource Remove="InTheHand.Forms.Platform.UWP\**" />
+  <EmbeddedResource Remove="InTheHand.Forms.Platform.WinRT\**" />
+  <EmbeddedResource Remove="InTheHand.Forms.Platform.wpa81\**" />
+  <EmbeddedResource Remove="packages\**" />
+  <None Remove="ChatList\**" />
+  <None Remove="InTheHand.Forms.Platform.Android\**" />
+  <None Remove="InTheHand.Forms.Platform.iOS\**" />
+  <None Remove="InTheHand.Forms.Platform.Tizen\**" />
+  <None Remove="InTheHand.Forms.Platform.UWP\**" />
+  <None Remove="InTheHand.Forms.Platform.WinRT\**" />
+  <None Remove="InTheHand.Forms.Platform.wpa81\**" />
+  <None Remove="packages\**" />
+</ItemGroup>
+
+<ItemGroup>
+  <Compile Remove="Properties\AssemblyInfo.cs" />
+</ItemGroup>
+
   <ItemGroup>
-    <Compile Include="AutoViewCell.cs" />
-    <Compile Include="Button.cs" />
-    <Compile Include="ButtonLineBreakModeEffect.cs" />
-    <Compile Include="CheckSwitch.cs" />
-    <Compile Include="DesignMode.cs" />
-    <Compile Include="IPageNavigation.cs" />
-    <Compile Include="MediaElement.cs" />
-    <Compile Include="MediaElementState.cs" />
-    <Compile Include="NavigationEventArgs2.cs" />
-    <Compile Include="NavigationMode.cs" />
-    <Compile Include="NavigationPage2.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Stretch.cs" />
+    <PackageReference Include="Xamarin.Forms" Version="4.0.0.482894" />
   </ItemGroup>
-  <ItemGroup>
-    <Reference Include="Xamarin.Forms.Core, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\Xamarin.Forms.2.4.0.91020\lib\portable-win+net45+wp80+win81+wpa81\Xamarin.Forms.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Xamarin.Forms.Platform, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\Xamarin.Forms.2.4.0.91020\lib\portable-win+net45+wp80+win81+wpa81\Xamarin.Forms.Platform.dll</HintPath>
-    </Reference>
-    <Reference Include="Xamarin.Forms.Xaml, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\Xamarin.Forms.2.4.0.91020\lib\portable-win+net45+wp80+win81+wpa81\Xamarin.Forms.Xaml.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
-  <Import Project="packages\Xamarin.Forms.2.4.0.91020\build\portable-win+net45+wp80+win81+wpa81\Xamarin.Forms.targets" Condition="Exists('packages\Xamarin.Forms.2.4.0.91020\build\portable-win+net45+wp80+win81+wpa81\Xamarin.Forms.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('packages\Xamarin.Forms.2.4.0.91020\build\portable-win+net45+wp80+win81+wpa81\Xamarin.Forms.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Xamarin.Forms.2.4.0.91020\build\portable-win+net45+wp80+win81+wpa81\Xamarin.Forms.targets'))" />
-  </Target>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+
 </Project>

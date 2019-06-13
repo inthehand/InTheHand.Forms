@@ -1,63 +1,67 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using Android.App;
-using Android.Content;
-using Android.Net;
-using Android.OS;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
+﻿using Android.Content;
 using Android.Media;
-using System.Diagnostics;
+using Android.Widget;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace InTheHand.Forms.Platform.Android
 {
-    public sealed class VideoViewEx : VideoView
+    internal class FormsVideoView : VideoView
     {
-        private int _videoHeight, _videoWidth;
-        private TimeSpan _duration;
+        public FormsVideoView(Context context) : base(context)
+        {
+        }
 
-        public VideoViewEx(Context context) : base(context) { }
+        public event EventHandler MetadataRetrieved;
 
         public override void SetVideoPath(string path)
         {
+            base.SetVideoPath(path);
+
             if (System.IO.File.Exists(path))
             {
-                MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-                try
+                var retriever = new MediaMetadataRetriever();
+
+                Task.Run(() =>
                 {
                     retriever.SetDataSource(path);
                     ExtractMetadata(retriever);
-                }
-                catch { }
+                    MetadataRetrieved?.Invoke(this, EventArgs.Empty);
+                });
             }
-
-            base.SetVideoPath(path);
         }
 
-        private void ExtractMetadata(MediaMetadataRetriever retriever)
+        void ExtractMetadata(MediaMetadataRetriever retriever)
         {
-            _duration = TimeSpan.Zero;
-            _videoWidth = 0;
-            int.TryParse(retriever.ExtractMetadata(MetadataKey.VideoWidth), out _videoWidth);
-            _videoHeight = 0;
-            int.TryParse(retriever.ExtractMetadata(MetadataKey.VideoHeight), out _videoHeight);
-
-            string durationString = retriever.ExtractMetadata(MetadataKey.Duration);
-            if (!string.IsNullOrEmpty(durationString))
+            int videoWidth = 0;
+            if (int.TryParse(retriever.ExtractMetadata(MetadataKey.VideoWidth), out videoWidth))
             {
-                long durationMS = long.Parse(durationString);
-                _duration = TimeSpan.FromMilliseconds(durationMS);
+                VideoWidth = videoWidth;
+            }
+
+            int videoHeight = 0;
+            if (int.TryParse(retriever.ExtractMetadata(MetadataKey.VideoHeight), out videoHeight))
+            {
+                VideoHeight = videoHeight;
+            }
+
+            long durationMS;
+            string durationString = retriever.ExtractMetadata(MetadataKey.Duration);
+
+            if (!string.IsNullOrEmpty(durationString) && long.TryParse(durationString, out durationMS))
+            {
+                DurationTimeSpan = TimeSpan.FromMilliseconds(durationMS);
+            }
+            else
+            {
+                DurationTimeSpan = null;
             }
         }
 
         public override void SetVideoURI(global::Android.Net.Uri uri, IDictionary<string, string> headers)
         {
             GetMetaData(uri, headers);
-            
             base.SetVideoURI(uri, headers);
         }
 
@@ -67,11 +71,12 @@ namespace InTheHand.Forms.Platform.Android
             base.SetVideoURI(uri);
         }
 
-        private void GetMetaData(global::Android.Net.Uri uri, IDictionary<string, string> headers)
+        void GetMetaData(global::Android.Net.Uri uri, IDictionary<string, string> headers)
         {
-            MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-            try
+            Task.Run(() =>
             {
+                var retriever = new MediaMetadataRetriever();
+
                 if (uri.Scheme != null && uri.Scheme.StartsWith("http") && headers != null)
                 {
                     retriever.SetDataSource(uri.ToString(), headers);
@@ -82,33 +87,23 @@ namespace InTheHand.Forms.Platform.Android
                 }
 
                 ExtractMetadata(retriever);
-            }
-            catch { }
+
+                MetadataRetrieved?.Invoke(this, EventArgs.Empty);
+            });
         }
 
-        public int VideoHeight
+        public int VideoHeight { get; private set; }
+
+        public int VideoWidth { get; private set; }
+
+        public TimeSpan? DurationTimeSpan { get; private set; }
+
+        public TimeSpan Position
         {
             get
             {
-                return _videoHeight;
+                return TimeSpan.FromMilliseconds(CurrentPosition);
             }
         }
-
-        public int VideoWidth
-        {
-            get
-            {
-                return _videoWidth;
-            }
-        }
-
-        public TimeSpan NaturalDuration
-        {
-            get
-            {
-                return _duration;
-            }
-        }
-
     }
 }

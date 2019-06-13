@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="MediaElementRenderer.cs" company="In The Hand Ltd">
-//   Copyright (c) 2017 In The Hand Ltd, All rights reserved.
+//   Copyright (c) 2017-19 In The Hand Ltd, All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -14,69 +14,52 @@ using Xamarin.Forms.Platform.WinRT;
 using Windows.UI.Xaml;
 using System.Diagnostics;
 using Xamarin.Forms;
+using Controls = Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media;
+using Windows.System.Display;
 
 [assembly: ExportRenderer(typeof(MediaElement), typeof(InTheHand.Forms.Platform.WinRT.MediaElementRenderer))]
 
 namespace InTheHand.Forms.Platform.WinRT
 {
-    public sealed class MediaElementRenderer : VisualElementRenderer<MediaElement, Windows.UI.Xaml.Controls.MediaElement>, IMediaElementRenderer
+    public sealed class MediaElementRenderer : VisualElementRenderer<MediaElement, Windows.UI.Xaml.Controls.MediaElement>
     {
-        private Windows.System.Display.DisplayRequest _request = new Windows.System.Display.DisplayRequest();
+        long _bufferingProgressChangedToken;
+        long _positionChangedToken;
+        DisplayRequest _request = new DisplayRequest();
 
-#if WINDOWS_UWP
-        private long _bufferingProgressChangedToken;
-
-        private long _positionChangedToken;
-#endif
-
-        double IMediaElementRenderer.BufferingProgress
+        void ReleaseControl()
         {
-            get
+            if (Control is null)
+                return;
+
+            if (_bufferingProgressChangedToken != 0)
             {
-                return Control.BufferingProgress;
+                Control.UnregisterPropertyChangedCallback(Controls.MediaElement.BufferingProgressProperty, _bufferingProgressChangedToken);
+                _bufferingProgressChangedToken = 0;
             }
+
+            if (_positionChangedToken != 0)
+            {
+                Control.UnregisterPropertyChangedCallback(Controls.MediaElement.PositionProperty, _positionChangedToken);
+                _positionChangedToken = 0;
+            }
+
+            Element.SeekRequested -= SeekRequested;
+            Element.StateRequested -= StateRequested;
+            Element.PositionRequested -= PositionRequested;
+
+            Control.CurrentStateChanged -= ControlCurrentStateChanged;
+            Control.SeekCompleted -= ControlSeekCompleted;
+            Control.MediaOpened -= ControlMediaOpened;
+            Control.MediaEnded -= ControlMediaEnded;
+            Control.MediaFailed -= ControlMediaFailed;
         }
 
-        TimeSpan IMediaElementRenderer.NaturalDuration
+        protected override void Dispose(bool disposing)
         {
-            get
-            {
-                if (Control.NaturalDuration.HasTimeSpan)
-                {
-                    return Control.NaturalDuration.TimeSpan;
-                }
-
-                return TimeSpan.Zero;
-            }
-        }
-
-        int IMediaElementRenderer.NaturalVideoHeight
-        {
-            get
-            {
-                return Control.NaturalVideoHeight;
-            }
-        }
-
-        int IMediaElementRenderer.NaturalVideoWidth
-        {
-            get
-            {
-                return Control.NaturalVideoWidth;
-            }
-        }
-
-        TimeSpan IMediaElementRenderer.Position
-        {
-            get
-            {
-                return Control.Position;
-            }
-        }
-
-        void IMediaElementRenderer.Seek(TimeSpan time)
-        {
-            Control.Position = time;
+            base.Dispose(disposing);
+            ReleaseControl();
         }
 
         protected override void OnElementChanged(ElementChangedEventArgs<MediaElement> e)
@@ -85,72 +68,116 @@ namespace InTheHand.Forms.Platform.WinRT
 
             if (e.OldElement != null)
             {
-                if (Control != null)
-                {
-#if WINDOWS_UWP
-                    if (_positionChangedToken != 0)
-                    {
-                        Control.UnregisterPropertyChangedCallback(Windows.UI.Xaml.Controls.MediaElement.PositionProperty, _positionChangedToken);
-                        _positionChangedToken = 0;
-                    }
-#endif
-                    Control.CurrentStateChanged -= Control_CurrentStateChanged;
-                    Control.SeekCompleted -= Control_SeekCompleted;
-                    Control.MediaOpened -= Control_MediaOpened;
-                    Control.MediaEnded -= Control_MediaEnded;
-                }
-
-                e.OldElement.SetRenderer(null);
+                ReleaseControl();
             }
 
             if (e.NewElement != null)
             {
-                this.SetNativeControl(new Windows.UI.Xaml.Controls.MediaElement());
-                e.NewElement.SetRenderer(this);
-                Control.Stretch = Windows.UI.Xaml.Media.Stretch.Uniform;
-                Control.AreTransportControlsEnabled = Element.AreTransportControlsEnabled;
+                SetNativeControl(new Controls.MediaElement());
+                Control.HorizontalAlignment = HorizontalAlignment.Stretch;
+                Control.VerticalAlignment = VerticalAlignment.Stretch;
+
+                Control.AreTransportControlsEnabled = Element.ShowsPlaybackControls;
                 Control.AutoPlay = Element.AutoPlay;
                 Control.IsLooping = Element.IsLooping;
-                Control.Stretch = (Windows.UI.Xaml.Media.Stretch)Element.Stretch;
-#if WINDOWS_UWP
-                _bufferingProgressChangedToken = Control.RegisterPropertyChangedCallback(Windows.UI.Xaml.Controls.MediaElement.BufferingProgressProperty, BufferingProgressChanged);
-                _positionChangedToken = Control.RegisterPropertyChangedCallback(Windows.UI.Xaml.Controls.MediaElement.PositionProperty, PositionChanged);
-#endif
-                Control.SeekCompleted += Control_SeekCompleted;
-                Control.CurrentStateChanged += Control_CurrentStateChanged;
-                Control.MediaOpened += Control_MediaOpened;
-                Control.MediaEnded += Control_MediaEnded;
+                Control.Stretch = ToStretch(Element.Aspect);
 
-                if (Element.Source != null)
-                {
-                    if (Element.Source.IsAbsoluteUri)
-                    {
-                        Control.Source = Element.Source;
-                    }
-                    else
-                    {
-                        Control.Source = new Uri("ms-appx:///" + Element.Source.ToString());
-                    }
-                }
+                _bufferingProgressChangedToken = Control.RegisterPropertyChangedCallback(Controls.MediaElement.BufferingProgressProperty, BufferingProgressChanged);
+                _positionChangedToken = Control.RegisterPropertyChangedCallback(Controls.MediaElement.PositionProperty, PositionChanged);
+
+                Element.SeekRequested += SeekRequested;
+                Element.StateRequested += StateRequested;
+                Element.PositionRequested += PositionRequested;
+                Control.SeekCompleted += ControlSeekCompleted;
+                Control.CurrentStateChanged += ControlCurrentStateChanged;
+                Control.MediaOpened += ControlMediaOpened;
+                Control.MediaEnded += ControlMediaEnded;
+                Control.MediaFailed += ControlMediaFailed;
+
+                UpdateSource();
             }
         }
 
-        private void Control_MediaEnded(object sender, RoutedEventArgs e)
+        void PositionRequested(object sender, EventArgs e)
         {
-            Element?.OnMediaEnded();
+            if (!(Control is null))
+            {
+                Controller.Position = Control.Position;
+            }
         }
 
-        private void Control_MediaOpened(object sender, RoutedEventArgs e)
+        IMediaElementController Controller => Element as IMediaElementController;
+
+        void StateRequested(object sender, StateRequested e)
         {
-            Element?.RaiseMediaOpened();
+            if (!(Control is null))
+            {
+                switch (e.State)
+                {
+                    case MediaElementState.Playing:
+                        Control.Play();
+                        break;
+
+                    case MediaElementState.Paused:
+                        if (Control.CanPause)
+                        {
+                            Control.Pause();
+                        }
+                        break;
+
+                    case MediaElementState.Stopped:
+                        Control.Stop();
+                        break;
+                }
+
+                Controller.Position = Control.Position;
+            }
         }
 
-        private void Control_CurrentStateChanged(object sender, RoutedEventArgs e)
+        void SeekRequested(object sender, SeekRequested e)
         {
-            switch(Control.CurrentState)
+            if (!(Control is null) && Control.CanSeek)
+            {
+                Control.Position = e.Position;
+                Controller.Position = Control.Position;
+            }
+        }
+
+        void ControlMediaFailed(object sender, ExceptionRoutedEventArgs e)
+        {
+            Controller?.OnMediaFailed();
+        }
+
+        void ControlMediaEnded(object sender, RoutedEventArgs e)
+        {
+            if (!(Control is null))
+            {
+                Controller.Position = Control.Position;
+            }
+
+            Controller.CurrentState = MediaElementState.Stopped;
+            Controller.OnMediaEnded();
+        }
+
+        void ControlMediaOpened(object sender, RoutedEventArgs e)
+        {
+            Controller.Duration = Control.NaturalDuration.HasTimeSpan ? Control.NaturalDuration.TimeSpan : (TimeSpan?)null;
+            Controller.VideoHeight = Control.NaturalVideoHeight;
+            Controller.VideoWidth = Control.NaturalVideoWidth;
+
+            Controller.OnMediaOpened();
+        }
+
+
+        void ControlCurrentStateChanged(object sender, RoutedEventArgs e)
+        {
+            if (Element is null || Control is null)
+                return;
+
+            switch (Control.CurrentState)
             {
                 case Windows.UI.Xaml.Media.MediaElementState.Playing:
-                    if(Element.KeepScreenOn)
+                    if (Element.KeepScreenOn)
                     {
                         _request.RequestActive();
                     }
@@ -159,73 +186,98 @@ namespace InTheHand.Forms.Platform.WinRT
                 case Windows.UI.Xaml.Media.MediaElementState.Paused:
                 case Windows.UI.Xaml.Media.MediaElementState.Stopped:
                 case Windows.UI.Xaml.Media.MediaElementState.Closed:
-                    if(Element.KeepScreenOn)
+                    if (Element.KeepScreenOn)
                     {
                         _request.RequestRelease();
                     }
                     break;
             }
 
-            if (Element != null)
+            Controller.CurrentState = FromWindowsMediaElementState(Control.CurrentState);
+        }
+
+        static MediaElementState FromWindowsMediaElementState(Windows.UI.Xaml.Media.MediaElementState state)
+        {
+            switch (state)
             {
-                Element.CurrentState = (MediaElementState)((int)Control.CurrentState);
-                //((IElementController)Element).SetValueFromRenderer(MediaElement.CurrentStateProperty, (MediaElementState)((int)Control.CurrentState));
-                Element.RaiseCurrentStateChanged();
+                case Windows.UI.Xaml.Media.MediaElementState.Buffering:
+                    return MediaElementState.Buffering;
+
+                case Windows.UI.Xaml.Media.MediaElementState.Closed:
+                    return MediaElementState.Closed;
+
+                case Windows.UI.Xaml.Media.MediaElementState.Opening:
+                    return MediaElementState.Opening;
+
+                case Windows.UI.Xaml.Media.MediaElementState.Paused:
+                    return MediaElementState.Paused;
+
+                case Windows.UI.Xaml.Media.MediaElementState.Playing:
+                    return MediaElementState.Playing;
+
+                case Windows.UI.Xaml.Media.MediaElementState.Stopped:
+                    return MediaElementState.Stopped;
+            }
+
+            throw new ArgumentOutOfRangeException();
+        }
+
+        void BufferingProgressChanged(DependencyObject sender, DependencyProperty dp)
+        {
+            if (!(Control is null))
+            {
+                Controller.BufferingProgress = Control.BufferingProgress;
             }
         }
 
-#if WINDOWS_UWP
-        private void BufferingProgressChanged(DependencyObject sender, DependencyProperty dp)
+        void PositionChanged(DependencyObject sender, DependencyProperty dp)
         {
-            Debug.WriteLine("BufferingProgress");
-            ((IElementController)Element).SetValueFromRenderer(MediaElement.BufferingProgressProperty, Control.BufferingProgress);
+            if (!(Control is null))
+            {
+                Controller.Position = Control.Position;
+            }
         }
-        
-        private void PositionChanged(DependencyObject sender, DependencyProperty dp)
-        {
-            Debug.WriteLine("Position");
-        }     
-#endif  
 
-        private void Control_SeekCompleted(object sender, RoutedEventArgs e)
+        void ControlSeekCompleted(object sender, RoutedEventArgs e)
         {
-            Element?.RaiseSeekCompleted();
+            if (!(Control is null))
+            {
+                Controller.Position = Control.Position;
+                Controller.OnSeekCompleted();
+            }
         }
-               
+        private static Stretch ToStretch(Aspect aspect)
+        {
+            switch (aspect)
+            {
+                case Aspect.Fill:
+                    return Stretch.Fill;
+
+                case Aspect.AspectFill:
+                    return Stretch.UniformToFill;
+
+                case Aspect.AspectFit:
+                default:
+                    return Stretch.Uniform;
+            }
+        }
         protected override void OnElementPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             switch (e.PropertyName)
             {
-                case "AreTransportControlsEnabled":
-                    Control.AreTransportControlsEnabled = Element.AreTransportControlsEnabled;
+                case nameof(MediaElement.Aspect):
+                    Control.Stretch = ToStretch(Element.Aspect);
                     break;
 
-                case "AutoPlay":
+                case nameof(MediaElement.AutoPlay):
                     Control.AutoPlay = Element.AutoPlay;
                     break;
 
-                case "CurrentState":
-                    switch (Element.CurrentState)
-                    {
-                        case MediaElementState.Playing:
-                            Control.Play();
-                            break;
-
-                        case MediaElementState.Paused:
-                            Control.Pause();
-                            break;
-
-                        case MediaElementState.Stopped:
-                            Control.Stop();
-                            break;
-                    }
-                    break;
-
-                case "IsLooping":
+                case nameof(MediaElement.IsLooping):
                     Control.IsLooping = Element.IsLooping;
                     break;
 
-                case "KeepScreenOn":
+                case nameof(MediaElement.KeepScreenOn):
                     if (Element.KeepScreenOn)
                     {
                         if (Control.CurrentState == Windows.UI.Xaml.Media.MediaElementState.Playing)
@@ -239,16 +291,36 @@ namespace InTheHand.Forms.Platform.WinRT
                     }
                     break;
 
-                case "Source":
-                    Control.Source = Element.Source;
+                case nameof(MediaElement.ShowsPlaybackControls):
+                    Control.AreTransportControlsEnabled = Element.ShowsPlaybackControls;
                     break;
 
-                case "Stretch":
-                    Control.Stretch = (Windows.UI.Xaml.Media.Stretch)Element.Stretch;
+                case nameof(MediaElement.Source):
+                    UpdateSource();
+                    break;
+
+                case nameof(MediaElement.Width):
+                    Width = Math.Max(0, Element.Width);
+                    break;
+
+                case nameof(MediaElement.Height):
+                    Height = Math.Max(0, Element.Height);
+                    break;
+
+                case nameof(MediaElement.Volume):
+                    Control.Volume = Element.Volume;
                     break;
             }
 
             base.OnElementPropertyChanged(sender, e);
+        }
+
+        void UpdateSource()
+        {
+            if (Element.Source is null)
+                return;
+
+            Control.Source = Element.Source;
         }
     }
 }
