@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CheckSwitch.cs" company="In The Hand Ltd">
-//   Copyright (c) 2017 In The Hand Ltd, All rights reserved.
+// <copyright file="RadioSwitch.cs" company="In The Hand Ltd">
+//   Copyright (c) 2019 In The Hand Ltd, All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -12,7 +12,7 @@ namespace InTheHand.Forms
     /// Checkbox control derived from Switch.
     /// </summary>
     [ContentProperty("Text")]
-    public sealed class CheckSwitch : Xamarin.Forms.Switch 
+    public sealed class RadioSwitch : Xamarin.Forms.Switch
     {
         /// <summary>
         /// <see cref="BindableProperty"/>. Backing store for the Text bindable property.
@@ -27,7 +27,7 @@ namespace InTheHand.Forms
           BindableProperty.Create("TextColor", typeof(Color), typeof(CheckSwitch), Color.Default);
 
         /// <summary>
-        /// The text that will appear on the CheckSwitch.
+        /// The text that will appear on the RadioSwitch.
         /// </summary>
         public string Text
         {
@@ -36,7 +36,7 @@ namespace InTheHand.Forms
         }
 
         /// <summary>
-        /// <see cref="Color"/>. Gets or sets the Color for the text of this CheckSwitch.
+        /// <see cref="Color"/>. Gets or sets the Color for the text of this RadioSwitch.
         /// This is a bindable property.
         /// </summary>
         public Color TextColor

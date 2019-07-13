@@ -34,7 +34,10 @@ namespace InTheHand.Forms.Platform.Android
 
         public MediaElementRenderer(Context context) : base(context)
         {
+            SetBackgroundColor(global::Android.Graphics.Color.Transparent);
+
             _view = new FormsVideoView(Context);
+            _view.Visibility = ViewStates.Invisible;
             _view.SetZOrderMediaOverlay(true);
             _view.SetOnCompletionListener(this);
             _view.SetOnInfoListener(this);
@@ -86,8 +89,7 @@ namespace InTheHand.Forms.Platform.Android
                 oldElement.StateRequested -= StateRequested;
             }
 
-            Color currentColor = oldElement?.BackgroundColor ?? Color.Default;
-            if (element.BackgroundColor != currentColor)
+            if (Element.BackgroundColor != Color.Transparent)
             {
                 UpdateBackgroundColor();
             }
@@ -346,7 +348,7 @@ namespace InTheHand.Forms.Platform.Android
         void MediaPlayer.IOnPreparedListener.OnPrepared(MediaPlayer mp)
         {
             Controller.OnMediaOpened();
-
+            _view.Visibility = ViewStates.Visible;
             UpdateLayoutParameters();
 
             _mediaPlayer = mp;
@@ -417,6 +419,8 @@ namespace InTheHand.Forms.Platform.Android
 
         void ReleaseControl()
         {
+            RemoveAllViews();
+
             if (_view != null)
             {
                 _view.MetadataRetrieved -= MetadataRetrieved;

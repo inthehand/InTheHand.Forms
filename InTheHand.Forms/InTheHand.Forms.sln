@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.28922.388
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InTheHand.Forms", "InTheHand.Forms.csproj", "{67F9D3A8-F71E-4428-913F-C37AE82CDB24}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InTheHand.Forms", "InTheHand.Forms.csproj", "{67F9D3A8-F71E-4428-913F-C37AE82CDB24}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InTheHand.Forms.Platform.iOS", "InTheHand.Forms.Platform.iOS\InTheHand.Forms.Platform.iOS.csproj", "{5068CED2-2FBF-468D-9BF4-759218DE330A}"
 EndProject
@@ -13,7 +13,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InTheHand.Forms.Platform.An
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaPlayerSample.Android", "..\MediaPlayerSample\MediaPlayerSample.Android\MediaPlayerSample.Android.csproj", "{422B7696-6958-4A6E-9E68-36043B827609}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaPlayerSample", "..\MediaPlayerSample\MediaPlayerSample\MediaPlayerSample.csproj", "{0DBAD6F4-C394-4D97-A331-27EE8F3DD6FF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MediaPlayerSample", "..\MediaPlayerSample\MediaPlayerSample\MediaPlayerSample.csproj", "{0DBAD6F4-C394-4D97-A331-27EE8F3DD6FF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaPlayerSample.UWP", "..\MediaPlayerSample\MediaPlayerSample.UWP\MediaPlayerSample.UWP.csproj", "{4405B5BB-9E86-4339-B347-B2DD3D754474}"
 EndProject
@@ -138,7 +138,6 @@ Global
 		{5068CED2-2FBF-468D-9BF4-759218DE330A}.AppStore|x86.ActiveCfg = Release|Any CPU
 		{5068CED2-2FBF-468D-9BF4-759218DE330A}.AppStore|x86.Build.0 = Release|Any CPU
 		{5068CED2-2FBF-468D-9BF4-759218DE330A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5068CED2-2FBF-468D-9BF4-759218DE330A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5068CED2-2FBF-468D-9BF4-759218DE330A}.Debug|ARM.ActiveCfg = Debug|Any CPU
 		{5068CED2-2FBF-468D-9BF4-759218DE330A}.Debug|ARM.Build.0 = Debug|Any CPU
 		{5068CED2-2FBF-468D-9BF4-759218DE330A}.Debug|iPhone.ActiveCfg = Debug|Any CPU
@@ -186,7 +185,6 @@ Global
 		{E0038494-3A3D-4274-9E3B-A64830B7CE26}.AppStore|x86.ActiveCfg = Release|x86
 		{E0038494-3A3D-4274-9E3B-A64830B7CE26}.AppStore|x86.Build.0 = Release|x86
 		{E0038494-3A3D-4274-9E3B-A64830B7CE26}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E0038494-3A3D-4274-9E3B-A64830B7CE26}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E0038494-3A3D-4274-9E3B-A64830B7CE26}.Debug|ARM.ActiveCfg = Debug|ARM
 		{E0038494-3A3D-4274-9E3B-A64830B7CE26}.Debug|ARM.Build.0 = Debug|ARM
 		{E0038494-3A3D-4274-9E3B-A64830B7CE26}.Debug|iPhone.ActiveCfg = Debug|Any CPU
@@ -414,8 +412,6 @@ Global
 		{4405B5BB-9E86-4339-B347-B2DD3D754474}.AppStore|x86.Build.0 = Release|x86
 		{4405B5BB-9E86-4339-B347-B2DD3D754474}.AppStore|x86.Deploy.0 = Release|x86
 		{4405B5BB-9E86-4339-B347-B2DD3D754474}.Debug|Any CPU.ActiveCfg = Debug|x64
-		{4405B5BB-9E86-4339-B347-B2DD3D754474}.Debug|Any CPU.Build.0 = Debug|x64
-		{4405B5BB-9E86-4339-B347-B2DD3D754474}.Debug|Any CPU.Deploy.0 = Debug|x64
 		{4405B5BB-9E86-4339-B347-B2DD3D754474}.Debug|ARM.ActiveCfg = Debug|ARM
 		{4405B5BB-9E86-4339-B347-B2DD3D754474}.Debug|ARM.Build.0 = Debug|ARM
 		{4405B5BB-9E86-4339-B347-B2DD3D754474}.Debug|ARM.Deploy.0 = Debug|ARM
@@ -456,7 +452,6 @@ Global
 		{218353AE-AE81-432F-BF4B-85B88702D812}.AppStore|x64.ActiveCfg = AppStore|iPhone
 		{218353AE-AE81-432F-BF4B-85B88702D812}.AppStore|x86.ActiveCfg = AppStore|iPhone
 		{218353AE-AE81-432F-BF4B-85B88702D812}.Debug|Any CPU.ActiveCfg = Debug|iPhone
-		{218353AE-AE81-432F-BF4B-85B88702D812}.Debug|Any CPU.Build.0 = Debug|iPhone
 		{218353AE-AE81-432F-BF4B-85B88702D812}.Debug|ARM.ActiveCfg = Debug|iPhone
 		{218353AE-AE81-432F-BF4B-85B88702D812}.Debug|iPhone.ActiveCfg = Debug|iPhone
 		{218353AE-AE81-432F-BF4B-85B88702D812}.Debug|iPhone.Build.0 = Debug|iPhone

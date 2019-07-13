@@ -11,15 +11,16 @@
     <Description>Extras for Xamarin Forms</Description>
     <Copyright>Copyright © In The Hand Ltd 2017-19</Copyright>
     <PackageProjectUrl>https://github.com/inthehand/InTheHand.Forms</PackageProjectUrl>
-    <PackageLicenseUrl>https://github.com/inthehand/InTheHand.Forms/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageLicenseUrl></PackageLicenseUrl>
     <RepositoryUrl>https://github.com/inthehand/InTheHand.Forms</RepositoryUrl>
     <AssemblyVersion>2.0.2019.0</AssemblyVersion>
-    <Version>2.2019.606</Version>
-    <FileVersion>2.0.2019.606</FileVersion>
+    <Version>2.2019.713</Version>
+    <FileVersion>2.0.2019.0</FileVersion>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <OutputPath>NuGet\lib\netstandard1.0\</OutputPath>
+    <OutputPath>NuGet\lib\</OutputPath>
     <DocumentationFile>InTheHand.Forms.xml</DocumentationFile>
   </PropertyGroup>
 

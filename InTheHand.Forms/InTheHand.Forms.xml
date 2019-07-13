@@ -47,7 +47,7 @@
         </member>
         <member name="P:InTheHand.Forms.CheckSwitch.TextColor">
             <summary>
-            <see cref="T:Xamarin.Forms.Color"/>. Gets or sets the Color for the text of this Label.
+            <see cref="T:Xamarin.Forms.Color"/>. Gets or sets the Color for the text of this CheckSwitch.
             This is a bindable property.
             </summary>
         </member>
@@ -231,6 +231,32 @@
         <member name="T:InTheHand.Forms.NavigationPage2">
             <summary>
             Supports additional callbacks on pages exposing <see cref="T:InTheHand.Forms.IPageNavigation"/>.
+            </summary>
+        </member>
+        <member name="T:InTheHand.Forms.RadioSwitch">
+            <summary>
+            Checkbox control derived from Switch.
+            </summary>
+        </member>
+        <member name="F:InTheHand.Forms.RadioSwitch.TextProperty">
+            <summary>
+            <see cref="T:Xamarin.Forms.BindableProperty"/>. Backing store for the Text bindable property.
+            </summary>
+        </member>
+        <member name="F:InTheHand.Forms.RadioSwitch.TextColorProperty">
+            <summary>
+            <see cref="T:Xamarin.Forms.BindableProperty"/>. Backing store for the TextColor bindable property.
+            </summary>
+        </member>
+        <member name="P:InTheHand.Forms.RadioSwitch.Text">
+            <summary>
+            The text that will appear on the RadioSwitch.
+            </summary>
+        </member>
+        <member name="P:InTheHand.Forms.RadioSwitch.TextColor">
+            <summary>
+            <see cref="T:Xamarin.Forms.Color"/>. Gets or sets the Color for the text of this RadioSwitch.
+            This is a bindable property.
             </summary>
         </member>
     </members>

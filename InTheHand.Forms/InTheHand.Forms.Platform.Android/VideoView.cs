@@ -11,6 +11,7 @@ namespace InTheHand.Forms.Platform.Android
     {
         public FormsVideoView(Context context) : base(context)
         {
+            SetBackgroundColor(global::Android.Graphics.Color.Transparent);
         }
 
         public event EventHandler MetadataRetrieved;
