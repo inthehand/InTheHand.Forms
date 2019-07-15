@@ -34,10 +34,7 @@ namespace InTheHand.Forms.Platform.Android
 
         public MediaElementRenderer(Context context) : base(context)
         {
-            SetBackgroundColor(global::Android.Graphics.Color.Transparent);
-
             _view = new FormsVideoView(Context);
-            _view.Visibility = ViewStates.Invisible;
             _view.SetZOrderMediaOverlay(true);
             _view.SetOnCompletionListener(this);
             _view.SetOnInfoListener(this);
@@ -89,7 +86,8 @@ namespace InTheHand.Forms.Platform.Android
                 oldElement.StateRequested -= StateRequested;
             }
 
-            if (Element.BackgroundColor != Color.Transparent)
+            Color currentColor = oldElement?.BackgroundColor ?? Color.Default;
+            if (element.BackgroundColor != currentColor)
             {
                 UpdateBackgroundColor();
             }
@@ -158,6 +156,7 @@ namespace InTheHand.Forms.Platform.Android
 
         void UpdateBackgroundColor()
         {
+            _view.SetBackgroundColor(Element.BackgroundColor.ToAndroid());
             SetBackgroundColor(Element.BackgroundColor.ToAndroid());
         }
 
@@ -348,9 +347,8 @@ namespace InTheHand.Forms.Platform.Android
         void MediaPlayer.IOnPreparedListener.OnPrepared(MediaPlayer mp)
         {
             Controller.OnMediaOpened();
-            _view.Visibility = ViewStates.Visible;
             UpdateLayoutParameters();
-
+            
             _mediaPlayer = mp;
             mp.Looping = MediaElement.IsLooping;
             mp.SeekTo(0);
@@ -419,8 +417,6 @@ namespace InTheHand.Forms.Platform.Android
 
         void ReleaseControl()
         {
-            RemoveAllViews();
-
             if (_view != null)
             {
                 _view.MetadataRetrieved -= MetadataRetrieved;
@@ -466,6 +462,7 @@ namespace InTheHand.Forms.Platform.Android
                     break;
 
                 case MediaInfo.VideoRenderingStart:
+                    _view.SetBackground(null);
                     Controller.CurrentState = MediaElementState.Playing;
                     break;
             }
