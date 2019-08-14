@@ -14,7 +14,7 @@
     <PackageLicenseUrl></PackageLicenseUrl>
     <RepositoryUrl>https://github.com/inthehand/InTheHand.Forms</RepositoryUrl>
     <AssemblyVersion>2.0.2019.0</AssemblyVersion>
-    <Version>2.2019.713</Version>
+    <Version>2.2019.813</Version>
     <FileVersion>2.0.2019.0</FileVersion>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
@@ -32,6 +32,7 @@
 <Compile Remove="InTheHand.Forms.Platform.UWP\**" />
 <Compile Remove="InTheHand.Forms.Platform.WinRT\**" />
 <Compile Remove="InTheHand.Forms.Platform.wpa81\**" />
+<Compile Remove="NuGet\**" />
 <Compile Remove="packages\**" />
 </ItemGroup>
 
@@ -43,6 +44,7 @@
   <EmbeddedResource Remove="InTheHand.Forms.Platform.UWP\**" />
   <EmbeddedResource Remove="InTheHand.Forms.Platform.WinRT\**" />
   <EmbeddedResource Remove="InTheHand.Forms.Platform.wpa81\**" />
+  <EmbeddedResource Remove="NuGet\**" />
   <EmbeddedResource Remove="packages\**" />
   <None Remove="ChatList\**" />
   <None Remove="InTheHand.Forms.Platform.Android\**" />
@@ -51,6 +53,7 @@
   <None Remove="InTheHand.Forms.Platform.UWP\**" />
   <None Remove="InTheHand.Forms.Platform.WinRT\**" />
   <None Remove="InTheHand.Forms.Platform.wpa81\**" />
+  <None Remove="NuGet\**" />
   <None Remove="packages\**" />
 </ItemGroup>
 

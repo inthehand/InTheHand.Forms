@@ -63,6 +63,25 @@ namespace InTheHand.Forms.Platform.iOS
             }
         }
 
+        private AVUrlAssetOptions GetOptionsWithHeaders(IDictionary<string, string> headers)
+        {
+            var nativeHeaders = new NSMutableDictionary();
+
+            foreach (var header in headers)
+            {
+                nativeHeaders.Add((NSString)header.Key, (NSString)header.Value);
+            }
+
+            var nativeHeadersKey = (NSString)"AVURLAssetHTTPHeaderFieldsKey";
+
+            var options = new AVUrlAssetOptions(NSDictionary.FromObjectAndKey(
+                nativeHeaders,
+                nativeHeadersKey
+            ));
+
+            return options;
+        }
+
         void UpdateSource()
         {
             if (MediaElement.Source != null)
@@ -85,7 +104,7 @@ namespace InTheHand.Forms.Platform.iOS
                     }
                     else
                     {
-                        asset = AVUrlAsset.Create(NSUrl.FromString(MediaElement.Source.AbsoluteUri));
+                        asset = AVUrlAsset.Create(NSUrl.FromString(MediaElement.Source.AbsoluteUri), GetOptionsWithHeaders(MediaElement.HttpHeaders));
                     }
 
 
@@ -310,9 +329,13 @@ namespace InTheHand.Forms.Platform.iOS
             audioSession.SetMode(AVAudioSession.ModeMoviePlayback, out err);
 
             err = audioSession.SetActive(true);
-         
-            Player.Play();
-            Controller.CurrentState = MediaElementState.Playing;
+
+            if (Player != null)
+            {
+                Player.Play();
+                Controller.CurrentState = MediaElementState.Playing;
+            }
+
             if (MediaElement.KeepScreenOn)
             {
                 SetKeepScreenOn(true);
@@ -334,8 +357,12 @@ namespace InTheHand.Forms.Platform.iOS
                     {
                         SetKeepScreenOn(false);
                     }
-                    Player.Pause();
-                    Controller.CurrentState = MediaElementState.Paused;
+
+                    if (Player != null)
+                    {
+                        Player.Pause();
+                        Controller.CurrentState = MediaElementState.Paused;
+                    }
                     break;
 
                 case MediaElementState.Stopped:

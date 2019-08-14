@@ -80,7 +80,14 @@ namespace InTheHand.Forms.Platform.Android
 
                 if (uri.Scheme != null && uri.Scheme.StartsWith("http") && headers != null)
                 {
-                    retriever.SetDataSource(uri.ToString(), headers);
+                    try
+                    {
+                        retriever.SetDataSource(uri.ToString(), headers);
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Diagnostics.Debug.WriteLine(ex);
+                    }
                 }
                 else
                 {

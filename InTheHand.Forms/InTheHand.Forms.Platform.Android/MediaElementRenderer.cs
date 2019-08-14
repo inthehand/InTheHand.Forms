@@ -67,7 +67,14 @@ namespace InTheHand.Forms.Platform.Android
 
             return new SizeRequest(new Size(MeasuredWidth, MeasuredHeight), new Size());
         }
-        
+
+        protected override void OnSizeChanged(int w, int h, int oldw, int oldh)
+        {
+            base.OnSizeChanged(w, h, oldw, oldh);
+
+            UpdateLayoutParameters();
+        }
+
         void IVisualElementRenderer.SetElement(VisualElement element)
         {
             if (element is null)
@@ -292,7 +299,7 @@ namespace InTheHand.Forms.Platform.Android
                     }
                     else
                     {
-                        _view.SetVideoURI(global::Android.Net.Uri.Parse(MediaElement.Source.AbsoluteUri));
+                        _view.SetVideoURI(global::Android.Net.Uri.Parse(MediaElement.Source.AbsoluteUri), MediaElement.HttpHeaders);
                     }
                 }
 
@@ -340,7 +347,7 @@ namespace InTheHand.Forms.Platform.Android
 
         void MediaPlayer.IOnCompletionListener.OnCompletion(MediaPlayer mp)
         {
-            Controller.Position = TimeSpan.FromMilliseconds(_mediaPlayer.CurrentPosition);
+            Controller.Position = TimeSpan.FromMilliseconds(mp.CurrentPosition);
             Controller.OnMediaEnded();
         }
 
@@ -366,6 +373,9 @@ namespace InTheHand.Forms.Platform.Android
 
         void UpdateLayoutParameters()
         {
+            if (_view == null)
+                return;
+
             if (_view.VideoWidth == 0 || _view.VideoHeight == 0)
             {
                 _view.LayoutParameters = new FrameLayout.LayoutParams(Width, Height, GravityFlags.Fill);
