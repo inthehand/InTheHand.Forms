@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\..\packages\Xamarin.Forms.4.0.0.618610\build\Xamarin.Forms.props" Condition="Exists('..\..\packages\Xamarin.Forms.4.0.0.618610\build\Xamarin.Forms.props')" />
   <Import Project="..\..\InTheHand.Forms\packages\Xamarin.Forms.4.0.0.482894\build\Xamarin.Forms.props" Condition="Exists('..\..\InTheHand.Forms\packages\Xamarin.Forms.4.0.0.482894\build\Xamarin.Forms.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -138,16 +139,16 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="Xamarin.Forms.Core, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\InTheHand.Forms\packages\Xamarin.Forms.4.0.0.482894\lib\Xamarin.iOS10\Xamarin.Forms.Core.dll</HintPath>
+      <HintPath>..\..\packages\Xamarin.Forms.4.0.0.618610\lib\Xamarin.iOS10\Xamarin.Forms.Core.dll</HintPath>
     </Reference>
     <Reference Include="Xamarin.Forms.Platform, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\InTheHand.Forms\packages\Xamarin.Forms.4.0.0.482894\lib\Xamarin.iOS10\Xamarin.Forms.Platform.dll</HintPath>
+      <HintPath>..\..\packages\Xamarin.Forms.4.0.0.618610\lib\Xamarin.iOS10\Xamarin.Forms.Platform.dll</HintPath>
     </Reference>
     <Reference Include="Xamarin.Forms.Platform.iOS, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\InTheHand.Forms\packages\Xamarin.Forms.4.0.0.482894\lib\Xamarin.iOS10\Xamarin.Forms.Platform.iOS.dll</HintPath>
+      <HintPath>..\..\packages\Xamarin.Forms.4.0.0.618610\lib\Xamarin.iOS10\Xamarin.Forms.Platform.iOS.dll</HintPath>
     </Reference>
     <Reference Include="Xamarin.Forms.Xaml, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\InTheHand.Forms\packages\Xamarin.Forms.4.0.0.482894\lib\Xamarin.iOS10\Xamarin.Forms.Xaml.dll</HintPath>
+      <HintPath>..\..\packages\Xamarin.Forms.4.0.0.618610\lib\Xamarin.iOS10\Xamarin.Forms.Xaml.dll</HintPath>
     </Reference>
     <Reference Include="Xamarin.iOS" />
   </ItemGroup>
@@ -174,6 +175,9 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\..\InTheHand.Forms\packages\Xamarin.Forms.4.0.0.482894\build\Xamarin.Forms.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\InTheHand.Forms\packages\Xamarin.Forms.4.0.0.482894\build\Xamarin.Forms.props'))" />
     <Error Condition="!Exists('..\..\InTheHand.Forms\packages\Xamarin.Forms.4.0.0.482894\build\Xamarin.Forms.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\InTheHand.Forms\packages\Xamarin.Forms.4.0.0.482894\build\Xamarin.Forms.targets'))" />
+    <Error Condition="!Exists('..\..\packages\Xamarin.Forms.4.0.0.618610\build\Xamarin.Forms.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Xamarin.Forms.4.0.0.618610\build\Xamarin.Forms.props'))" />
+    <Error Condition="!Exists('..\..\packages\Xamarin.Forms.4.0.0.618610\build\Xamarin.Forms.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Xamarin.Forms.4.0.0.618610\build\Xamarin.Forms.targets'))" />
   </Target>
   <Import Project="..\..\InTheHand.Forms\packages\Xamarin.Forms.4.0.0.482894\build\Xamarin.Forms.targets" Condition="Exists('..\..\InTheHand.Forms\packages\Xamarin.Forms.4.0.0.482894\build\Xamarin.Forms.targets')" />
+  <Import Project="..\..\packages\Xamarin.Forms.4.0.0.618610\build\Xamarin.Forms.targets" Condition="Exists('..\..\packages\Xamarin.Forms.4.0.0.618610\build\Xamarin.Forms.targets')" />
 </Project>

@@ -5,8 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="InTheHand.Forms" Version="2.0.2019.718" />
-    <PackageReference Include="Xamarin.Forms" Version="4.0.0.482894" />
+    <PackageReference Include="Xamarin.Forms" Version="4.0.0.618610" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\InTheHand.Forms\InTheHand.Forms.csproj" />
   </ItemGroup>
 
   <ItemGroup>

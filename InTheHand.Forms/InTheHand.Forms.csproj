@@ -14,7 +14,7 @@
     <PackageLicenseUrl></PackageLicenseUrl>
     <RepositoryUrl>https://github.com/inthehand/InTheHand.Forms</RepositoryUrl>
     <AssemblyVersion>2.0.2019.0</AssemblyVersion>
-    <Version>2.2019.813</Version>
+    <Version>2.2019.816</Version>
     <FileVersion>2.0.2019.0</FileVersion>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
@@ -62,7 +62,7 @@
 </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Xamarin.Forms" Version="4.0.0.482894" />
+    <PackageReference Include="Xamarin.Forms" Version="4.0.0.618610" />
   </ItemGroup>
 
 </Project>

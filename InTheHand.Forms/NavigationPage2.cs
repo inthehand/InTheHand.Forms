@@ -41,7 +41,7 @@ namespace InTheHand.Forms
             {
                 if (this.Navigation.NavigationStack[0] is IPageNavigation)
                 {
-                    ((IPageNavigation)this.Navigation.NavigationStack[0]).OnNavigatedTo(new NavigationEventArgs2(e.Page, NavigationMode.Back));
+                    ((IPageNavigation)Navigation.NavigationStack[0]).OnNavigatedTo(new NavigationEventArgs2(e.Page, NavigationMode.Back));
                 }
             }
         }

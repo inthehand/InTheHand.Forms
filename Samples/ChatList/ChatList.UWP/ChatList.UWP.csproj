@@ -11,8 +11,8 @@
     <AssemblyName>ChatList.UWP</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
-    <TargetPlatformVersion>10.0.16299.0</TargetPlatformVersion>
-    <TargetPlatformMinVersion>10.0.16299.0</TargetPlatformMinVersion>
+    <TargetPlatformVersion>10.0.18362.0</TargetPlatformVersion>
+    <TargetPlatformMinVersion>10.0.15063.0</TargetPlatformMinVersion>
     <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
     <EnableDotNetNativeCompatibleProfile>true</EnableDotNetNativeCompatibleProfile>
     <FileAlignment>512</FileAlignment>
@@ -148,10 +148,14 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Xamarin.Forms" Version="4.0.0.482894" />
+    <PackageReference Include="Xamarin.Forms" Version="4.0.0.618610" />
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="6.2.8" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\InTheHand.Forms\InTheHand.Forms.Platform.UWP\InTheHand.Forms.Platform.UWP.csproj">
+      <Project>{e0038494-3a3d-4274-9e3b-a64830b7ce26}</Project>
+      <Name>InTheHand.Forms.Platform.UWP</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ChatList\ChatList.csproj">
       <Project>{7FA8CC4D-E760-4CBC-83D2-5AFD6D76AB22}</Project>
       <Name>ChatList</Name>

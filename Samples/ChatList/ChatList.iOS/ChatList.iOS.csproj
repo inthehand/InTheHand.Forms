@@ -119,10 +119,16 @@
     <Reference Include="Xamarin.iOS" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Xamarin.Forms" Version="4.0.0.482894" />
+    <PackageReference Include="Xamarin.Forms" Version="4.0.0.618610" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ItemGroup>
+    <ProjectReference Include="..\..\..\InTheHand.Forms\InTheHand.Forms.Platform.iOS\InTheHand.Forms.Platform.iOS.csproj">
+      <Project>{5068ced2-2fbf-468d-9bf4-759218de330a}</Project>
+      <Name>InTheHand.Forms.Platform.iOS</Name>
+      <IsAppExtension>false</IsAppExtension>
+      <IsWatchApp>false</IsWatchApp>
+    </ProjectReference>
     <ProjectReference Include="..\ChatList\ChatList.csproj">
       <Project>{7FA8CC4D-E760-4CBC-83D2-5AFD6D76AB22}</Project>
       <Name>ChatList</Name>
