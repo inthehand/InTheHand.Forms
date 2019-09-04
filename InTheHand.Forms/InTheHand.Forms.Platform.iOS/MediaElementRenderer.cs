@@ -39,11 +39,12 @@ namespace InTheHand.Forms.Platform.iOS
         {
             _playToEndObserver = NSNotificationCenter.DefaultCenter.AddObserver(AVPlayerItem.DidPlayToEndTimeNotification, PlayedToEnd);
             View.AutoresizingMask = UIViewAutoresizing.FlexibleDimensions;
+            View.ContentMode = UIViewContentMode.ScaleToFill;
         }
 
-        public override void ViewDidLayoutSubviews()
+        public override bool ShouldAutorotate()
         {
-            MediaElement.Layout(View.Frame.ToRectangle());
+            return true;
         }
 
         void SetKeepScreenOn(bool value)
@@ -407,7 +408,7 @@ namespace InTheHand.Forms.Platform.iOS
 
         SizeRequest IVisualElementRenderer.GetDesiredSize(double widthConstraint, double heightConstraint)
         {
-            return View.GetSizeRequest(widthConstraint, heightConstraint, 44, 44);
+            return View.GetSizeRequest(widthConstraint, heightConstraint, 240, 180);
         }
 
         void IVisualElementRenderer.SetElement(VisualElement element)
@@ -446,6 +447,9 @@ namespace InTheHand.Forms.Platform.iOS
             MediaElement.PositionRequested += MediaElementPositionRequested;
             MediaElement.VolumeRequested += MediaElementVolumeRequested;
 
+            UpdateSource();
+            VideoGravity = AspectToGravity(MediaElement.Aspect);
+
             _tracker = new VisualElementTracker(this);
 
             OnElementChanged(new VisualElementChangedEventArgs(oldElement, MediaElement));
@@ -470,9 +474,15 @@ namespace InTheHand.Forms.Platform.iOS
 
         void IVisualElementRenderer.SetElementSize(Size size)
         {
-            Layout.LayoutChildIntoBoundingRegion(MediaElement, new Rectangle(MediaElement.X, MediaElement.Y, size.Width, size.Height));
+            MediaElement.Layout(new Rectangle(MediaElement.X, MediaElement.Y, size.Width, size.Height));
         }
 
+        public override void ViewDidLayoutSubviews()
+        {
+            base.ViewDidLayoutSubviews();
+            View.Frame = new CoreGraphics.CGRect(View.Frame.Left, View.Frame.Top, Math.Min(View.Frame.Width, View.Superview.Bounds.Width), Math.Min(View.Frame.Height, View.Superview.Bounds.Height));
+        }
+        
         void UpdateBackgroundColor()
         {
             View.BackgroundColor = MediaElement.BackgroundColor.ToUIColor();
