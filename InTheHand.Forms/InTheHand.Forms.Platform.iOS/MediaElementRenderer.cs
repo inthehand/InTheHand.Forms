@@ -1,3 +1,9 @@
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="MediaElementRenderer.cs" company="In The Hand Ltd">
+//   Copyright (c) 2017-19 In The Hand Ltd, All rights reserved.
+// </copyright>
+// --------------------------------------------------------------------------------------------------------------------
+
 using AVFoundation;
 using AVKit;
 using CoreMedia;
@@ -20,6 +26,8 @@ namespace InTheHand.Forms.Platform.iOS
         IMediaElementController Controller => MediaElement as IMediaElementController;
 
 #pragma warning disable 0414
+        VisualElementPackager _packager;
+        EventTracker _events;
         VisualElementTracker _tracker;
 #pragma warning restore 0414
 
@@ -183,6 +191,32 @@ namespace InTheHand.Forms.Platform.iOS
 
             Player?.Pause();
             Player?.ReplaceCurrentItemWithPlayerItem(null);
+
+            if (disposing)
+            {
+                if (_events != null)
+                {
+                    _events.Dispose();
+                    _events = null;
+                }
+                if (_tracker != null)
+                {
+                    _tracker.Dispose();
+                    _tracker = null;
+                }
+                if (_packager != null)
+                {
+                    _packager.Dispose();
+                    _packager = null;
+                }
+
+                // The ListView can create renderers and unhook them from the Element before Dispose is called in CalculateHeightForCell.
+                // Thus, it is possible that this work is already completed.
+                if (MediaElement != null)
+                {
+                    ((IVisualElementRenderer)this).SetElement(null);
+                }
+            }
 
             base.Dispose(disposing);
         }
@@ -452,6 +486,12 @@ namespace InTheHand.Forms.Platform.iOS
 
             _tracker = new VisualElementTracker(this);
 
+            _packager = new VisualElementPackager(this);
+            _packager.Load();
+
+            _events = new EventTracker(this);
+            _events.LoadEvents(View);
+
             OnElementChanged(new VisualElementChangedEventArgs(oldElement, MediaElement));
         }
 
@@ -480,7 +520,11 @@ namespace InTheHand.Forms.Platform.iOS
         public override void ViewDidLayoutSubviews()
         {
             base.ViewDidLayoutSubviews();
-            View.Frame = new CoreGraphics.CGRect(View.Frame.Left, View.Frame.Top, Math.Min(View.Frame.Width, View.Superview.Bounds.Width), Math.Min(View.Frame.Height, View.Superview.Bounds.Height));
+            //System.Diagnostics.Debug.WriteLine($"Superview {View.Superview.Bounds}");
+            //System.Diagnostics.Debug.WriteLine($"View {View.Frame}");
+
+            // This is a temporary fix to stop zero width/height on resize or control expanding beyond page dimensions
+            View.Frame = new CoreGraphics.CGRect(View.Frame.Left, View.Frame.Top, Math.Min(Math.Max(View.Frame.Width, View.Superview.Bounds.Width - View.Frame.X), View.Superview.Bounds.Width), Math.Min(Math.Max(View.Frame.Height, View.Superview.Bounds.Height - View.Frame.Y), View.Superview.Bounds.Height));
         }
         
         void UpdateBackgroundColor()
