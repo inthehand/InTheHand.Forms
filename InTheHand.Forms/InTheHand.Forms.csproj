@@ -14,7 +14,7 @@
     <PackageLicenseUrl></PackageLicenseUrl>
     <RepositoryUrl>https://github.com/inthehand/InTheHand.Forms</RepositoryUrl>
     <AssemblyVersion>2.0.2019.0</AssemblyVersion>
-    <Version>2.2019.905</Version>
+    <Version>2.2019.906</Version>
     <FileVersion>2.0.2019.0</FileVersion>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
@@ -28,10 +28,12 @@
 <Compile Remove="ChatList\**" />
 <Compile Remove="InTheHand.Forms.Platform.Android\**" />
 <Compile Remove="InTheHand.Forms.Platform.iOS\**" />
+<Compile Remove="InTheHand.Forms.Platform.Mac\**" />
 <Compile Remove="InTheHand.Forms.Platform.Tizen\**" />
 <Compile Remove="InTheHand.Forms.Platform.UWP\**" />
 <Compile Remove="InTheHand.Forms.Platform.WinRT\**" />
 <Compile Remove="InTheHand.Forms.Platform.wpa81\**" />
+<Compile Remove="InTheHand.Forms.Platform.WPF\**" />
 <Compile Remove="NuGet\**" />
 <Compile Remove="packages\**" />
 </ItemGroup>
@@ -40,19 +42,23 @@
   <EmbeddedResource Remove="ChatList\**" />
   <EmbeddedResource Remove="InTheHand.Forms.Platform.Android\**" />
   <EmbeddedResource Remove="InTheHand.Forms.Platform.iOS\**" />
+  <EmbeddedResource Remove="InTheHand.Forms.Platform.Mac\**" />
   <EmbeddedResource Remove="InTheHand.Forms.Platform.Tizen\**" />
   <EmbeddedResource Remove="InTheHand.Forms.Platform.UWP\**" />
   <EmbeddedResource Remove="InTheHand.Forms.Platform.WinRT\**" />
   <EmbeddedResource Remove="InTheHand.Forms.Platform.wpa81\**" />
+  <EmbeddedResource Remove="InTheHand.Forms.Platform.WPF\**" />
   <EmbeddedResource Remove="NuGet\**" />
   <EmbeddedResource Remove="packages\**" />
   <None Remove="ChatList\**" />
   <None Remove="InTheHand.Forms.Platform.Android\**" />
   <None Remove="InTheHand.Forms.Platform.iOS\**" />
+  <None Remove="InTheHand.Forms.Platform.Mac\**" />
   <None Remove="InTheHand.Forms.Platform.Tizen\**" />
   <None Remove="InTheHand.Forms.Platform.UWP\**" />
   <None Remove="InTheHand.Forms.Platform.WinRT\**" />
   <None Remove="InTheHand.Forms.Platform.wpa81\**" />
+  <None Remove="InTheHand.Forms.Platform.WPF\**" />
   <None Remove="NuGet\**" />
   <None Remove="packages\**" />
 </ItemGroup>
@@ -62,7 +68,7 @@
 </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Xamarin.Forms" Version="4.0.0.618610" />
+    <PackageReference Include="Xamarin.Forms" Version="4.2.0.709249" />
   </ItemGroup>
 
 </Project>

@@ -17,7 +17,9 @@ Supports Android, iOS and Windows platforms.
 ## Platforms
 - Android
 - iOS
+- macOS
 - Windows UWP
+- Windows Desktop (WPF)
 - Windows 8.1 Store (Deprecated)
 - Windows Phone 8.1 (Deprecated)
 
