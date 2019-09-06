@@ -59,8 +59,6 @@
     <MtouchUseLlvm>False</MtouchUseLlvm>
     <MtouchUseThumb>False</MtouchUseThumb>
     <MtouchEnableBitcode>False</MtouchEnableBitcode>
-    <MtouchUseSGen>False</MtouchUseSGen>
-    <MtouchUseRefCounting>False</MtouchUseRefCounting>
     <OptimizePNGs>True</OptimizePNGs>
     <MtouchTlsProvider>Default</MtouchTlsProvider>
     <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
@@ -163,7 +161,7 @@
       <IsWatchApp>false</IsWatchApp>
     </ProjectReference>
     <ProjectReference Include="..\MediaPlayerSample\MediaPlayerSample.csproj">
-      <Project>{677bb82f-a15c-454b-a7cc-1f139b20a615}</Project>
+      <Project>{0DBAD6F4-C394-4D97-A331-27EE8F3DD6FF}</Project>
       <Name>MediaPlayerSample</Name>
     </ProjectReference>
   </ItemGroup>

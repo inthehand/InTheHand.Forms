@@ -10,6 +10,8 @@ using Xamarin.Forms;
 
 #if __ANDROID__
 namespace InTheHand.Forms.Platform.Android
+#elif __MACOS__
+namespace InTheHand.Forms.Platform.MacOS
 #elif __IOS__
 namespace InTheHand.Forms.Platform.iOS
 #elif WINDOWS_UWP || WINDOWS_APP || WINDOWS_PHONE_APP
