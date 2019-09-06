@@ -130,7 +130,7 @@
       <IsWatchApp>false</IsWatchApp>
     </ProjectReference>
     <ProjectReference Include="..\ChatList\ChatList.csproj">
-      <Project>{7FA8CC4D-E760-4CBC-83D2-5AFD6D76AB22}</Project>
+      <Project>{3E814BE1-6AA7-47E4-A8AC-AEFAEE932EF3}</Project>
       <Name>ChatList</Name>
     </ProjectReference>
   </ItemGroup>
