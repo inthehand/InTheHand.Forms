@@ -44,6 +44,7 @@ namespace InTheHand.Forms.Platform.MacOS
                 }
 
                 Control.VideoGravity = AspectToGravity(Element.Aspect);
+                Control.ControlsStyle = Element.ShowsPlaybackControls ? AVPlayerViewControlsStyle.Default : AVPlayerViewControlsStyle.None;
                 UpdateSource();
             }
         }
@@ -57,8 +58,17 @@ namespace InTheHand.Forms.Platform.MacOS
                 case nameof(MediaElement.Aspect):
                     Control.VideoGravity = AspectToGravity(Element.Aspect);
                     break;
+
+                case nameof(MediaElement.ShowsPlaybackControls):
+                    Control.ControlsStyle = Element.ShowsPlaybackControls ? AVPlayerViewControlsStyle.Default : AVPlayerViewControlsStyle.None;
+                    break;
+
                 case nameof(MediaElement.Source):
                     UpdateSource();
+                    break;
+
+                case nameof(MediaElement.Volume):
+                    Control.Player.Volume = (float)Element.Volume;
                     break;
             }
         }
@@ -238,11 +248,13 @@ namespace InTheHand.Forms.Platform.MacOS
                 if (Control.Player != null)
                 {
                     Control.Player.ReplaceCurrentItemWithPlayerItem(item);
+                    Control.Player.Volume = (float)Element.Volume;
                 }
                 else
                 {
                     Control.Player = new AVPlayer(item);
                     _rateObserver = (NSObject)Control.Player.AddObserver("rate", NSKeyValueObservingOptions.New, ObserveRate);
+                    Control.Player.Volume = (float)Element.Volume;
                 }
 
                 if (Element.AutoPlay)

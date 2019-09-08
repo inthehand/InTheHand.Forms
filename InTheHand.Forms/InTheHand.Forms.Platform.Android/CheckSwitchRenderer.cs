@@ -8,7 +8,7 @@ using Xamarin.Forms.Platform.Android;
 
 namespace InTheHand.Forms.Platform.Android
 {
-    public sealed class CheckSwitchRenderer : ViewRenderer<CheckSwitch, CheckBox>
+    public sealed class CheckSwitchRenderer : ViewRenderer<CheckSwitch, global::Android.Widget.CheckBox>
     {
         public CheckSwitchRenderer(Context c) : base(c)
         { }
@@ -19,7 +19,7 @@ namespace InTheHand.Forms.Platform.Android
 
             if (e.NewElement != null)
             {
-                this.SetNativeControl(new CheckBox(this.Context));
+                this.SetNativeControl(new global::Android.Widget.CheckBox(this.Context));
                 
                 Control.SetTextColor(e.NewElement.TextColor.ToAndroid());
                 this.Control.Text = e.NewElement.Text;

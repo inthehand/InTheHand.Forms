@@ -126,11 +126,13 @@ namespace InTheHand.Forms.Platform.iOS
                 if (Player != null)
                 {
                     Player.ReplaceCurrentItemWithPlayerItem(item);
+                    Player.Volume = (float)MediaElement.Volume;
                 }
                 else
                 {
                     Player = new AVPlayer(item);
                     _rateObserver = (NSObject)Player.AddObserver("rate", NSKeyValueObservingOptions.New, ObserveRate);
+                    Player.Volume = (float)MediaElement.Volume;
                 }
 
                 if (MediaElement.AutoPlay)
