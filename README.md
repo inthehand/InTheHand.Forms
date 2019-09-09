@@ -24,8 +24,8 @@ Supports Android, iOS and Windows platforms.
 - Windows Phone 8.1 (Deprecated)
 
 ## Samples:-
-- [MediaPlayer Sample](https://github.com/inthehand/InTheHand.Forms/tree/master/MediaPlayerSample/MediaPlayerSample)
-- [Navigation Sample](https://github.com/inthehand/InTheHand.Forms/tree/master/XamarinFormsNavigation)
+- [MediaPlayer Sample](https://github.com/inthehand/InTheHand.Forms/tree/master/Samples/MediaPlayerSample)
+- [Navigation Sample](https://github.com/inthehand/InTheHand.Forms/tree/master/Samples/XamarinFormsNavigation)
 
 ## See also:-
 - [Pontoon - Cross platform APIs](https://github.com/inthehand/Pontoon)
