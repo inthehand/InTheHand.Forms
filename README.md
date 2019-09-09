@@ -24,7 +24,7 @@ Supports Android, iOS and Windows platforms.
 - Windows Phone 8.1 (Deprecated)
 
 ## Samples:-
-- [MediaPlayer Sample](https://github.com/inthehand/InTheHand.Forms/tree/master/MediaPlayerSample/MediaPlayerSample)
+- [MediaPlayer Sample](https://github.com/inthehand/InTheHand.Forms/tree/master/MediaPlayerSample)
 - [Navigation Sample](https://github.com/inthehand/InTheHand.Forms/tree/master/XamarinFormsNavigation)
 
 ## See also:-
