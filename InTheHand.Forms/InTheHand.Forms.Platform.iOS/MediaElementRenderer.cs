@@ -212,7 +212,7 @@ namespace InTheHand.Forms.Platform.iOS
                     _packager = null;
                 }
 
-                // The ListView can create renderers and unhook them from the Element before Dispose is called in CalculateHeightForCell.
+                // The element can create renderers and unhook them from the Element before Dispose is called in CalculateHeightForCell.
                 // Thus, it is possible that this work is already completed.
                 if (MediaElement != null)
                 {
@@ -449,18 +449,7 @@ namespace InTheHand.Forms.Platform.iOS
 
         void IVisualElementRenderer.SetElement(VisualElement element)
         {
-            if (element == null)
-            {
-                throw new ArgumentNullException(nameof(element));
-            }
-
-            if (!(element is MediaElement))
-            {
-                throw new ArgumentException($"{nameof(element)} must be of type {nameof(MediaElement)}");
-            }
-
             MediaElement oldElement = MediaElement;
-            MediaElement = (MediaElement)element;
             
             if (oldElement != null)
             {
@@ -471,30 +460,35 @@ namespace InTheHand.Forms.Platform.iOS
                 oldElement.VolumeRequested -= MediaElementVolumeRequested;
             }
 
-            Color currentColor = oldElement?.BackgroundColor ?? Color.Default;
-            if (element.BackgroundColor != currentColor)
+            if (element != null)
             {
-                UpdateBackgroundColor();
+                MediaElement = (MediaElement)element;
+            
+                Color currentColor = oldElement?.BackgroundColor ?? Color.Default;
+                if (element.BackgroundColor != currentColor)
+                {
+                    UpdateBackgroundColor();
+                }
+
+                MediaElement.PropertyChanged += OnElementPropertyChanged;
+                MediaElement.SeekRequested += MediaElementSeekRequested;
+                MediaElement.StateRequested += MediaElementStateRequested;
+                MediaElement.PositionRequested += MediaElementPositionRequested;
+                MediaElement.VolumeRequested += MediaElementVolumeRequested;
+
+                UpdateSource();
+                VideoGravity = AspectToGravity(MediaElement.Aspect);
+
+                _tracker = new VisualElementTracker(this);
+
+                _packager = new VisualElementPackager(this);
+                _packager.Load();
+
+                _events = new EventTracker(this);
+                _events.LoadEvents(View);
             }
 
-            MediaElement.PropertyChanged += OnElementPropertyChanged;
-            MediaElement.SeekRequested += MediaElementSeekRequested;
-            MediaElement.StateRequested += MediaElementStateRequested;
-            MediaElement.PositionRequested += MediaElementPositionRequested;
-            MediaElement.VolumeRequested += MediaElementVolumeRequested;
-
-            UpdateSource();
-            VideoGravity = AspectToGravity(MediaElement.Aspect);
-
-            _tracker = new VisualElementTracker(this);
-
-            _packager = new VisualElementPackager(this);
-            _packager.Load();
-
-            _events = new EventTracker(this);
-            _events.LoadEvents(View);
-
-            OnElementChanged(new VisualElementChangedEventArgs(oldElement, MediaElement));
+            OnElementChanged(new VisualElementChangedEventArgs(oldElement, element));
         }
 
         private void MediaElementVolumeRequested(object sender, EventArgs e)
