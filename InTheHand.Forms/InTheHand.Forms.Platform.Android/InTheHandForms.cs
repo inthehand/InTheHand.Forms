@@ -15,8 +15,9 @@ namespace InTheHand.Forms.Platform.MacOS
 #elif __IOS__
 namespace InTheHand.Forms.Platform.iOS
 #elif WINDOWS_UWP || WINDOWS_APP || WINDOWS_PHONE_APP
-
 namespace InTheHand.Forms.Platform.WinRT
+#elif WPF
+namespace InTheHand.Forms.Platform.WPF
 #endif
 {
     public static class InTheHandForms

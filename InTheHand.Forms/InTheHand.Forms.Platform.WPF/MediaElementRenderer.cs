@@ -2,6 +2,7 @@
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.WPF;
 
@@ -41,7 +42,7 @@ namespace InTheHand.Forms.Platform.WPF
 
                 Control.LoadedBehavior = MediaState.Manual;
                 Control.UnloadedBehavior = MediaState.Close;
-                Control.Stretch = Element.Aspect.ToStretch();
+                Control.Stretch = ToStretch(Element.Aspect);
 
                 Control.BufferingStarted += ControlBufferingStarted;
                 Control.BufferingEnded += ControlBufferingEnded;
@@ -155,6 +156,11 @@ namespace InTheHand.Forms.Platform.WPF
             }
 
             Controller.CurrentState = MediaElementState.Opening;
+
+            if(Element.AutoPlay)
+            {
+                Control.Play();
+            }
         }
 
         void ControlBufferingEnded(object sender, RoutedEventArgs e)
@@ -228,7 +234,7 @@ namespace InTheHand.Forms.Platform.WPF
             switch (e.PropertyName)
             {
                 case nameof(MediaElement.Aspect):
-                    Control.Stretch = Element.Aspect.ToStretch();
+                    Control.Stretch = ToStretch(Element.Aspect);
                     break;
 
                 case nameof(MediaElement.KeepScreenOn):
@@ -293,6 +299,20 @@ namespace InTheHand.Forms.Platform.WPF
                 /// Forces the display to be on by resetting the display idle timer.
                 /// </summary>
                 DISPLAY_REQUIRED = 0x00000002,
+            }
+        }
+
+        static Stretch ToStretch(Aspect aspect)
+        {
+            switch (aspect)
+            {
+                case Aspect.Fill:
+                    return Stretch.Fill;
+                case Aspect.AspectFill:
+                    return Stretch.UniformToFill;
+                default:
+                case Aspect.AspectFit:
+                    return Stretch.Uniform;
             }
         }
     }
