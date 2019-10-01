@@ -1043,6 +1043,7 @@ Global
 		{E9D60C98-0DEA-495F-96AD-CF455248AB7B}.Release|ARM64.ActiveCfg = Release|Any CPU
 		{E9D60C98-0DEA-495F-96AD-CF455248AB7B}.Release|ARM64.Build.0 = Release|Any CPU
 		{E9D60C98-0DEA-495F-96AD-CF455248AB7B}.Release|iPhone.ActiveCfg = Release|Any CPU
+		{E9D60C98-0DEA-495F-96AD-CF455248AB7B}.Release|iPhone.Build.0 = Release|Any CPU
 		{E9D60C98-0DEA-495F-96AD-CF455248AB7B}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
 		{E9D60C98-0DEA-495F-96AD-CF455248AB7B}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
 		{E9D60C98-0DEA-495F-96AD-CF455248AB7B}.Release|x64.ActiveCfg = Release|Any CPU
