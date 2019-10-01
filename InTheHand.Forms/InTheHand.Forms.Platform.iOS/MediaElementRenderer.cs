@@ -180,12 +180,14 @@ namespace InTheHand.Forms.Platform.iOS
             if (_playToEndObserver != null)
             {
                 NSNotificationCenter.DefaultCenter.RemoveObserver(_playToEndObserver);
+                _playToEndObserver.Dispose();
                 _playToEndObserver = null;
             }
 
             if (_rateObserver != null)
             {
                 Player.RemoveObserver(_rateObserver, "rate");
+                _rateObserver.Dispose();
                 _rateObserver = null;
             }
 
@@ -193,6 +195,10 @@ namespace InTheHand.Forms.Platform.iOS
 
             Player?.Pause();
             Player?.ReplaceCurrentItemWithPlayerItem(null);
+            Player?.Dispose();
+            Player = null;
+
+            View?.Dispose();
 
             if (disposing)
             {
@@ -233,7 +239,7 @@ namespace InTheHand.Forms.Platform.iOS
                 }
                 finally
                 {
-
+                    _statusObserver.Dispose();
                     _statusObserver = null;
                 }
             }
@@ -450,7 +456,7 @@ namespace InTheHand.Forms.Platform.iOS
         void IVisualElementRenderer.SetElement(VisualElement element)
         {
             MediaElement oldElement = MediaElement;
-            
+
             if (oldElement != null)
             {
                 oldElement.PropertyChanged -= OnElementPropertyChanged;
@@ -460,10 +466,10 @@ namespace InTheHand.Forms.Platform.iOS
                 oldElement.VolumeRequested -= MediaElementVolumeRequested;
             }
 
+            MediaElement = (MediaElement)element;
+
             if (element != null)
             {
-                MediaElement = (MediaElement)element;
-            
                 Color currentColor = oldElement?.BackgroundColor ?? Color.Default;
                 if (element.BackgroundColor != currentColor)
                 {
