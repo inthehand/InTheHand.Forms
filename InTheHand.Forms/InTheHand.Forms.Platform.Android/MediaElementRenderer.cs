@@ -91,6 +91,7 @@ namespace InTheHand.Forms.Platform.Android
                 oldElement.PropertyChanged -= OnElementPropertyChanged;
                 oldElement.SeekRequested -= SeekRequested;
                 oldElement.StateRequested -= StateRequested;
+                oldElement.PositionRequested += OnPositionRequested;
             }
 
             Color currentColor = oldElement?.BackgroundColor ?? Color.Default;
@@ -102,6 +103,7 @@ namespace InTheHand.Forms.Platform.Android
             MediaElement.PropertyChanged += OnElementPropertyChanged;
             MediaElement.SeekRequested += SeekRequested;
             MediaElement.StateRequested += StateRequested;
+            MediaElement.PositionRequested += OnPositionRequested;
 
             if (_tracker is null)
             {
@@ -110,6 +112,11 @@ namespace InTheHand.Forms.Platform.Android
             }
 
             OnElementChanged(new ElementChangedEventArgs<MediaElement>(oldElement as MediaElement, MediaElement));
+        }
+
+        private void OnPositionRequested(object sender, EventArgs e)
+        {
+            Controller.Position = TimeSpan.FromMilliseconds(_mediaPlayer.CurrentPosition);
         }
 
         void StateRequested(object sender, StateRequested e)
@@ -143,7 +150,7 @@ namespace InTheHand.Forms.Platform.Android
 
         void SeekRequested(object sender, SeekRequested e)
         {
-            Controller.Position = _view.Position;
+            _mediaPlayer.SeekTo((int)e.Position.TotalMilliseconds);
         }
 
         void IVisualElementRenderer.SetLabelFor(int? id)
