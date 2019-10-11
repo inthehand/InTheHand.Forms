@@ -37,7 +37,19 @@ namespace InTheHand.Forms.Platform.iOS
 
         VisualElement IVisualElementRenderer.Element => MediaElement;
 
-        UIView IVisualElementRenderer.NativeView => View;
+        UIView IVisualElementRenderer.NativeView
+        {
+            get
+            {
+                if(!_isDisposed)
+                {
+                    return View;
+                }
+
+                return null;
+            }
+        }
+      
 
         UIViewController IVisualElementRenderer.ViewController => this;
 
@@ -175,8 +187,11 @@ namespace InTheHand.Forms.Platform.iOS
             }
         }
 
+        private bool _isDisposed = false;
+
         protected override void Dispose(bool disposing)
         {
+            
             if (_playToEndObserver != null)
             {
                 NSNotificationCenter.DefaultCenter.RemoveObserver(_playToEndObserver);
@@ -199,6 +214,8 @@ namespace InTheHand.Forms.Platform.iOS
             Player = null;
 
             View?.Dispose();
+
+            _isDisposed = true;
 
             if (disposing)
             {

@@ -91,7 +91,7 @@ namespace InTheHand.Forms.Platform.Android
                 oldElement.PropertyChanged -= OnElementPropertyChanged;
                 oldElement.SeekRequested -= SeekRequested;
                 oldElement.StateRequested -= StateRequested;
-                oldElement.PositionRequested += OnPositionRequested;
+                oldElement.PositionRequested -= OnPositionRequested;
             }
 
             Color currentColor = oldElement?.BackgroundColor ?? Color.Default;
@@ -151,6 +151,7 @@ namespace InTheHand.Forms.Platform.Android
         void SeekRequested(object sender, SeekRequested e)
         {
             _mediaPlayer.SeekTo((int)e.Position.TotalMilliseconds);
+            Controller.Position = _view.Position;
         }
 
         void IVisualElementRenderer.SetLabelFor(int? id)
