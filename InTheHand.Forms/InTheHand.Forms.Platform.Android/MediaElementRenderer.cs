@@ -361,22 +361,26 @@ namespace InTheHand.Forms.Platform.Android
 
         void MediaPlayer.IOnPreparedListener.OnPrepared(MediaPlayer mp)
         {
-            Controller.OnMediaOpened();
             UpdateLayoutParameters();
-            
             _mediaPlayer = mp;
-            mp.Looping = MediaElement.IsLooping;
-            mp.SeekTo(0);
 
-            if (MediaElement.AutoPlay)
-            {
-                _mediaPlayer.Start();
-                Controller.CurrentState = MediaElementState.Playing;
-            }
-            else
-            {
-                Controller.CurrentState = MediaElementState.Paused;
-            }
+            Device.BeginInvokeOnMainThread(() =>
+            { 
+                Controller.OnMediaOpened();
+           
+                mp.Looping = MediaElement.IsLooping;
+                mp.SeekTo(0);
+
+                if (MediaElement.AutoPlay)
+                {
+                    _mediaPlayer.Start();
+                    Controller.CurrentState = MediaElementState.Playing;
+                }
+                else
+                {
+                    Controller.CurrentState = MediaElementState.Paused;
+                }
+            });
         }
 
         void UpdateLayoutParameters()
@@ -460,39 +464,48 @@ namespace InTheHand.Forms.Platform.Android
 
         bool MediaPlayer.IOnErrorListener.OnError(MediaPlayer mp, MediaError what, int extra)
         {
-            Controller.OnMediaFailed();
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                Controller.OnMediaFailed();
+            });
+
             return false;
         }
 
         bool MediaPlayer.IOnInfoListener.OnInfo(MediaPlayer mp, MediaInfo what, int extra)
         {
-            System.Diagnostics.Debug.WriteLine(what);
-            switch (what)
-            {
-                case MediaInfo.BufferingStart:
-                    Controller.CurrentState = MediaElementState.Buffering;
-                    mp.BufferingUpdate += Mp_BufferingUpdate;
-                    break;
-
-                case MediaInfo.BufferingEnd:
-                    mp.BufferingUpdate -= Mp_BufferingUpdate;
-                    Controller.CurrentState = MediaElementState.Paused;
-                    break;
-
-                case MediaInfo.VideoRenderingStart:
-                    _view.SetBackground(null);
-                    Controller.CurrentState = MediaElementState.Playing;
-                    break;
-            }
-
             _mediaPlayer = mp;
 
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                switch (what)
+                {
+                    case MediaInfo.BufferingStart:
+                        Controller.CurrentState = MediaElementState.Buffering;
+                        mp.BufferingUpdate += Mp_BufferingUpdate;
+                        break;
+
+                    case MediaInfo.BufferingEnd:
+                        mp.BufferingUpdate -= Mp_BufferingUpdate;
+                        Controller.CurrentState = MediaElementState.Paused;
+                        break;
+
+                    case MediaInfo.VideoRenderingStart:
+                        _view.SetBackground(null);
+                        Controller.CurrentState = MediaElementState.Playing;
+                        break;
+                }
+            });
+            
             return true;
         }
 
         void Mp_BufferingUpdate(object sender, MediaPlayer.BufferingUpdateEventArgs e)
         {
-            Controller.BufferingProgress = e.Percent / 100f;
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                Controller.BufferingProgress = e.Percent / 100f;
+            });
         }
     }
 }
