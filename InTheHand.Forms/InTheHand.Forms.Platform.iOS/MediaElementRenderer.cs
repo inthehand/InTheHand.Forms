@@ -289,7 +289,11 @@ namespace InTheHand.Forms.Platform.iOS
                     break;
 
                 case AVPlayerStatus.ReadyToPlay:
-                    Controller.Duration = TimeSpan.FromSeconds(Player.CurrentItem.Duration.Seconds);
+                    if (!Player.CurrentItem.Duration.IsInvalid && !Player.CurrentItem.Duration.IsIndefinite)
+                    {
+                        Controller.Duration = TimeSpan.FromSeconds(Player.CurrentItem.Duration.Seconds);
+                    }
+
                     Controller.VideoHeight = (int)Player.CurrentItem.Asset.NaturalSize.Height;
                     Controller.VideoWidth = (int)Player.CurrentItem.Asset.NaturalSize.Width;
                     Controller.OnMediaOpened();
