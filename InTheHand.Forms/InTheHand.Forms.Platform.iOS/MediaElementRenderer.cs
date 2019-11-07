@@ -37,7 +37,16 @@ namespace InTheHand.Forms.Platform.iOS
 
         VisualElement IVisualElementRenderer.Element => MediaElement;
 
-        UIView IVisualElementRenderer.NativeView => View;      
+        UIView IVisualElementRenderer.NativeView
+        {
+            get
+            {
+                if (_isDisposed)
+                    return new UIView();
+
+                return View;
+            }
+        }
 
         UIViewController IVisualElementRenderer.ViewController => this;
 
@@ -120,7 +129,6 @@ namespace InTheHand.Forms.Platform.iOS
                     asset = AVUrlAsset.Create(NSUrl.FromString(MediaElement.Source.AbsoluteUri), GetOptionsWithHeaders(MediaElement.HttpHeaders));
                 }
 
-
                 AVPlayerItem item = new AVPlayerItem(asset);
                 RemoveStatusObserver();
 
@@ -151,11 +159,12 @@ namespace InTheHand.Forms.Platform.iOS
                 }
             }
         }
+
         internal static string ResolveMsAppDataUri(Uri uri)
         {
             if (uri.Scheme == "ms-appdata")
             {
-                string filePath = string.Empty;
+                string filePath;
 
                 if (uri.LocalPath.StartsWith("/local"))
                 {
@@ -182,7 +191,9 @@ namespace InTheHand.Forms.Platform.iOS
         private bool _isDisposed = false;
 
         protected override void Dispose(bool disposing)
-        { 
+        {
+            base.Dispose(disposing);
+
             if (_playToEndObserver != null)
             {
                 NSNotificationCenter.DefaultCenter.RemoveObserver(_playToEndObserver);
@@ -192,17 +203,11 @@ namespace InTheHand.Forms.Platform.iOS
 
             if (_rateObserver != null)
             {
-                Player.RemoveObserver(_rateObserver, "rate");
                 _rateObserver.Dispose();
                 _rateObserver = null;
             }
 
             RemoveStatusObserver();
-
-            Player?.Pause();
-            Player?.ReplaceCurrentItemWithPlayerItem(null);
-            Player?.Dispose();
-            Player = null;
             
             _isDisposed = true;
 
@@ -223,31 +228,15 @@ namespace InTheHand.Forms.Platform.iOS
                     _packager.Dispose();
                     _packager = null;
                 }
-
-                // The element can create renderers and unhook them from the Element before Dispose is called in CalculateHeightForCell.
-                // Thus, it is possible that this work is already completed.
-                if (MediaElement != null)
-                {
-                    ((IVisualElementRenderer)this).SetElement(null);
-                }
-            }
-
-            base.Dispose(disposing);
+            }            
         }
 
         void RemoveStatusObserver()
         {
             if (_statusObserver != null)
             {
-                try
-                {
-                    Player?.CurrentItem?.RemoveObserver(_statusObserver, "status");
-                }
-                finally
-                {
-                    _statusObserver.Dispose();
-                    _statusObserver = null;
-                }
+                _statusObserver.Dispose();
+                _statusObserver = null;
             }
         }
 
@@ -423,7 +412,7 @@ namespace InTheHand.Forms.Platform.iOS
                     {
                         SetKeepScreenOn(false);
                     }
-                    //ios has no stop...
+                    // ios has no stop...
                     Player.Pause();
                     Player.Seek(CMTime.Zero);
                     Controller.CurrentState = MediaElementState.Stopped;
@@ -532,8 +521,6 @@ namespace InTheHand.Forms.Platform.iOS
         public override void ViewDidLayoutSubviews()
         {
             base.ViewDidLayoutSubviews();
-            //System.Diagnostics.Debug.WriteLine($"Superview {View.Superview.Bounds}");
-            //System.Diagnostics.Debug.WriteLine($"View {View.Frame}");
 
             // This is a temporary fix to stop zero width/height on resize or control expanding beyond page dimensions
             View.Frame = new CoreGraphics.CGRect(View.Frame.Left, View.Frame.Top, Math.Min(Math.Max(View.Frame.Width, View.Superview.Bounds.Width - View.Frame.X), View.Superview.Bounds.Width), Math.Min(Math.Max(View.Frame.Height, View.Superview.Bounds.Height - View.Frame.Y), View.Superview.Bounds.Height));
