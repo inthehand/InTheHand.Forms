@@ -37,19 +37,7 @@ namespace InTheHand.Forms.Platform.iOS
 
         VisualElement IVisualElementRenderer.Element => MediaElement;
 
-        UIView IVisualElementRenderer.NativeView
-        {
-            get
-            {
-                if(!_isDisposed)
-                {
-                    return View;
-                }
-
-                return null;
-            }
-        }
-      
+        UIView IVisualElementRenderer.NativeView => View;      
 
         UIViewController IVisualElementRenderer.ViewController => this;
 
@@ -109,24 +97,28 @@ namespace InTheHand.Forms.Platform.iOS
             {
                 AVAsset asset = null;
 
-                    if (MediaElement.Source.Scheme == "ms-appx")
-                    {
-                        // used for a file embedded in the application package
-                        asset = AVAsset.FromUrl(NSUrl.FromFilename(MediaElement.Source.LocalPath.Substring(1)));
-                    }
-                    else if (MediaElement.Source.Scheme == "ms-appdata")
-                    {
-                        string filePath = ResolveMsAppDataUri(MediaElement.Source);
+                if (MediaElement.Source.Scheme == "ms-appx")
+                {
+                    // used for a file embedded in the application package
+                    asset = AVAsset.FromUrl(NSUrl.FromFilename(MediaElement.Source.LocalPath.Substring(1)));
+                }
+                else if (MediaElement.Source.Scheme == "ms-appdata")
+                {
+                    string filePath = ResolveMsAppDataUri(MediaElement.Source);
 
-                        if (string.IsNullOrEmpty(filePath))
-                            throw new ArgumentException("Invalid Uri", "Source");
+                    if (string.IsNullOrEmpty(filePath))
+                        throw new ArgumentException("Invalid Uri", "Source");
 
-                        asset = AVAsset.FromUrl(NSUrl.FromFilename(filePath));
-                    }
-                    else
-                    {
-                        asset = AVUrlAsset.Create(NSUrl.FromString(MediaElement.Source.AbsoluteUri), GetOptionsWithHeaders(MediaElement.HttpHeaders));
-                    }
+                    asset = AVAsset.FromUrl(NSUrl.FromFilename(filePath));
+                }
+                else if (MediaElement.Source.IsFile)
+                {
+                    asset = AVAsset.FromUrl(NSUrl.FromFilename(MediaElement.Source.LocalPath));
+                }
+                else
+                {
+                    asset = AVUrlAsset.Create(NSUrl.FromString(MediaElement.Source.AbsoluteUri), GetOptionsWithHeaders(MediaElement.HttpHeaders));
+                }
 
 
                 AVPlayerItem item = new AVPlayerItem(asset);
@@ -190,8 +182,7 @@ namespace InTheHand.Forms.Platform.iOS
         private bool _isDisposed = false;
 
         protected override void Dispose(bool disposing)
-        {
-            
+        { 
             if (_playToEndObserver != null)
             {
                 NSNotificationCenter.DefaultCenter.RemoveObserver(_playToEndObserver);
@@ -212,9 +203,7 @@ namespace InTheHand.Forms.Platform.iOS
             Player?.ReplaceCurrentItemWithPlayerItem(null);
             Player?.Dispose();
             Player = null;
-
-            View?.Dispose();
-
+            
             _isDisposed = true;
 
             if (disposing)
