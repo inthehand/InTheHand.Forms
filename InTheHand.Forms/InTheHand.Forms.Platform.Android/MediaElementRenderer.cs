@@ -42,7 +42,9 @@ namespace InTheHand.Forms.Platform.Android
             _view.SetOnErrorListener(this);
             _view.MetadataRetrieved += MetadataRetrieved;
             
-            this.SetForegroundGravity(GravityFlags.Center);
+            SetForegroundGravity(GravityFlags.Center);
+            _view.SetForegroundGravity(GravityFlags.Center);
+
             AddView(_view, -1, -1);
 
             _controller = new MediaController(Context);

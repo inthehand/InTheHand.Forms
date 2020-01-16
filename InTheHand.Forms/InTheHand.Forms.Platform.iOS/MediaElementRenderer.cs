@@ -20,7 +20,7 @@ using Xamarin.Forms.Platform.iOS;
 
 namespace InTheHand.Forms.Platform.iOS
 {
-    public sealed class MediaElementRenderer : Xamarin.Forms.Platform.iOS.ViewRenderer<MediaElement, UIView>
+    public sealed class MediaElementRenderer : ViewRenderer<MediaElement, UIView>
     {
         IMediaElementController Controller => Element as IMediaElementController;
 
@@ -173,7 +173,7 @@ namespace InTheHand.Forms.Platform.iOS
                     asset = AVUrlAsset.Create(NSUrl.FromString(Element.Source.AbsoluteUri), GetOptionsWithHeaders(Element.HttpHeaders));
                 }
 
-                AVPlayerItem item = new AVPlayerItem(asset);
+                var item = new AVPlayerItem(asset);
 
                 RemoveStatusObserver();
 
@@ -186,6 +186,7 @@ namespace InTheHand.Forms.Platform.iOS
                 else
                 {
                     _avPlayerViewController.Player = new AVPlayer(item);
+                    _rateObserver = (NSObject)_avPlayerViewController.Player.AddObserver("rate", NSKeyValueObservingOptions.New, ObserveRate);
                 }
 
                 if (Element.AutoPlay)
@@ -197,7 +198,8 @@ namespace InTheHand.Forms.Platform.iOS
             {
                 if (Element.CurrentState == MediaElementState.Playing || Element.CurrentState == MediaElementState.Buffering)
                 {
-                    Element.Stop();
+                    _avPlayerViewController.Player.Pause();
+                    Controller.CurrentState = MediaElementState.Stopped;
                 }
             }
         }
@@ -356,12 +358,21 @@ namespace InTheHand.Forms.Platform.iOS
 
         private void ObserveStatus(NSObservedChange e)
         {
-            if (e.NewValue != null)
+            Controller.Volume = _avPlayerViewController.Player.Volume;
+
+            switch (_avPlayerViewController.Player.Status)
             {
-                if (_avPlayerViewController.Player.Status == AVPlayerStatus.ReadyToPlay)
-                {
-                    Controller?.OnMediaOpened();
-                }
+                case AVPlayerStatus.Failed:
+                    Controller.OnMediaFailed();
+                    break;
+
+                case AVPlayerStatus.ReadyToPlay:
+                    Controller.Duration = TimeSpan.FromSeconds(_avPlayerViewController.Player.CurrentItem.Duration.Seconds);
+                    Controller.VideoHeight = (int)_avPlayerViewController.Player.CurrentItem.Asset.NaturalSize.Height;
+                    Controller.VideoWidth = (int)_avPlayerViewController.Player.CurrentItem.Asset.NaturalSize.Width;
+                    Controller.OnMediaOpened();
+                    Controller.Position = Position;
+                    break;
             }
         }
 
@@ -396,6 +407,7 @@ namespace InTheHand.Forms.Platform.iOS
             else
             {
                 SetKeepScreenOn(false);
+                Controller.Position = Position;
 
                 try
                 {
@@ -427,19 +439,15 @@ namespace InTheHand.Forms.Platform.iOS
         {
             switch (e.PropertyName)
             {
-                case "ShowsPlaybackControls":
-                    _avPlayerViewController.ShowsPlaybackControls = Element.ShowsPlaybackControls;
+                case nameof(Aspect):
+                    _avPlayerViewController.VideoGravity = AspectToGravity(Element.Aspect);
                     break;
 
-                case "BackgroundColor":
+                case nameof(MediaElement.BackgroundColor):
                     UpdateBackgroundColor();
                     break;
 
-                case "Source":
-                    UpdateSource();
-                    break;
-
-                case "CurrentState":
+                case nameof(MediaElement.CurrentState):
                     switch (Element.CurrentState)
                     {
                         case MediaElementState.Playing:
@@ -470,15 +478,28 @@ namespace InTheHand.Forms.Platform.iOS
 
                     break;
 
-                case "KeepScreenOn":
+                case nameof(MediaElement.KeepScreenOn):
                     if (!Element.KeepScreenOn)
                     {
                         SetKeepScreenOn(false);
                     }
+                    else if (Element.CurrentState == MediaElementState.Playing)
+                    {
+                        // only toggle this on if property is set while video is already running
+                        SetKeepScreenOn(true);
+                    }
                     break;
 
-                case nameof(Aspect):
-                    _avPlayerViewController.VideoGravity = AspectToGravity(Element.Aspect);
+                case nameof(MediaElement.ShowsPlaybackControls):
+                    _avPlayerViewController.ShowsPlaybackControls = Element.ShowsPlaybackControls;
+                    break;
+
+                case nameof(MediaElement.Source):
+                    UpdateSource();
+                    break;
+
+                case nameof(MediaElement.Volume):
+                    _avPlayerViewController.Player.Volume = (float)Element.Volume;
                     break;
             }
 

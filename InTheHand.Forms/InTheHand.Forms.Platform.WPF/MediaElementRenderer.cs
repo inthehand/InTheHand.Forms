@@ -122,9 +122,13 @@ namespace InTheHand.Forms.Platform.WPF
             if (Control.Clock != null)
                 Control.Clock = null;
 
-            if (Element.Source.Scheme == "ms-appx")
+            if(!Element.Source.IsAbsoluteUri)
             {
-                Control.Source = new Uri(Element.Source.ToString().Replace("ms-appx://", "pack://application:,,,"));
+                Control.Source = Element.Source;
+            }
+            else if (Element.Source.Scheme == "ms-appx")
+            {
+                Control.Source = new Uri(Element.Source.ToString().Replace("ms-appx:///", ""), UriKind.Relative);
             }
             else if (Element.Source.Scheme == "ms-appdata")
             {
