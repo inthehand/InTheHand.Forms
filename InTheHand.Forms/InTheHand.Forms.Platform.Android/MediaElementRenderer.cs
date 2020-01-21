@@ -43,7 +43,6 @@ namespace InTheHand.Forms.Platform.Android
             _view.MetadataRetrieved += MetadataRetrieved;
             
             SetForegroundGravity(GravityFlags.Center);
-            _view.SetForegroundGravity(GravityFlags.Center);
 
             AddView(_view, -1, -1);
 

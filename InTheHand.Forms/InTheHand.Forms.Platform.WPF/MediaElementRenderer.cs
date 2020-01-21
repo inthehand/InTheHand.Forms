@@ -1,4 +1,10 @@
-﻿using System;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="MediaElementRenderer.cs" company="In The Hand Ltd">
+//   Copyright (c) 2018-20 In The Hand Ltd, All rights reserved.
+// </copyright>
+// --------------------------------------------------------------------------------------------------------------------
+
+using System;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
@@ -219,7 +225,7 @@ namespace InTheHand.Forms.Platform.WPF
             {
                 Control.Play();
                 _requestedState = MediaElementState.Playing;
-                Controller.CurrentState = MediaElementState.Playing;
+                Controller.CurrentState = MediaElementState.Playing;              
             }
             else
             {
