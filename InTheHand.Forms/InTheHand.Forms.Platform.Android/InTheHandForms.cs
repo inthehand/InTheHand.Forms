@@ -1,6 +1,6 @@
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="InTheHandForms.cs" company="In The Hand Ltd">
-//   Copyright (c) 2017-19 In The Hand Ltd, All rights reserved.
+//   Copyright (c) 2017-20 In The Hand Ltd, All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 using System.Reflection;

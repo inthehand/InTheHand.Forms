@@ -36,6 +36,7 @@
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
@@ -47,7 +48,11 @@
     <Compile Include="..\InTheHand.Forms.Platform.Android\InTheHandForms.cs">
       <Link>InTheHandForms.cs</Link>
     </Compile>
+    <Compile Include="ActivityIndicatorRenderer.cs" />
     <Compile Include="MediaElementRenderer.cs" />
+    <Compile Include="ProgressRing.xaml.cs">
+      <DependentUpon>ProgressRing.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -63,6 +68,12 @@
     <PackageReference Include="Xamarin.Forms.Platform.WPF">
       <Version>4.2.0.778463</Version>
     </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="ProgressRing.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
