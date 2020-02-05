@@ -6,6 +6,7 @@ Supports Android, iOS and Windows platforms.
 [![NuGet version](https://badge.fury.io/nu/inthehand.forms.svg)](https://badge.fury.io/nu/inthehand.forms)
 
 ## Contains:-
+- ActivityIndicatorRenderer (WPF)
 - ButtonLineBreakModeEffect
 - CheckSwitch
 - ColorExtensions (UWP)
