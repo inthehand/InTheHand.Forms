@@ -252,3 +252,4 @@ paket-files/
 *.sln.iml
 /InTheHand.Forms/NuGet
 /InTheHand.Forms/NuGet/lib
+/.mfractor/InTheHand.Forms..db
