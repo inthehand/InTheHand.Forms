@@ -15,7 +15,7 @@ using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 using AView = Android.Views.View;
 
-[assembly: ExportRenderer(typeof(MediaElement), typeof(InTheHand.Forms.Platform.Android.MediaElementRenderer))]
+[assembly: ExportRenderer(typeof(InTheHand.Forms.MediaElement), typeof(InTheHand.Forms.Platform.Android.MediaElementRenderer))]
 
 namespace InTheHand.Forms.Platform.Android
 {
@@ -23,7 +23,7 @@ namespace InTheHand.Forms.Platform.Android
     {
         bool _isDisposed;
         int? _defaultLabelFor;
-        MediaElement MediaElement { get; set; }
+        InTheHand.Forms.MediaElement MediaElement { get; set; }
         IMediaElementController Controller => MediaElement as IMediaElementController;
 
         VisualElementTracker _tracker;
@@ -67,7 +67,7 @@ namespace InTheHand.Forms.Platform.Android
             AView view = this;
             view.Measure(widthConstraint, heightConstraint);
 
-            return new SizeRequest(new Size(MeasuredWidth, MeasuredHeight), new Size());
+            return new SizeRequest(new Size(MeasuredWidth, MeasuredHeight), new Size(1,1));
         }
 
         protected override void OnSizeChanged(int w, int h, int oldw, int oldh)
@@ -127,6 +127,7 @@ namespace InTheHand.Forms.Platform.Android
             {
                 case MediaElementState.Playing:
                     _view.Start();
+                    UpdateVolume();
                     Controller.CurrentState = _view.IsPlaying ? MediaElementState.Playing : MediaElementState.Stopped;
                     break;
 
@@ -222,6 +223,7 @@ namespace InTheHand.Forms.Platform.Android
                 UpdateShowPlaybackControls();
                 UpdateSource();
                 UpdateBackgroundColor();
+                UpdateVolume();
             }
 
             ElementChanged?.Invoke(this, new VisualElementChangedEventArgs(e.OldElement, e.NewElement));
@@ -264,7 +266,7 @@ namespace InTheHand.Forms.Platform.Android
                     break;
 
                 case nameof(MediaElement.Volume):
-                    _mediaPlayer?.SetVolume((float)MediaElement.Volume, (float)MediaElement.Volume);
+                    UpdateVolume();
                     break;
             }
 
@@ -325,6 +327,11 @@ namespace InTheHand.Forms.Platform.Android
                 _view.StopPlayback();
                 Controller.CurrentState = MediaElementState.Stopped;
             }
+        }
+
+        void UpdateVolume()
+        {
+            _mediaPlayer?.SetVolume((float)MediaElement.Volume, (float)MediaElement.Volume);
         }
 
         internal static string ResolveMsAppDataUri(Uri uri)
@@ -476,7 +483,10 @@ namespace InTheHand.Forms.Platform.Android
 
         bool MediaPlayer.IOnInfoListener.OnInfo(MediaPlayer mp, MediaInfo what, int extra)
         {
-            _mediaPlayer = mp;
+            if (_mediaPlayer == null)
+            {
+                _mediaPlayer = mp;
+            }
 
             Device.BeginInvokeOnMainThread(() =>
             {

@@ -8,7 +8,7 @@ using Xamarin.Forms.Platform.Android;
 
 namespace InTheHand.Forms.Platform.Android
 {
-    public sealed class RadioSwitchRenderer : ViewRenderer<RadioSwitch, RadioButton>
+    public sealed class RadioSwitchRenderer : ViewRenderer<RadioSwitch, global::Android.Widget.RadioButton>
     {
         public RadioSwitchRenderer(Context c) : base(c)
         { }
@@ -19,7 +19,7 @@ namespace InTheHand.Forms.Platform.Android
 
             if (e.NewElement != null)
             {
-                this.SetNativeControl(new RadioButton(this.Context));
+                this.SetNativeControl(new global::Android.Widget.RadioButton(this.Context));
 
                 Control.SetTextColor(e.NewElement.TextColor.ToAndroid());
                 this.Control.Text = e.NewElement.Text;

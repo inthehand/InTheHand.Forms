@@ -16,11 +16,11 @@ using UIKit;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.iOS;
 
-[assembly: ExportRenderer(typeof(MediaElement), typeof(InTheHand.Forms.Platform.iOS.MediaElementRenderer))]
+[assembly: ExportRenderer(typeof(InTheHand.Forms.MediaElement), typeof(InTheHand.Forms.Platform.iOS.MediaElementRenderer))]
 
 namespace InTheHand.Forms.Platform.iOS
 {
-    public sealed class MediaElementRenderer : ViewRenderer<MediaElement, UIView>
+    public sealed class MediaElementRenderer : ViewRenderer<InTheHand.Forms.MediaElement, UIView>
     {
         IMediaElementController Controller => Element as IMediaElementController;
 
@@ -242,13 +242,12 @@ namespace InTheHand.Forms.Platform.iOS
 
             if (_rateObserver != null)
             {
-                _rateObserver.Dispose();
+                _avPlayerViewController?.Player?.RemoveObserver(_rateObserver, "rate");
                 _rateObserver = null;
             }
 
             RemoveStatusObserver();
 
-            _avPlayerViewController?.Player?.Pause();
             _avPlayerViewController?.Player?.ReplaceCurrentItemWithPlayerItem(null);
 
             base.Dispose(disposing);
