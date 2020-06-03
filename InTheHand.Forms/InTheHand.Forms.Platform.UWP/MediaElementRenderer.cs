@@ -320,7 +320,14 @@ namespace InTheHand.Forms.Platform.WinRT
             if (Element.Source is null)
                 return;
 
-            Control.Source = Element.Source;
+            if (!Element.Source.IsAbsoluteUri)
+            {
+                Control.Source = new Uri(new Uri("ms-appx:///"), Element.Source);
+            }
+            else
+            {
+                Control.Source = Element.Source;
+            }
         }
     }
 }

@@ -123,6 +123,9 @@ namespace InTheHand.Forms.Platform.Android
 
         void StateRequested(object sender, StateRequested e)
         {
+            if (_mediaPlayer == null)
+                return;
+
             switch (e.State)
             {
                 case MediaElementState.Playing:
@@ -499,7 +502,7 @@ namespace InTheHand.Forms.Platform.Android
 
                     case MediaInfo.BufferingEnd:
                         mp.BufferingUpdate -= Mp_BufferingUpdate;
-                        Controller.CurrentState = MediaElementState.Paused;
+                        Controller.CurrentState = MediaElementState.Stopped;
                         break;
 
                     case MediaInfo.VideoRenderingStart:

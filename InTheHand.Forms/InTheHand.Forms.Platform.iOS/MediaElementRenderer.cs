@@ -298,6 +298,9 @@ namespace InTheHand.Forms.Platform.iOS
 
         void MediaElementStateRequested(object sender, StateRequested e)
         {
+            if (_avPlayerViewController.Player.CurrentItem == null)
+                return;
+
             MediaElementVolumeRequested(this, EventArgs.Empty);
 
             switch (e.State)
@@ -372,6 +375,7 @@ namespace InTheHand.Forms.Platform.iOS
                     }
                     else
                     {
+                        Controller.CurrentState = _avPlayerViewController.Player.Rate == 0.0f ? MediaElementState.Stopped : MediaElementState.Playing;
                         Controller.Duration = TimeSpan.FromSeconds(_avPlayerViewController.Player.CurrentItem.Duration.Seconds);
                         Controller.VideoHeight = (int)_avPlayerViewController.Player.CurrentItem.Asset.NaturalSize.Height;
                         Controller.VideoWidth = (int)_avPlayerViewController.Player.CurrentItem.Asset.NaturalSize.Width;
