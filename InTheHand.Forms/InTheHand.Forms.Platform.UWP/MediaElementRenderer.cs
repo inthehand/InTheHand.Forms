@@ -18,7 +18,7 @@ using Controls = Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 using Windows.System.Display;
 
-[assembly: ExportRenderer(typeof(MediaElement), typeof(InTheHand.Forms.Platform.WinRT.MediaElementRenderer))]
+[assembly: ExportRenderer(typeof(InTheHand.Forms.MediaElement), typeof(InTheHand.Forms.Platform.WinRT.MediaElementRenderer))]
 
 namespace InTheHand.Forms.Platform.WinRT
 {

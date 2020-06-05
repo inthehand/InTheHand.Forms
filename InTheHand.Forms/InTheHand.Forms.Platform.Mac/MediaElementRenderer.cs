@@ -18,7 +18,7 @@ using CoreMedia;
 using System.IO;
 using AppKit;
 
-[assembly:ExportRenderer(typeof(MediaElement), typeof(MediaElementRenderer))]
+[assembly:ExportRenderer(typeof(InTheHand.Forms.MediaElement), typeof(MediaElementRenderer))]
 namespace InTheHand.Forms.Platform.MacOS
 {
     public class MediaElementRenderer : Xamarin.Forms.Platform.MacOS.ViewRenderer<MediaElement, AVPlayerView>
@@ -264,7 +264,7 @@ namespace InTheHand.Forms.Platform.MacOS
             {
                 if (Element.CurrentState == MediaElementState.Playing || Element.CurrentState == MediaElementState.Buffering)
                 {
-                    Control.Player.Pause();
+                    Control.Player.ReplaceCurrentItemWithPlayerItem(null);
                     Controller.CurrentState = MediaElementState.Stopped;
                 }
             }

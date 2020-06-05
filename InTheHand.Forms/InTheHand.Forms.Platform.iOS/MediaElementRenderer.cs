@@ -198,7 +198,7 @@ namespace InTheHand.Forms.Platform.iOS
             {
                 if (Element.CurrentState == MediaElementState.Playing || Element.CurrentState == MediaElementState.Buffering)
                 {
-                    _avPlayerViewController.Player.Pause();
+                    _avPlayerViewController.Player.ReplaceCurrentItemWithPlayerItem(null);
                     Controller.CurrentState = MediaElementState.Stopped;
                 }
             }

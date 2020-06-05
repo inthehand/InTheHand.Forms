@@ -328,6 +328,10 @@ namespace InTheHand.Forms.Platform.Android
             else if (_view.IsPlaying)
             {
                 _view.StopPlayback();
+                _view.SeekTo(0);
+                _view.Visibility = ViewStates.Invisible;
+                _view.SetVideoURI(null);
+                _view.Visibility = ViewStates.Visible;
                 Controller.CurrentState = MediaElementState.Stopped;
             }
         }
