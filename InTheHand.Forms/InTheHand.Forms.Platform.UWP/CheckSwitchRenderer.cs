@@ -32,8 +32,8 @@ namespace InTheHand.Forms.Platform.WinRT
                 Control.IsChecked = e.NewElement.IsToggled;
                 if (e.NewElement.TextColor != Color.Default)
                 {
-                    Control.BorderBrush = new SolidColorBrush(Element.TextColor.ToWindows());
-                    Control.Foreground = new SolidColorBrush(Element.TextColor.ToWindows());
+                    Control.BorderBrush = new Windows.UI.Xaml.Media.SolidColorBrush(Element.TextColor.ToWindowsColor());
+                    Control.Foreground = new Windows.UI.Xaml.Media.SolidColorBrush(Element.TextColor.ToWindowsColor());
                 }
                 Control.Checked += Control_Checked;
                 Control.Unchecked += Control_Unchecked;
@@ -59,7 +59,7 @@ namespace InTheHand.Forms.Platform.WinRT
                     break;
 
                 case "TextColor":
-                    Control.Foreground = new SolidColorBrush(Element.TextColor.ToWindows());
+                    Control.Foreground = new Windows.UI.Xaml.Media.SolidColorBrush(Element.TextColor.ToWindowsColor());
                     break;
 
                 case "IsToggled":

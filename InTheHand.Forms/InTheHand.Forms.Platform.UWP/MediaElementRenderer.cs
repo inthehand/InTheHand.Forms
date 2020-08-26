@@ -246,19 +246,19 @@ namespace InTheHand.Forms.Platform.WinRT
                 Controller.OnSeekCompleted();
             }
         }
-        private static Stretch ToStretch(Aspect aspect)
+        private static Windows.UI.Xaml.Media.Stretch ToStretch(Aspect aspect)
         {
             switch (aspect)
             {
                 case Aspect.Fill:
-                    return Stretch.Fill;
+                    return Windows.UI.Xaml.Media.Stretch.Fill;
 
                 case Aspect.AspectFill:
-                    return Stretch.UniformToFill;
+                    return Windows.UI.Xaml.Media.Stretch.UniformToFill;
 
                 case Aspect.AspectFit:
                 default:
-                    return Stretch.Uniform;
+                    return Windows.UI.Xaml.Media.Stretch.Uniform;
             }
         }
         protected override void OnElementPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)

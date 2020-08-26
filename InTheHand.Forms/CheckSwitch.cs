@@ -4,6 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System;
 using Xamarin.Forms;
 
 namespace InTheHand.Forms
@@ -12,6 +13,7 @@ namespace InTheHand.Forms
     /// Checkbox control derived from Switch.
     /// </summary>
     [ContentProperty("Text")]
+    [Obsolete("Use Xamarin.Forms.CheckBox")]
     public sealed class CheckSwitch : Xamarin.Forms.Switch 
     {
         /// <summary>

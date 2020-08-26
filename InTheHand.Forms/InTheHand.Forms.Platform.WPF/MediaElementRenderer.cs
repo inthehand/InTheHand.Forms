@@ -312,17 +312,17 @@ namespace InTheHand.Forms.Platform.WPF
             }
         }
 
-        static Stretch ToStretch(Aspect aspect)
+        static System.Windows.Media.Stretch ToStretch(Aspect aspect)
         {
             switch (aspect)
             {
                 case Aspect.Fill:
-                    return Stretch.Fill;
+                    return System.Windows.Media.Stretch.Fill;
                 case Aspect.AspectFill:
-                    return Stretch.UniformToFill;
+                    return System.Windows.Media.Stretch.UniformToFill;
                 default:
                 case Aspect.AspectFit:
-                    return Stretch.Uniform;
+                    return System.Windows.Media.Stretch.Uniform;
             }
         }
     }
