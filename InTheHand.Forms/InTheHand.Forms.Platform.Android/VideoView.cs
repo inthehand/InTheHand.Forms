@@ -35,22 +35,19 @@ namespace InTheHand.Forms.Platform.Android
 
         void ExtractMetadata(MediaMetadataRetriever retriever)
         {
-            int videoWidth = 0;
-            if (int.TryParse(retriever.ExtractMetadata(MetadataKey.VideoWidth), out videoWidth))
+            if (int.TryParse(retriever.ExtractMetadata(MetadataKey.VideoWidth), out var videoWidth))
             {
                 VideoWidth = videoWidth;
             }
 
-            int videoHeight = 0;
-            if (int.TryParse(retriever.ExtractMetadata(MetadataKey.VideoHeight), out videoHeight))
+            if (int.TryParse(retriever.ExtractMetadata(MetadataKey.VideoHeight), out var videoHeight))
             {
                 VideoHeight = videoHeight;
             }
 
-            long durationMS;
             string durationString = retriever.ExtractMetadata(MetadataKey.Duration);
 
-            if (!string.IsNullOrEmpty(durationString) && long.TryParse(durationString, out durationMS))
+            if (!string.IsNullOrEmpty(durationString) && long.TryParse(durationString, out var durationMS))
             {
                 DurationTimeSpan = TimeSpan.FromMilliseconds(durationMS);
             }
@@ -64,12 +61,6 @@ namespace InTheHand.Forms.Platform.Android
         {
             GetMetaData(uri, headers);
             base.SetVideoURI(uri, headers);
-        }
-
-        public override void SetVideoURI(global::Android.Net.Uri uri)
-        {
-            GetMetaData(uri, new Dictionary<string, string>());
-            base.SetVideoURI(uri);
         }
 
         void GetMetaData(global::Android.Net.Uri uri, IDictionary<string, string> headers)

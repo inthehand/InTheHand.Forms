@@ -41,7 +41,8 @@ namespace InTheHand.Forms.Platform.Android
             _view.SetOnPreparedListener(this);
             _view.SetOnErrorListener(this);
             _view.MetadataRetrieved += MetadataRetrieved;
-            
+            _view.SetForegroundGravity(GravityFlags.Center);
+
             SetForegroundGravity(GravityFlags.Center);
 
             AddView(_view, -1, -1);
@@ -404,6 +405,9 @@ namespace InTheHand.Forms.Platform.Android
             if (_view == null)
                 return;
 
+            if (Width == 0 || Height == 0)
+                return;
+
             if (_view.VideoWidth == 0 || _view.VideoHeight == 0)
             {
                 _view.LayoutParameters = new FrameLayout.LayoutParams(Width, Height, GravityFlags.Fill);
@@ -425,13 +429,13 @@ namespace InTheHand.Forms.Platform.Android
                     {
                         int requiredHeight = (int)(Width / ratio);
                         int vertMargin = (Height - requiredHeight) / 2;
-                        _view.LayoutParameters = new FrameLayout.LayoutParams(Width, requiredHeight, GravityFlags.FillHorizontal | GravityFlags.CenterVertical) { LeftMargin = 0, RightMargin = 0, TopMargin = vertMargin, BottomMargin = vertMargin };
+                        _view.LayoutParameters = new FrameLayout.LayoutParams(Width, requiredHeight, GravityFlags.Center) { LeftMargin = 0, RightMargin = 0, TopMargin = vertMargin, BottomMargin = vertMargin };
                     }
                     else
                     {
                         int requiredWidth = (int)(Height * ratio);
                         int horizMargin = (Width - requiredWidth) / 2;
-                        _view.LayoutParameters = new FrameLayout.LayoutParams(requiredWidth, Height, GravityFlags.CenterHorizontal | GravityFlags.FillVertical) { LeftMargin = horizMargin, RightMargin = horizMargin, TopMargin = 0, BottomMargin = 0 };
+                        _view.LayoutParameters = new FrameLayout.LayoutParams(requiredWidth, Height, GravityFlags.Center) { LeftMargin = horizMargin, RightMargin = horizMargin, TopMargin = 0, BottomMargin = 0 };
                     }
                     break;
 
