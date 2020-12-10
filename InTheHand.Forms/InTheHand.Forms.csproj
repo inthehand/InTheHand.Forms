@@ -7,22 +7,23 @@
     <Company>In The Hand Ltd</Company>
     <Authors>Peter Foot</Authors>
     <PackageTargetFallback>portable-monoandroid10+net45+win+win81+wp8+wpa81+xamarinios10+xamarinmac20</PackageTargetFallback>
-    <DebugType>full</DebugType>
+    <DebugType>portable</DebugType>
     <Description>Extras for Xamarin Forms</Description>
     <Copyright>Copyright © In The Hand Ltd 2017-20</Copyright>
     <PackageProjectUrl>https://github.com/inthehand/InTheHand.Forms</PackageProjectUrl>
     <PackageLicenseUrl></PackageLicenseUrl>
     <RepositoryUrl>https://github.com/inthehand/InTheHand.Forms</RepositoryUrl>
     <AssemblyVersion>2.0.2020.0</AssemblyVersion>
-    <Version>2.2020.0826</Version>
+    <Version>2.2020.1210</Version>
     <FileVersion>2.0.2020.0</FileVersion>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageReleaseNotes>Updated for Xamarin Forms 4.8 and Android X</PackageReleaseNotes>
+    <PackageReleaseNotes>Fixes video centering on Android with AspectFit</PackageReleaseNotes>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <OutputPath>NuGet\lib\</OutputPath>
     <DocumentationFile>InTheHand.Forms.xml</DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
 
 <ItemGroup>
@@ -69,7 +70,7 @@
 </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Xamarin.Forms" Version="4.8.0.1269" />
+    <PackageReference Include="Xamarin.Forms" Version="4.8.0.1687" />
   </ItemGroup>
 
 </Project>

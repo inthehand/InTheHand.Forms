@@ -41,7 +41,6 @@ namespace InTheHand.Forms.Platform.Android
             _view.SetOnPreparedListener(this);
             _view.SetOnErrorListener(this);
             _view.MetadataRetrieved += MetadataRetrieved;
-            _view.SetForegroundGravity(GravityFlags.Center);
 
             SetForegroundGravity(GravityFlags.Center);
 
@@ -428,12 +427,14 @@ namespace InTheHand.Forms.Platform.Android
                     if (ratio > controlRatio)
                     {
                         int requiredHeight = (int)(Width / ratio);
+                        SetMinimumHeight(requiredHeight);
                         int vertMargin = (Height - requiredHeight) / 2;
                         _view.LayoutParameters = new FrameLayout.LayoutParams(Width, requiredHeight, GravityFlags.Center) { LeftMargin = 0, RightMargin = 0, TopMargin = vertMargin, BottomMargin = vertMargin };
                     }
                     else
                     {
                         int requiredWidth = (int)(Height * ratio);
+                        SetMinimumWidth(requiredWidth);
                         int horizMargin = (Width - requiredWidth) / 2;
                         _view.LayoutParameters = new FrameLayout.LayoutParams(requiredWidth, Height, GravityFlags.Center) { LeftMargin = horizMargin, RightMargin = horizMargin, TopMargin = 0, BottomMargin = 0 };
                     }

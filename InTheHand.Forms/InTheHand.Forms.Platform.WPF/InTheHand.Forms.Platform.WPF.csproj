@@ -23,13 +23,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
+    <DebugType>portable</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>..\NuGet\lib\net461\</OutputPath>
     <DefineConstants>TRACE;WPF</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>..\NuGet\lib\net461\InTheHand.Forms.Platform.WPF.xml</DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="PresentationCore" />
@@ -50,8 +51,8 @@
     </Compile>
     <None Include="ActivityIndicatorRenderer.cs" />
     <Compile Include="MediaElementRenderer.cs" />
-    <None Include="ProgressRing.xaml.cs"/>
-<None Include="ProgressRing.xaml"/>
+    <None Include="ProgressRing.xaml.cs" />
+    <None Include="ProgressRing.xaml" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -62,10 +63,10 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Xamarin.Forms">
-      <Version>4.8.0.1269</Version>
+      <Version>4.8.0.1687</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Forms.Platform.WPF">
-      <Version>4.8.0.1269</Version>
+      <Version>4.8.0.1687</Version>
     </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
